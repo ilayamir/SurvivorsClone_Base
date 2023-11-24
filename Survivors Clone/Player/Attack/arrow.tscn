@@ -1,0 +1,48 @@
+[gd_scene load_steps=7 format=3 uid="uid://cjk8f6j4bweip"]
+
+[ext_resource type="Script" path="res://Player/Attack/arrow.gd" id="1_5mdnx"]
+[ext_resource type="Texture2D" uid="uid://t00edfxp1lg5" path="res://Textures/Items/Weapons/arrow.png" id="2_qt8uu"]
+[ext_resource type="PackedScene" uid="uid://blefoq1ykd26f" path="res://Utility/trail.tscn" id="2_wtmw7"]
+[ext_resource type="AudioStream" uid="uid://6biydoubh6sd" path="res://Audio/SoundEffect/laser5.wav" id="3_aticb"]
+[ext_resource type="Script" path="res://Utility/trail.gd" id="4_djino"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vanvm"]
+size = Vector2(2.4, 3.9)
+
+[node name="Arrow" type="Area2D" groups=["attacks"]]
+top_level = true
+scale = Vector2(1.3, 1.3)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_5mdnx")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_vanvm")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
+rotation = -3.14159
+scale = Vector2(0.15, 0.15)
+texture = ExtResource("2_qt8uu")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_aticb")
+volume_db = -20.0
+pitch_scale = 0.9
+autoplay = true
+
+[node name="Trail" parent="." instance=ExtResource("2_wtmw7")]
+top_level = true
+texture_filter = 2
+width = 6.0
+joint_mode = 2
+script = ExtResource("4_djino")
+MAX_LENGTH = 70
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

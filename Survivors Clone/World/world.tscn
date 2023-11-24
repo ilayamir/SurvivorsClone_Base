@@ -22,7 +22,7 @@ script = ExtResource("5_4dsq2")
 time_start = 0
 time_end = 60
 enemy = ExtResource("4_wtewt")
-enemy_num = 0
+enemy_num = 1
 enemy_spawn_delay = 1
 
 [sub_resource type="Resource" id="Resource_qsxi0"]
@@ -46,8 +46,8 @@ script = ExtResource("5_4dsq2")
 time_start = 60
 time_end = 180
 enemy = ExtResource("6_wopsv")
-enemy_num = 1
-enemy_spawn_delay = 1
+enemy_num = 0
+enemy_spawn_delay = 0
 
 [sub_resource type="Resource" id="Resource_6jk8q"]
 script = ExtResource("5_4dsq2")

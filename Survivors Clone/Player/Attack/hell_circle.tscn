@@ -93,6 +93,7 @@ _data = {
 }
 
 [node name="HellCircle" type="Area2D" groups=["attacks", "aura", "cooldown_hurtbox_enforcers"]]
+show_behind_parent = true
 z_index = -1
 collision_layer = 16
 collision_mask = 0
@@ -106,11 +107,17 @@ texture = ExtResource("1_t2yh3")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("CircleShape2D_rqn5f")
 
-[node name="Timer" type="Timer" parent="."]
-one_shot = true
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
 speed_scale = 0.1
 libraries = {
 "": SubResource("AnimationLibrary_lh4t0")
 }
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+autostart = true
+
+[node name="Timer2" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+autostart = true

@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://enppeejftyda"]
+[gd_scene load_steps=31 format=3 uid="uid://enppeejftyda"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_2xhn0"]
 [ext_resource type="AudioStream" uid="uid://b8jqmflw6l0ny" path="res://Audio/SoundEffect/punch-1-166694.mp3" id="2_joqqs"]
@@ -9,17 +9,19 @@
 [ext_resource type="AudioStream" uid="uid://8mpp2035p7xt" path="res://Audio/SoundEffect/pistol_1.ogg" id="5_c653h"]
 [ext_resource type="Texture2D" uid="uid://b2f4rd41n831p" path="res://Textures/GUI/exp_progress.png" id="5_d6a6p"]
 [ext_resource type="FontFile" uid="uid://bhrsi6k88jpsc" path="res://Font/tenderness.otf" id="6_ja15c"]
+[ext_resource type="AudioStream" uid="uid://bdh4sol6qxjty" path="res://Audio/SoundEffect/foom_0.wav" id="7_2holb"]
 [ext_resource type="Texture2D" uid="uid://lxgpfbqmp2yb" path="res://Textures/GUI/ult_background.png" id="7_nbtup"]
 [ext_resource type="Texture2D" uid="uid://bs7qsd27evsr0" path="res://Textures/GUI/ult_progress.png" id="8_ht4mt"]
 [ext_resource type="AudioStream" uid="uid://6ul6twlnohn5" path="res://Audio/SoundEffect/levelup.ogg" id="9_e0bu1"]
 [ext_resource type="Script" path="res://Player/UltPushArea.gd" id="9_e7dy3"]
 [ext_resource type="Texture2D" uid="uid://mrs0ss7fo4n" path="res://Textures/GUI/healthbar.png" id="10_0awwn"]
 [ext_resource type="Texture2D" uid="uid://b8sjykpn3ng7x" path="res://Textures/GUI/health.png" id="11_uf4lx"]
-[ext_resource type="AudioStream" uid="uid://gx3fosouj4ty" path="res://Audio/SoundEffect/Victory.wav" id="12_3symf"]
 [ext_resource type="AudioStream" uid="uid://btu4yvjlvm5pu" path="res://Audio/Music/lvl1bgm2.wav" id="13_fxid2"]
-[ext_resource type="AudioStream" uid="uid://c11i3pdfuw06x" path="res://Audio/SoundEffect/Lose.ogg" id="13_symqh"]
 [ext_resource type="AudioStream" uid="uid://ccsoultawopua" path="res://Audio/Music/boss1.wav" id="14_4egen"]
 [ext_resource type="PackedScene" uid="uid://c82bslamv61g6" path="res://Utility/basic_button.tscn" id="14_j8mhi"]
+[ext_resource type="AudioStream" uid="uid://bl2yjfsoohhii" path="res://Audio/Music/winnoboss_snd.wav" id="16_0485o"]
+[ext_resource type="AudioStream" uid="uid://eibcbs017w6m" path="res://Audio/Music/lose_snd.wav" id="17_jjuk7"]
+[ext_resource type="AudioStream" uid="uid://dk32wusa0jyq1" path="res://Audio/Music/winboss_snd.wav" id="18_v6e0i"]
 [ext_resource type="PackedScene" uid="uid://drbow2l4igbn6" path="res://Utility/soft_collision_box.tscn" id="19_n6wu4"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_x0mlk"]
@@ -156,9 +158,22 @@ unique_name_in_owner = true
 wait_time = 5.0
 autostart = true
 
-[node name="HellBase" type="Node2D" parent="Attack"]
+[node name="TrailTimer" type="Timer" parent="Attack"]
 unique_name_in_owner = true
-show_behind_parent = true
+wait_time = 0.5
+
+[node name="snd_trail" type="AudioStreamPlayer" parent="Attack"]
+stream = ExtResource("7_2holb")
+volume_db = -20.0
+pitch_scale = 1.8
+
+[node name="TrailSndTimer" type="Timer" parent="Attack"]
+wait_time = 2.0
+one_shot = true
+
+[node name="BowTimer" type="Timer" parent="Attack"]
+unique_name_in_owner = true
+wait_time = 6.0
 
 [node name="EnemyDetectionArea" type="Area2D" parent="."]
 visible = false
@@ -322,12 +337,17 @@ autowrap_mode = 1
 
 [node name="snd_victory" type="AudioStreamPlayer" parent="GUILayer/GUI/DeathPanel"]
 unique_name_in_owner = true
-stream = ExtResource("12_3symf")
+stream = ExtResource("16_0485o")
 volume_db = -13.0
 
 [node name="snd_lose" type="AudioStreamPlayer" parent="GUILayer/GUI/DeathPanel"]
 unique_name_in_owner = true
-stream = ExtResource("13_symqh")
+stream = ExtResource("17_jjuk7")
+volume_db = -13.0
+
+[node name="snd_victory_boss" type="AudioStreamPlayer" parent="GUILayer/GUI/DeathPanel"]
+unique_name_in_owner = true
+stream = ExtResource("18_v6e0i")
 volume_db = -13.0
 
 [node name="btn_menu" parent="GUILayer/GUI/DeathPanel" instance=ExtResource("14_j8mhi")]
@@ -490,6 +510,10 @@ shape = SubResource("CapsuleShape2D_vsy5q")
 [node name="ShadowTimer" type="Timer" parent="."]
 wait_time = 0.05
 
+[node name="BossDeathTimer" type="Timer" parent="."]
+unique_name_in_owner = true
+one_shot = true
+
 [connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
 [connection signal="timeout" from="Attack/IceSpearTimer" to="." method="_on_ice_spear_timer_timeout"]
 [connection signal="timeout" from="Attack/IceSpearTimer/IceSpearAttackTimer" to="." method="_on_ice_spear_attack_timer_timeout"]
@@ -506,6 +530,8 @@ wait_time = 0.05
 [connection signal="timeout" from="Attack/KatanaTimer" to="." method="_on_katana_timer_timeout"]
 [connection signal="timeout" from="Attack/KatanaTimer/KatanaAttackTimer" to="." method="_on_katana_attack_timer_timeout"]
 [connection signal="timeout" from="Attack/WeaponUpdate" to="." method="_on_weapon_update_timeout"]
+[connection signal="timeout" from="Attack/TrailTimer" to="." method="_on_trail_timer_timeout"]
+[connection signal="timeout" from="Attack/BowTimer" to="." method="_on_bow_timer_timeout"]
 [connection signal="area_entered" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_entered"]
 [connection signal="area_exited" from="EnemyDetectionArea" to="." method="_on_enemy_detection_area_area_exited"]
 [connection signal="area_entered" from="GrabArea" to="." method="_on_grab_area_area_entered"]
@@ -518,6 +544,7 @@ wait_time = 0.05
 [connection signal="timeout" from="MagnetTimer" to="." method="_on_magnet_timer_timeout"]
 [connection signal="timeout" from="ShiftTimer" to="." method="_on_shift_timer_timeout"]
 [connection signal="timeout" from="ShadowTimer" to="." method="_on_shadow_timer_timeout"]
+[connection signal="timeout" from="BossDeathTimer" to="." method="_on_boss_death_timer_timeout"]
 
 [editable path="HurtBox"]
 [editable path="SoftCollisionBox"]

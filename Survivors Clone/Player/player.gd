@@ -34,6 +34,8 @@ var comet = preload("res://Player/Attack/comet.tscn")
 var fire_bullet = preload("res://Player/Attack/fire_bullet.tscn")
 var katana = preload("res://Player/Attack/katana_manager.tscn")
 var hell_circle = preload("res://Player/Attack/hell_circle.tscn")
+var fire_trail = preload("res://Player/Attack/fire_trail.tscn")
+var bow = preload("res://Player/Attack/bow.tscn")
 
 #AttackNodes
 @onready var iceSpearTimer = get_node("%IceSpearTimer")
@@ -52,7 +54,9 @@ var hell_circle = preload("res://Player/Attack/hell_circle.tscn")
 @onready var katanaTimer = get_node("%KatanaTimer")
 @onready var katanaAttackTimer = get_node("%KatanaAttackTimer")
 @onready var weapon_update = get_node("%WeaponUpdate")
-@onready var hell_base = get_node("%HellBase")
+@onready var trail_timer = get_node("%TrailTimer")
+@onready var bowTimer = get_node("%BowTimer")
+@onready var hell_base = []
 
 #UPGRADES
 var collected_upgrades = []
@@ -74,6 +78,11 @@ var comet_baseammo = 0
 var comet_attackspeed = 4
 var comet_level = 0
 
+#Bow
+var bow_ammo = 0
+var bow_level = 0
+var bow_attackspeed = 6
+
 #HellCircle
 var hell_circle_level = 0
 
@@ -94,6 +103,10 @@ var katana_ammo = 0
 var katana_baseammo = 0
 var katana_attackspeed = 3
 var katana_level = 0
+
+#FireTrail
+var trail_cd = 0.1
+var trail_level = 0
 
 #Tornado
 var tornado_ammo = 0
@@ -135,6 +148,7 @@ var dmg_num = preload("res://Utility/damage_number.tscn")
 var shadow = preload("res://Utility/shadow.tscn")
 @onready var loot_base = get_tree().get_first_node_in_group("loot")
 @onready var snd_shot = get_node("%snd_shotgun")
+@onready var death_timer = get_node("%BossDeathTimer")
 
 #GUI
 @onready var expBar = get_node("%ExperienceBar")
@@ -154,6 +168,7 @@ var shadow = preload("res://Utility/shadow.tscn")
 @onready var deathPanel = get_node("%DeathPanel")
 @onready var lblResult = get_node("%lbl_Result")
 @onready var sndVictory = get_node("%snd_victory")
+@onready var sndVictoryBoss = get_node("%snd_victory_boss")
 @onready var sndLose = get_node("%snd_lose")
 @onready var pausePanel = get_node("%PausePanel")
 @onready var bossHealthBar = get_node("%BossHealthBar")
@@ -167,7 +182,7 @@ var shadow = preload("res://Utility/shadow.tscn")
 signal playerdeath
 
 func _ready():
-	upgrade_character("fsword1")
+	upgrade_character("circle1")
 	attack()
 	set_expbar(experience, calculate_experiencecap())
 	healthBar.max_value = maxhp
@@ -269,6 +284,14 @@ func attack():
 		katanaTimer.wait_time = katana_attackspeed* (1-spell_cooldown)
 		if katanaTimer.is_stopped():
 			katanaTimer.start()
+	if trail_level > 0:
+		trail_timer.wait_time = trail_cd * (1-spell_cooldown)
+		if trail_timer.is_stopped():
+			trail_timer.start()
+	if bow_level > 0:
+		bowTimer.wait_time = bow_attackspeed * (1-spell_cooldown)
+		if bowTimer.is_stopped():
+			bowTimer.start()
 
 func _on_hurt_box_hurt(damage, _angle, _knockback, _special_effect):
 	hp -= clamp(damage-armor,1.0,999.0)
@@ -453,9 +476,9 @@ func calculate_experiencecap():
 	if experience_level < 20:
 		exp_cap = experience_level*5
 	elif experience_level < 40:
-		exp_cap = 95 * (experience_level-19)*8
+		exp_cap = 100 + (experience_level-19)*13
 	else:
-		exp_cap = 255 + (experience_level-39)*12
+		exp_cap = 260 + (experience_level-39)*25
 		
 	return exp_cap
 
@@ -552,6 +575,30 @@ func upgrade_character(upgrade):
 		"hsword4":
 			sword_level = 4
 			sword_attackspeed -= 2
+		"bow1":
+			bow_level = 1
+			bow_ammo += 1
+		"bow2":
+			bow_level = 2
+			bow_ammo += 1
+		"bow3":
+			bow_level = 3
+			bow_ammo += 1
+		"bow4":
+			bow_level = 4
+			bow_ammo += 1
+		"bow5":
+			bow_level = 5
+			bow_ammo += 1
+		"trail1":
+			trail_level = 1
+			weapon_count += 1
+		"trail2":
+			trail_level = 2
+		"trail3":
+			trail_level = 3
+		"trail4":
+			trail_level = 4
 		"comet1":
 			comet_level = 1
 			comet_baseammo += 1
@@ -782,7 +829,7 @@ func death():
 	tween.play()
 	if boss_flag == 1:
 		lblResult.text = "Victory !"
-		sndVictory.play()
+		sndVictoryBoss.play()
 	elif time >= 300:
 		lblResult.text = "You Survived...\nBut The Boss Isn't Dead !"
 		sndVictory.play()
@@ -926,16 +973,38 @@ func _on_weapon_update_timeout():
 		update_hell()
 
 func update_hell():
-	var circles = hell_base.get_children()
+	var circles = hell_base
 	if circles.size() > 0:
 		for circle in circles:
 			if circle.has_method("update"):
 				circle.level = hell_circle_level
+				circle.global_position = global_position
 				circle.update()
 	else:
 		var circle = hell_circle.instantiate()
 		circle.global_position = global_position
-		circle.position = position
-		hell_base.add_child(circle)
+		hell_base.append(circle)
+		add_child(circle)
 		update_hell()
+
+func _on_boss_death_timer_timeout():
+	death()
+
+
+func _on_trail_timer_timeout():
+	var new_fire = fire_trail.instantiate()
+	new_fire.level = trail_level
+	new_fire.position = position
+	if $Attack/TrailSndTimer.is_stopped():
+		$Attack/snd_trail.play()
+		$Attack/TrailSndTimer.start()
+	add_child(new_fire)
+
+
+func _on_bow_timer_timeout():
+	var new_bow = bow.instantiate()
+	new_bow.level = bow_level
+	new_bow.ammo = bow_ammo + additional_attacks
+	new_bow.angle = last_movement.normalized()
+	add_child(new_bow)
 

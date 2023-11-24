@@ -1,7 +1,7 @@
 [gd_scene load_steps=14 format=3 uid="uid://cyqke1j1hpx4h"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_56pqo"]
-[ext_resource type="Texture2D" uid="uid://dj4bhngel04ik" path="res://Textures/Enemy/kolbold_strong.png" id="2_bv24n"]
+[ext_resource type="Texture2D" uid="uid://dubh0v1qemm6c" path="res://Textures/Enemy/big_slime_green.png" id="2_ysbg1"]
 [ext_resource type="PackedScene" uid="uid://8qpqxca3v05p" path="res://Utility/hurt_box.tscn" id="3_puumq"]
 [ext_resource type="PackedScene" uid="uid://bfcmpfltcfccm" path="res://Utility/hit_box.tscn" id="4_p2fx1"]
 [ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_2wlmg"]
@@ -34,6 +34,22 @@ tracks/1/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
+[sub_resource type="Animation" id="Animation_xvjhn"]
+resource_name = "death"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
+}
+
 [sub_resource type="Animation" id="Animation_pm3nj"]
 resource_name = "walk"
 length = 0.6
@@ -51,22 +67,6 @@ tracks/0/keys = {
 "values": [0, 1, 0]
 }
 
-[sub_resource type="Animation" id="Animation_xvjhn"]
-resource_name = "death"
-length = 0.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:modulate")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ajlna"]
 _data = {
 "RESET": SubResource("Animation_fndc4"),
@@ -75,33 +75,35 @@ _data = {
 }
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8y70w"]
-size = Vector2(22.5, 25)
+size = Vector2(24.5833, 25)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4r0h"]
-size = Vector2(16, 24)
+size = Vector2(15.6667, 24)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_35tpl"]
-radius = 2.5
-height = 10.0
+radius = 5.0
+height = 15.0
 
 [node name="enemy_kob_strong" type="CharacterBody2D" groups=["enemy"]]
+scale = Vector2(1.2, 1.2)
 collision_layer = 5
 collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_56pqo")
-movement_speed = 35.0
+movement_speed = 40.0
 hp = 20
-experience = 4
+knockback_recovery = 7.0
+knockback_recovery_base = 7.0
+experience = 3
 enemy_damage = 4
 gem_drop_chance = 0.7
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-scale = Vector2(0.8, 0.8)
-texture = ExtResource("2_bv24n")
+texture = ExtResource("2_ysbg1")
 hframes = 2
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 1.5
+speed_scale = 0.6
 libraries = {
 "": SubResource("AnimationLibrary_ajlna")
 }
@@ -112,7 +114,7 @@ collision_mask = 20
 HurtBoxType = 1
 
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
-position = Vector2(-1.25, 1.49012e-07)
+position = Vector2(1.04167, -0.833333)
 shape = SubResource("RectangleShape2D_8y70w")
 
 [node name="HitBox" parent="." instance=ExtResource("4_p2fx1")]
@@ -122,7 +124,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" parent="HitBox" index="0" groups=["attacks"]]
-position = Vector2(-0.02341, -3.37956)
+position = Vector2(4.14326, -4.21289)
 shape = SubResource("RectangleShape2D_x4r0h")
 
 [node name="snd_hit" type="AudioStreamPlayer2D" parent="."]
@@ -145,7 +147,6 @@ wait_time = 3.0
 autostart = true
 
 [node name="ResetLocTimer" type="Timer" parent="."]
-wait_time = 2.0
 autostart = true
 
 [node name="DebuffTimer" type="Timer" parent="."]
@@ -157,9 +158,11 @@ process_callback = 0
 autostart = true
 
 [node name="SoftCollisionBox" parent="." instance=ExtResource("6_6v546")]
+visible = false
 position = Vector2(0, 2.38419e-07)
 
 [node name="CollisionShape2D" parent="SoftCollisionBox" index="0"]
+position = Vector2(1.66667, -2.38419e-07)
 shape = SubResource("CapsuleShape2D_35tpl")
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

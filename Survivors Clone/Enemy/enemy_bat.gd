@@ -51,9 +51,9 @@ func _ready():
 		else:
 			direction = Vector2(screen_size.x,screen_size.y).normalized()
 	if direction.x > 0.1:
-			sprite.flip_h = true
-	elif direction.x < -0.1:
 			sprite.flip_h = false
+	elif direction.x < -0.1:
+			sprite.flip_h = true
 	velocity = direction*movement_speed
 
 func death():
@@ -95,7 +95,7 @@ func death():
 		new_magnet.global_position = global_position - Vector2(-5,5)
 		loot_base.call_deferred("add_child",new_magnet)
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	knockback = knockback.move_toward(Vector2.ZERO, knockback_recovery)
 	velocity = direction*movement_speed
 	velocity += knockback
@@ -154,5 +154,5 @@ func _on_hide_timer_timeout():
 	if abs(location_dif.x) > (screen_size.x/2) and abs(location_dif.y) > (screen_size.y/2):
 		queue_free()
 
-func update_dir(pos):
+func update_dir(_pos):
 	pass

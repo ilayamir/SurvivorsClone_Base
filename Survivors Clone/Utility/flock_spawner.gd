@@ -10,14 +10,13 @@ var group_manager = preload("res://Utility/enemy_group_manager.tscn")
 
 @export var time = 0
 signal changetime(time)
-var corner
 
 func _ready():
 	connect("changetime",Callable(player,"change_time"))
 
 func _on_timer_timeout():
 	time += 1
-	corner=randi_range(0,1)
+	var corner=randi_range(0,1)
 	var enemy_spawns = spawns
 	var my_children = get_children()
 	var direction = player.global_position
@@ -52,7 +51,7 @@ func _on_timer_timeout():
 			leftover_manager.update_loc(direction)
 			add_child(leftover_manager)
 			var new_enemy = enemies_to_spawn[0].instantiate()
-			var corner = randi_range(0,1)
+			corner = randi_range(0,1)
 			new_enemy.global_position = get_random_position(corner)
 			new_enemy.in_flock = true
 			new_enemy.top_right = corner

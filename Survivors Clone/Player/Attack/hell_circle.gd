@@ -10,7 +10,6 @@ var attack_size = 1.0
 
 func ready():
 	update()
-	
 
 func update():
 	$AnimationPlayer.play("rotate")
@@ -42,9 +41,12 @@ func update():
 			cd = 0.5 * (1-player.spell_cooldown)
 			lifeleech = true
 	scale = Vector2(1,1) * attack_size
-	$Timer.wait_time = cd
+
 
 func enemy_hit(_charge = 1, _crit=false):
 	if lifeleech and $Timer.is_stopped():
 		player.heal(2)
 		$Timer.start()
+	if $Timer2.is_stopped():
+		AudioManager.play_positional("hit", position)
+		$Timer2.start()

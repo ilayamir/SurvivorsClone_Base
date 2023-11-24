@@ -164,6 +164,38 @@ const UPGRADES = {
 		"prerequisite": ["katana4"],
 		"type": "weapon_upgrade"
 	},
+	"trail1": {
+		"icon": WEAPON_PATH + "fire_icon.png",
+		"displayname": "Fire Trail",
+		"details": "Leave a trail of fire behind the player. Duration and damage scales with speed",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "weapon"
+	},
+	"trail2": {
+		"icon": WEAPON_PATH + "fire_icon.png",
+		"displayname": "Fire Trail",
+		"details": "Increase fire damage",
+		"level": "Level: 2",
+		"prerequisite": ["trail1"],
+		"type": "weapon_upgrade"
+	},
+	"trail3": {
+		"icon": WEAPON_PATH + "fire_icon.png",
+		"displayname": "Fire Trail",
+		"details": "Increase fire duration",
+		"level": "Level: 3",
+		"prerequisite": ["trail2"],
+		"type": "weapon_upgrade"
+	},
+	"trail4": {
+		"icon": WEAPON_PATH + "fire_icon.png",
+		"displayname": "Fire Trail",
+		"details": "Increase fire duration and damage",
+		"level": "Level: 4",
+		"prerequisite": ["trail3"],
+		"type": "weapon_upgrade"
+	},
 	"circle1": {
 		"icon": WEAPON_PATH + "hellcircle.png",
 		"displayname": "Hell Aura",
@@ -191,7 +223,7 @@ const UPGRADES = {
 	"circle4": {
 		"icon": WEAPON_PATH + "hellcircle.png",
 		"displayname": "Hell Aura",
-		"details": "Decrease aura cooldow",
+		"details": "Decrease aura cooldown",
 		"level": "Level: 4",
 		"prerequisite": ["circle3"],
 		"type": "weapon_upgrade"
@@ -202,6 +234,46 @@ const UPGRADES = {
 		"details": "Increase aura size, damage, and grant life leech",
 		"level": "Level: 5",
 		"prerequisite": ["circle4"],
+		"type": "weapon_upgrade"
+	},
+	"bow1": {
+		"icon": WEAPON_PATH + "bow_icon.png",
+		"displayname": "Holy Bow",
+		"details": "Spawn a bow that shoots piercing projectiles in a straight line",
+		"level": "Level: 1",
+		"prerequisite": [],
+		"type": "weapon"
+	},
+	"bow2": {
+		"icon": WEAPON_PATH + "bow_icon.png",
+		"displayname": "Holy Bow",
+		"details": "Shoot an additional arrow",
+		"level": "Level: 2",
+		"prerequisite": ["bow1"],
+		"type": "weapon_upgrade"
+	},
+	"bow3": {
+		"icon": WEAPON_PATH + "bow_icon.png",
+		"displayname": "Holy Bow",
+		"details": "Shoot an additional arrow and increase damage",
+		"level": "Level: 3",
+		"prerequisite": ["bow2"],
+		"type": "weapon_upgrade"
+	},
+	"bow4": {
+		"icon": WEAPON_PATH + "bow_icon.png",
+		"displayname": "Holy Bow",
+		"details": "Shoot an additional arrow",
+		"level": "Level: 4",
+		"prerequisite": ["bow3"],
+		"type": "weapon_upgrade"
+	},
+	"bow5": {
+		"icon": WEAPON_PATH + "bow_icon.png",
+		"displayname": "Holy Bow",
+		"details": "Shoot an additional arrow and increase damage",
+		"level": "Level: 5",
+		"prerequisite": ["bow4"],
 		"type": "weapon_upgrade"
 	},
 	"firegun1": {

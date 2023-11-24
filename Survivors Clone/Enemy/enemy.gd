@@ -47,14 +47,14 @@ var screen_size
 func _ready():
 	if is_in_group("slime"):
 		var color = randi_range(1,10)
-		if color <5:
+		if color <6:
 			sprite.texture = spr_green
-		elif color < 9:
+		elif color < 11:
 			sprite.texture = spr_blue
 		else:
 			sprite.texture = spr_red
 	maxhp = hp
-	stagger_threshold = clamp(int(hp/5)*2,1,maxhp)
+	stagger_threshold = clamp(int(hp*2/5),1,maxhp)
 	movement_speed_base = movement_speed
 	if is_in_group("rusher"):
 		$RushingTimer.start()
@@ -83,7 +83,7 @@ func death():
 	emit_signal("remove_from_array", self)
 	if self.is_in_group("boss"):
 		player.boss_flag = 1
-		player.death()
+		player.death_timer.start()
 	anim.stop()
 	anim.play("death")
 	if !dead:
@@ -153,10 +153,12 @@ func _on_ult_recovery_timeout():
 func _on_rushing_timer_timeout():
 	if self.is_in_group("rusher"):
 		movement_speed += 100
+		knockback_recovery += 10
 		rushTimer.start()
 
 func _on_rush_timer_timeout():
 	movement_speed -= 100
+	knockback_recovery -= 10
 
 func _on_hide_timer_timeout():
 	var location_dif = global_position - curr_pos
@@ -201,7 +203,7 @@ func get_random_position():
 	return Vector2(x_spawn,y_spawn)
 
 func _on_reset_loc_timer_timeout():
-	if global_position.distance_to(player.global_position) > screen_size.x/2*1.5:
+	if global_position.distance_to(curr_pos) > (screen_size.x/2)*1.5:
 		global_position = get_random_position()
 
 func _on_debuff_timer_timeout():
@@ -225,8 +227,8 @@ func _on_animation_player_animation_finished(_death):
 	
 func staggered():
 	player.lblstagger.visible = true
-	hitBox.set_collision_mask_value(2,false)
-	stagger_threshold = int(maxhp/5)*2
+	hitBox.set_collision_layer_value(2,false)
+	stagger_threshold = int(maxhp*2/5)
 	stagger = true
 	$StaggerTime.start()
 	movement_speed = 0
@@ -236,4 +238,7 @@ func _on_stagger_time_timeout():
 	player.lblstagger.visible = false
 	stagger = false
 	movement_speed = movement_speed_base
-	hitBox.set_collision_mask_value(2,true)
+	hitBox.set_collision_layer_value(2,true)
+
+
+

@@ -19,32 +19,32 @@ func _ready():
 		1:
 			hp = 1
 			speed = 250*(1+player.speed_bonus)
-			damage = 6*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 200
 			attack_size = 1.0 * (1 + player.spell_size)
 		2:
 			hp = 1
 			speed = 250*(1+player.speed_bonus)
-			damage = 6*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 200
 			attack_size = 1.0 * (1 + player.spell_size)
 		3:
 			hp = 1
 			speed = 250*(1+player.speed_bonus)
-			damage = 8*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 6*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 200
 			attack_size = 1.0 * (1 + player.spell_size)
 		4:
 			hp = 2
 			speed = 250*(1+player.speed_bonus)
-			damage = 8*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 6*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 200
 			attack_size = 1.0 * (1 + player.spell_size)
 			$Timer.wait_time = 0.8
 		5:
 			hp = 2
 			speed = 250*(1+player.speed_bonus)
-			damage = 8*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 7*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 200
 			attack_size = 1.0 * (1 + player.spell_size)
 			$Timer.wait_time = 0.7

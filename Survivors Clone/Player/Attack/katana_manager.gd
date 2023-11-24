@@ -42,11 +42,11 @@ func _ready():
 				blade.visible = true
 
 
-func _physics_process(delta):
+func _physics_process(_delta):
 	self.position = player.global_position
 
 
-func _on_animation_player_animation_finished(slice):
+func _on_animation_player_animation_finished(_slice):
 	for blade in blades:
 		blade.emit_signal("remove_from_array",blade)
 		blade.queue_free()
