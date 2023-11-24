@@ -1,0 +1,189 @@
+[gd_scene load_steps=3 format=3 uid="uid://b67akvtby027g"]
+
+[ext_resource type="PackedScene" uid="uid://cqrsgqrv40hao" path="res://Enemy/enemy_bat.tscn" id="1_v675r"]
+[ext_resource type="Script" path="res://Enemy/bat_flock.gd" id="1_yqfj5"]
+
+[node name="BatFlock" type="CharacterBody2D"]
+position = Vector2(-16, 46)
+motion_mode = 1
+script = ExtResource("1_yqfj5")
+
+[node name="enemy_bat" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(40, -96)
+
+[node name="enemy_bat60" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(28, -105)
+
+[node name="enemy_bat2" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(52, -86)
+
+[node name="enemy_bat3" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(62, -74)
+
+[node name="enemy_bat4" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(74, -63)
+
+[node name="enemy_bat5" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(87, -52)
+
+[node name="enemy_bat6" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(27, -92)
+
+[node name="enemy_bat7" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(38, -82)
+
+[node name="enemy_bat8" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(50, -73)
+
+[node name="enemy_bat9" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(61, -61)
+
+[node name="enemy_bat10" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(74, -50)
+
+[node name="enemy_bat11" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(86, -37)
+
+[node name="enemy_bat12" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(7, -93)
+
+[node name="enemy_bat13" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(18, -83)
+
+[node name="enemy_bat14" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(30, -74)
+
+[node name="enemy_bat15" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(41, -62)
+
+[node name="enemy_bat16" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(54, -51)
+
+[node name="enemy_bat17" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(66, -38)
+
+[node name="enemy_bat18" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(5, -80)
+
+[node name="enemy_bat19" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(16, -70)
+
+[node name="enemy_bat20" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(28, -61)
+
+[node name="enemy_bat21" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(39, -49)
+
+[node name="enemy_bat22" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(52, -38)
+
+[node name="enemy_bat23" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(64, -25)
+
+[node name="enemy_bat24" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-10, -81)
+
+[node name="enemy_bat25" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(1, -71)
+
+[node name="enemy_bat26" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(13, -62)
+
+[node name="enemy_bat27" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(24, -50)
+
+[node name="enemy_bat28" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(37, -39)
+
+[node name="enemy_bat29" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(49, -26)
+
+[node name="enemy_bat30" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-12, -69)
+
+[node name="enemy_bat31" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-1, -59)
+
+[node name="enemy_bat32" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(11, -50)
+
+[node name="enemy_bat33" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(22, -38)
+
+[node name="enemy_bat34" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(35, -27)
+
+[node name="enemy_bat35" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(47, -14)
+
+[node name="enemy_bat36" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-27, -70)
+
+[node name="enemy_bat37" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-16, -60)
+
+[node name="enemy_bat38" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-4, -51)
+
+[node name="enemy_bat39" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(7, -39)
+
+[node name="enemy_bat40" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(20, -28)
+
+[node name="enemy_bat41" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(32, -15)
+
+[node name="enemy_bat42" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-27, -54)
+
+[node name="enemy_bat43" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-16, -44)
+
+[node name="enemy_bat44" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-4, -35)
+
+[node name="enemy_bat45" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(7, -23)
+
+[node name="enemy_bat46" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(20, -12)
+
+[node name="enemy_bat47" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(32, 1)
+
+[node name="enemy_bat48" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-43, -54)
+
+[node name="enemy_bat49" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-32, -44)
+
+[node name="enemy_bat50" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-20, -35)
+
+[node name="enemy_bat51" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-9, -23)
+
+[node name="enemy_bat52" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(4, -12)
+
+[node name="enemy_bat53" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(16, 1)
+
+[node name="enemy_bat54" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-45, -41)
+
+[node name="enemy_bat55" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-34, -31)
+
+[node name="enemy_bat56" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-22, -22)
+
+[node name="enemy_bat57" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(-11, -10)
+
+[node name="enemy_bat58" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(2, 1)
+
+[node name="enemy_bat59" parent="." instance=ExtResource("1_v675r")]
+position = Vector2(14, 14)

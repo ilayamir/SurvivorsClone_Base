@@ -1,0 +1,49 @@
+[gd_scene load_steps=4 format=3 uid="uid://3sq5vn1tos7t"]
+
+[ext_resource type="Script" path="res://TitleScreen/menu.gd" id="1_0uiai"]
+[ext_resource type="FontFile" uid="uid://bhrsi6k88jpsc" path="res://Font/tenderness.otf" id="1_41dnb"]
+[ext_resource type="PackedScene" uid="uid://c82bslamv61g6" path="res://Utility/basic_button.tscn" id="2_2byse"]
+
+[node name="Menu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_0uiai")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 360.0
+color = Color(0.235294, 0.0823529, 0.164706, 1)
+
+[node name="Label" type="Label" parent="."]
+layout_mode = 0
+offset_right = 640.0
+offset_bottom = 100.0
+theme_override_fonts/font = ExtResource("1_41dnb")
+theme_override_font_sizes/font_size = 72
+text = "VS Clone"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="btn_play" parent="." instance=ExtResource("2_2byse")]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 204.0
+offset_right = 360.0
+offset_bottom = 234.0
+text = "Play"
+
+[node name="btn_exit" parent="." instance=ExtResource("2_2byse")]
+layout_mode = 0
+offset_left = 280.0
+offset_top = 274.0
+offset_right = 360.0
+offset_bottom = 304.0
+text = "Exit"
+
+[connection signal="click_end" from="btn_play" to="." method="_on_btn_play_click_end"]
+[connection signal="click_end" from="btn_exit" to="." method="_on_btn_exit_click_end"]

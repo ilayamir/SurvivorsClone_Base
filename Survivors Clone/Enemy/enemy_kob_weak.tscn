@@ -1,0 +1,175 @@
+[gd_scene load_steps=14 format=3 uid="uid://b6rvw0jlif31y"]
+
+[ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_8awwk"]
+[ext_resource type="Texture2D" uid="uid://ccwwh2cskhrbw" path="res://Textures/Enemy/slime_green.png" id="2_snub3"]
+[ext_resource type="PackedScene" uid="uid://8qpqxca3v05p" path="res://Utility/hurt_box.tscn" id="3_mnill"]
+[ext_resource type="PackedScene" uid="uid://bfcmpfltcfccm" path="res://Utility/hit_box.tscn" id="4_8v7g0"]
+[ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_1d2s1"]
+[ext_resource type="PackedScene" uid="uid://drbow2l4igbn6" path="res://Utility/soft_collision_box.tscn" id="6_reh3y"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_8y70w"]
+size = Vector2(21, 20)
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_yufd1"]
+radius = 8.0
+height = 20.0
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_2sw0j"]
+radius = 6.0
+height = 12.0
+
+[sub_resource type="Animation" id="Animation_fndc4"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_pm3nj"]
+resource_name = "walk"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="Animation" id="Animation_xvjhn"]
+resource_name = "death"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ajlna"]
+_data = {
+"RESET": SubResource("Animation_fndc4"),
+"death": SubResource("Animation_xvjhn"),
+"walk": SubResource("Animation_pm3nj")
+}
+
+[node name="enemy_kob_weak" type="CharacterBody2D" groups=["enemy", "slime"]]
+collision_layer = 4
+collision_mask = 4
+motion_mode = 1
+script = ExtResource("1_8awwk")
+movement_speed = 30.0
+hp = 8
+enemy_damage = 2
+gem_drop_chance = 0.5
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_snub3")
+hframes = 2
+
+[node name="HurtBox" parent="." instance=ExtResource("3_mnill")]
+visible = false
+collision_mask = 20
+HurtBoxType = 1
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2(-0.5, -1)
+shape = SubResource("RectangleShape2D_8y70w")
+
+[node name="HitBox" parent="." instance=ExtResource("4_8v7g0")]
+visible = false
+position = Vector2(-1.97659, 3.37956)
+collision_layer = 2
+
+[node name="CollisionShape2D" parent="HitBox" index="0" groups=["attacks"]]
+position = Vector2(-2.02341, -4.37956)
+shape = SubResource("CapsuleShape2D_yufd1")
+
+[node name="snd_hit" type="AudioStreamPlayer2D" parent="."]
+stream = ExtResource("5_1d2s1")
+volume_db = -17.0
+pitch_scale = 0.9
+
+[node name="UltRecovery" type="Timer" parent="." groups=["enemy"]]
+one_shot = true
+
+[node name="RushingTimer" type="Timer" parent="."]
+wait_time = 10.0
+
+[node name="RushTimer" type="Timer" parent="RushingTimer"]
+wait_time = 2.0
+one_shot = true
+
+[node name="HideTimer" type="Timer" parent="."]
+autostart = true
+
+[node name="ResetLocTimer" type="Timer" parent="."]
+wait_time = 2.0
+autostart = true
+
+[node name="DebuffTimer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+
+[node name="GetDirTimer" type="Timer" parent="."]
+process_callback = 0
+autostart = true
+
+[node name="SoftCollisionBox" parent="." instance=ExtResource("6_reh3y")]
+visible = false
+position = Vector2(1, 2)
+
+[node name="CollisionShape2D" parent="SoftCollisionBox" index="0"]
+position = Vector2(-2, -1)
+shape = SubResource("CapsuleShape2D_2sw0j")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 1.2
+libraries = {
+"": SubResource("AnimationLibrary_ajlna")
+}
+
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
+[connection signal="hurt_ult" from="HurtBox" to="." method="_on_hurt_box_hurt_ult"]
+[connection signal="timeout" from="UltRecovery" to="." method="_on_ult_recovery_timeout"]
+[connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]
+[connection signal="timeout" from="ResetLocTimer" to="." method="_on_reset_loc_timer_timeout"]
+[connection signal="timeout" from="DebuffTimer" to="." method="_on_debuff_timer_timeout"]
+[connection signal="timeout" from="GetDirTimer" to="." method="_on_get_dir_timer_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+
+[editable path="HurtBox"]
+[editable path="HitBox"]
+[editable path="SoftCollisionBox"]

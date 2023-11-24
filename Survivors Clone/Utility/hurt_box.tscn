@@ -1,0 +1,23 @@
+[gd_scene load_steps=3 format=3 uid="uid://8qpqxca3v05p"]
+
+[ext_resource type="Script" path="res://Utility/hurt_box.gd" id="1_8yr20"]
+[ext_resource type="AudioStream" uid="uid://cyum7d1fybr6n" path="res://Audio/SoundEffect/sword-hit-7160.mp3" id="2_g6cu4"]
+
+[node name="HurtBox" type="Area2D"]
+collision_layer = 0
+collision_mask = 0
+monitorable = false
+script = ExtResource("1_8yr20")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+
+[node name="DisableTimer" type="Timer" parent="."]
+wait_time = 0.5
+one_shot = true
+
+[node name="snd_crit" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("2_g6cu4")
+volume_db = -30.0
+
+[connection signal="area_entered" from="." to="." method="_on_area_entered"]
+[connection signal="timeout" from="DisableTimer" to="." method="_on_disable_timer_timeout"]

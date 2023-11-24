@@ -1,0 +1,220 @@
+[gd_scene load_steps=7 format=3 uid="uid://bupf0c0650uvh"]
+
+[ext_resource type="Script" path="res://Player/Attack/katana_manager.gd" id="1_p1fv5"]
+[ext_resource type="PackedScene" uid="uid://cvpx2wwoy3sq1" path="res://Player/Attack/katana.tscn" id="1_wpksq"]
+[ext_resource type="AudioStream" uid="uid://c2a6ro82gopf2" path="res://Audio/SoundEffect/swish-7.wav" id="3_8u8jf"]
+
+[sub_resource type="Animation" id="Animation_xmqb1"]
+resource_name = "slice"
+length = 0.7
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.197222, 0.392699, 0.589921, 0.785398, 0.785398, 0.785398, 0.785398]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Katana:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 9), Vector2(0, 0), Vector2(0, -10)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Katana3:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(-9, 0), Vector2(0, 0), Vector2(10, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Katana5:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, -9), Vector2(0, 0), Vector2(0, 10)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Katana7:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(9, 0), Vector2(0, 0), Vector2(-10, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_0t3p4"]
+length = 0.001
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath(".:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath(".:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Katana:position")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Katana3:position")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Katana5:position")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Katana7:position")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3s227"]
+_data = {
+"RESET": SubResource("Animation_0t3p4"),
+"slice": SubResource("Animation_xmqb1")
+}
+
+[node name="KatanaManager" type="Node2D"]
+modulate = Color(1, 1, 1, 0)
+top_level = true
+script = ExtResource("1_p1fv5")
+
+[node name="Katana" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+
+[node name="Katana2" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 0.785398
+
+[node name="Katana3" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 1.5708
+
+[node name="Katana4" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 2.35619
+
+[node name="Katana5" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 3.14159
+
+[node name="Katana6" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 3.92699
+
+[node name="Katana7" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 4.71239
+
+[node name="Katana8" parent="." instance=ExtResource("1_wpksq")]
+process_mode = 4
+visible = false
+rotation = 5.49779
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 1.3
+libraries = {
+"": SubResource("AnimationLibrary_3s227")
+}
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_8u8jf")
+volume_db = -15.0
+autoplay = true
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]

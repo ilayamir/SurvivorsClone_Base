@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://che25lfyorkje"]
+
+[ext_resource type="Script" path="res://Objects/floor_meat.gd" id="1_1cwxc"]
+[ext_resource type="Texture2D" uid="uid://bg40ta11aoq2g" path="res://Textures/Items/Upgrades/chunk.png" id="1_v37s0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4ufva"]
+size = Vector2(32, 21)
+
+[node name="FloorMeat" type="Area2D" groups=["loot"]]
+scale = Vector2(0.5, 0.5)
+collision_layer = 8
+collision_mask = 0
+script = ExtResource("1_1cwxc")
+healing = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 0.5)
+shape = SubResource("RectangleShape2D_4ufva")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("1_v37s0")

@@ -1,0 +1,21 @@
+[gd_scene load_steps=3 format=3 uid="uid://dce2ch3ybu4lr"]
+
+[ext_resource type="Script" path="res://Utility/damage_number.gd" id="1_6jcu2"]
+[ext_resource type="FontFile" uid="uid://bhrsi6k88jpsc" path="res://Font/tenderness.otf" id="1_yoegy"]
+
+[node name="DamageNumber" type="Node2D"]
+modulate = Color(1, 0.239216, 0.239216, 0.772549)
+top_level = true
+script = ExtResource("1_6jcu2")
+
+[node name="Label" type="Label" parent="."]
+offset_left = 6.0
+offset_top = -36.0
+offset_right = 46.0
+offset_bottom = -13.0
+theme_override_fonts/font = ExtResource("1_yoegy")
+
+[node name="Timer" type="Timer" parent="."]
+one_shot = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

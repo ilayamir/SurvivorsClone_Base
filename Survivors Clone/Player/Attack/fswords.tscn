@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cg5uukfwwl63f"]
+
+[ext_resource type="Texture2D" uid="uid://bhd2g37xsxj6r" path="res://Textures/Items/Weapons/sword.png" id="1_ad38w"]
+[ext_resource type="Script" path="res://Player/Attack/fswords.gd" id="1_r3nbt"]
+[ext_resource type="AudioStream" uid="uid://tcuv5nd5wamp" path="res://Audio/SoundEffect/tornado.ogg" id="2_ufmop"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_y0ddc"]
+size = Vector2(31.8198, 8.48528)
+
+[node name="FSword" type="Area2D" groups=["attacks"]]
+top_level = true
+position = Vector2(-2, -2)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_r3nbt")
+
+[node name="snd_attack" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(2, 2)
+stream = ExtResource("2_ufmop")
+volume_db = -20.0
+pitch_scale = 2.5
+autoplay = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0.25, 0.25)
+rotation = 0.785398
+scale = Vector2(0.5, 0.5)
+shape = SubResource("RectangleShape2D_y0ddc")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(1, 1)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("1_ad38w")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 2.0
+one_shot = true
+autostart = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

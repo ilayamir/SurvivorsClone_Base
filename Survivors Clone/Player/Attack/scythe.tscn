@@ -1,0 +1,43 @@
+[gd_scene load_steps=5 format=3 uid="uid://cwqu28p1q05v5"]
+
+[ext_resource type="Script" path="res://Player/Attack/scythe.gd" id="1_8xms1"]
+[ext_resource type="Texture2D" uid="uid://g38dmbrex6fa" path="res://Textures/Items/Weapons/scythe.png" id="2_spuba"]
+[ext_resource type="AudioStream" uid="uid://jk7frppes8cf" path="res://Audio/SoundEffect/woosh.wav" id="3_ph1wv"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o31u"]
+size = Vector2(10.2688, 42.1695)
+
+[node name="scythe" type="Area2D" groups=["attacks", "cooldown_hurtbox_enforcers"]]
+top_level = true
+rotation = 1.13446
+scale = Vector2(1.2, 1.2)
+collision_layer = 4
+collision_mask = 0
+script = ExtResource("1_8xms1")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(-20, -20)
+texture = ExtResource("2_spuba")
+
+[node name="Blade" type="CollisionShape2D" parent="."]
+position = Vector2(-17.3635, -37)
+rotation = 1.5708
+shape = SubResource("RectangleShape2D_6o31u")
+
+[node name="Handle" type="CollisionShape2D" parent="."]
+position = Vector2(-20.2043, -19.6775)
+rotation = -0.837758
+shape = SubResource("RectangleShape2D_6o31u")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 10.0
+one_shot = true
+autostart = true
+
+[node name="snd_play" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_ph1wv")
+volume_db = -5.0
+autoplay = true
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

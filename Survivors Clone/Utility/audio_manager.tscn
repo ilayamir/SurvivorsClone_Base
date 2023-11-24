@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://djtsvnmjneqls"]
+
+[ext_resource type="Script" path="res://Utility/audio_manager.gd" id="1_264hh"]
+[ext_resource type="AudioStream" uid="uid://mw6hvkkvcpap" path="res://Audio/SoundEffect/collectgem.mp3" id="2_jvfyq"]
+[ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="3_lgnyh"]
+[ext_resource type="AudioStream" uid="uid://cxjxv38vqdu8u" path="res://Audio/SoundEffect/enemy_death.ogg" id="4_uuae7"]
+[ext_resource type="AudioStream" uid="uid://cyum7d1fybr6n" path="res://Audio/SoundEffect/sword-hit-7160.mp3" id="5_hcq8s"]
+
+[node name="AudioManager" type="Node"]
+script = ExtResource("1_264hh")
+
+[node name="snd_collected" type="AudioStreamPlayer" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("2_jvfyq")
+volume_db = -19.0
+
+[node name="snd_hit" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("3_lgnyh")
+volume_db = -14.0
+pitch_scale = 0.9
+
+[node name="snd_explosion" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("4_uuae7")
+volume_db = -12.0
+pitch_scale = 0.47
+
+[node name="snd_crit" type="AudioStreamPlayer2D" parent="."]
+unique_name_in_owner = true
+stream = ExtResource("5_hcq8s")
+volume_db = -30.0
