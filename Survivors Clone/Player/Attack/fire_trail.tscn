@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://ls4kq8lcbccs"]
 
 [ext_resource type="Script" path="res://Player/Attack/fire_trail.gd" id="1_w0y6n"]
-[ext_resource type="Texture2D" uid="uid://8kbn0jfg3445" path="res://Textures/Items/Weapons/fire7_64.png" id="2_fjc0s"]
+[ext_resource type="Texture2D" uid="uid://j2dakt1uo8cj" path="res://Textures/Items/Weapons/fire7_64 (1).png" id="2_a4oex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_58ga2"]
 size = Vector2(24, 30)
@@ -45,7 +45,6 @@ _data = {
 }
 
 [node name="FireTrail" type="Area2D" groups=["attacks", "cooldown_hurtbox_enforcers"]]
-modulate = Color(0.764706, 1, 0.862745, 1)
 top_level = true
 z_index = -2
 collision_layer = 16
@@ -53,7 +52,7 @@ collision_mask = 0
 script = ExtResource("1_w0y6n")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("2_fjc0s")
+texture = ExtResource("2_a4oex")
 hframes = 10
 vframes = 6
 

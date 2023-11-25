@@ -70,12 +70,20 @@ func _physics_process(_delta):
 
 func play_collect():
 	if collect_queue < max_queue:
-		collect_queue+=1
+		if $gem_delay.is_stopped():
+			collect_queue+=1
+			$gem_delay.start()
 
 func play_positional(sound, position):
 	if sound == "hit" and hit_queue.size()<max_queue:
-		hit_queue.append(position)
+		if $hit_delay.is_stopped():
+			hit_queue.append(position)
+			$hit_delay.start()
 	if sound == "death" and death_queue.size()<max_queue:
-		death_queue.append(position)
+		if $death_delay.is_stopped():
+			death_queue.append(position)
+			$death_delay.start()
 	if sound == "crit" and crit_queue.size()<max_queue:
-		crit_queue.append(position)
+		if $crit_delay.is_stopped():
+			crit_queue.append(position)
+			$crit_delay.start()

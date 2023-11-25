@@ -1,17 +1,17 @@
 [gd_scene load_steps=14 format=3 uid="uid://c0owmup3as1g0"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_33g71"]
-[ext_resource type="Texture2D" uid="uid://dupab3ov5vv6p" path="res://Textures/Enemy/kolbold_weak.png" id="2_pldlt"]
+[ext_resource type="Texture2D" uid="uid://b38g0ugdtx0yi" path="res://Textures/Enemy/skell_1.png" id="2_n7lgk"]
 [ext_resource type="PackedScene" uid="uid://8qpqxca3v05p" path="res://Utility/hurt_box.tscn" id="3_l58un"]
 [ext_resource type="PackedScene" uid="uid://bfcmpfltcfccm" path="res://Utility/hit_box.tscn" id="4_jlrgq"]
 [ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_bvaut"]
 [ext_resource type="PackedScene" uid="uid://drbow2l4igbn6" path="res://Utility/soft_collision_box.tscn" id="6_hi0u4"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8y70w"]
-size = Vector2(16, 20)
+size = Vector2(13, 24)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4r0h"]
-size = Vector2(13, 18)
+size = Vector2(10, 20)
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_7714c"]
 radius = 2.0
@@ -22,26 +22,26 @@ length = 0.001
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprite2D:modulate")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
-"update": 1,
-"values": [0]
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
 tracks/1/enabled = true
-tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/path = NodePath("Sprite2D:rotation")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Color(1, 1, 1, 1)]
+"values": [0.0]
 }
 
 [sub_resource type="Animation" id="Animation_xvjhn"]
@@ -57,24 +57,24 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.8), Color(1, 1, 1, 0.6), Color(1, 1, 1, 0.4), Color(1, 1, 1, 0.2), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_pm3nj"]
 resource_name = "walk"
-length = 0.6
+length = 1.2
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/path = NodePath("Sprite2D:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 1,
-"values": [0, 1, 0]
+"times": PackedFloat32Array(0, 0.3, 0.6, 0.9),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [0.0, 0.10472, 0.0, -0.10472]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ajlna"]
@@ -84,8 +84,7 @@ _data = {
 "walk": SubResource("Animation_pm3nj")
 }
 
-[node name="enemy_kob_fodder" type="CharacterBody2D" groups=["enemy"]]
-modulate = Color(3, 3, 3, 1)
+[node name="enemy_kob_fodder" type="CharacterBody2D" groups=["enemy", "skell"]]
 collision_layer = 4
 collision_mask = 4
 motion_mode = 1
@@ -94,29 +93,24 @@ script = ExtResource("1_33g71")
 movement_speed = 50.0
 hp = 2
 gem_drop_chance = 0.5
-base_color = Color(4, 4, 4, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.75, 0.75)
-texture = ExtResource("2_pldlt")
-hframes = 2
+texture = ExtResource("2_n7lgk")
 
 [node name="HurtBox" parent="." instance=ExtResource("3_l58un")]
-visible = false
 collision_mask = 20
 HurtBoxType = 1
 
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
-position = Vector2(2, 2)
 shape = SubResource("RectangleShape2D_8y70w")
 
 [node name="HitBox" parent="." instance=ExtResource("4_jlrgq")]
-visible = false
-position = Vector2(-1.97659, 3.37956)
+position = Vector2(-4, 4)
 collision_layer = 2
 
 [node name="CollisionShape2D" parent="HitBox" index="0" groups=["attacks"]]
-position = Vector2(3.47659, -1.37956)
+position = Vector2(3.97659, -2.37956)
 shape = SubResource("RectangleShape2D_x4r0h")
 
 [node name="snd_hit" type="AudioStreamPlayer2D" parent="."]
@@ -139,6 +133,7 @@ wait_time = 5.0
 autostart = true
 
 [node name="ResetLocTimer" type="Timer" parent="."]
+wait_time = 4.0
 autostart = true
 
 [node name="DebuffTimer" type="Timer" parent="."]
@@ -151,13 +146,12 @@ wait_time = 0.5
 autostart = true
 
 [node name="SoftCollisionBox" parent="." instance=ExtResource("6_hi0u4")]
-position = Vector2(1, 2)
+position = Vector2(0, -1)
 
 [node name="CollisionShape2D" parent="SoftCollisionBox" index="0"]
 shape = SubResource("CapsuleShape2D_7714c")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 1.5
 libraries = {
 "": SubResource("AnimationLibrary_ajlna")
 }

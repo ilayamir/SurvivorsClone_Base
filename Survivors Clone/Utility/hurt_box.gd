@@ -70,7 +70,7 @@ func _on_area_entered(area):
 				if crit:
 					number.label.text = str(int(damage)) + "!"
 					number.scale *= 1.2
-					number.modulate = Color(1,0.24,0.77,1)
+					number.modulate = Color(0.78,0.57,0.02,0.75)
 				else:
 					number.label.text = str(int(damage))
 			var special_effect = "none"

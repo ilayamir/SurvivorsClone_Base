@@ -47,7 +47,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.8), Color(1, 1, 1, 0.6), Color(1, 1, 1, 0.4), Color(1, 1, 1, 0.2), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_pm3nj"]
@@ -147,6 +147,7 @@ wait_time = 3.0
 autostart = true
 
 [node name="ResetLocTimer" type="Timer" parent="."]
+wait_time = 4.0
 autostart = true
 
 [node name="DebuffTimer" type="Timer" parent="."]

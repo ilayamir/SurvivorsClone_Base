@@ -30,3 +30,19 @@ pitch_scale = 0.47
 unique_name_in_owner = true
 stream = ExtResource("5_hcq8s")
 volume_db = -30.0
+
+[node name="gem_delay" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="hit_delay" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="crit_delay" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true
+
+[node name="death_delay" type="Timer" parent="."]
+wait_time = 0.05
+one_shot = true

@@ -4,7 +4,7 @@
 [ext_resource type="FontFile" uid="uid://bhrsi6k88jpsc" path="res://Font/tenderness.otf" id="1_yoegy"]
 
 [node name="DamageNumber" type="Node2D"]
-modulate = Color(1, 0.239216, 0.239216, 0.772549)
+modulate = Color(0.792157, 0.0156863, 0.756863, 0.6)
 top_level = true
 script = ExtResource("1_6jcu2")
 

@@ -38,6 +38,9 @@ var gem_magnet = preload("res://Objects/gem_magnet.tscn")
 var spr_green = preload("res://Textures/Enemy/slime_green.png")
 var spr_blue= preload("res://Textures/Enemy/slime_blue.png")
 var spr_red = preload("res://Textures/Enemy/slime_pink.png")
+var spr_1 = preload("res://Textures/Enemy/skell_1.png")
+var spr_2 = preload("res://Textures/Enemy/skell_2.png")
+var spr_3 = preload("res://Textures/Enemy/skell_3.png")
 
 var direction = Vector2.ZERO
 signal remove_from_array(object)
@@ -46,18 +49,26 @@ var screen_size
 
 func _ready():
 	if is_in_group("slime"):
-		var color = randi_range(1,10)
-		if color <6:
+		var color = randi_range(1,2)
+		if color == 1:
 			sprite.texture = spr_green
-		elif color < 11:
-			sprite.texture = spr_blue
 		else:
-			sprite.texture = spr_red
+			sprite.texture = spr_blue
+	if is_in_group("skell"):
+		var color = randi_range(1,3)
+		if color == 1:
+			sprite.texture = spr_1
+		elif color == 2:
+			sprite.texture = spr_2
+		else:
+			sprite.texture = spr_3
 	maxhp = hp
 	stagger_threshold = clamp(int(hp*2/5),1,maxhp)
 	movement_speed_base = movement_speed
 	if is_in_group("rusher"):
 		$RushingTimer.start()
+	var anim_spd = randf_range(0.9,1.1)
+	anim.speed_scale *= anim_spd
 	anim.play("walk")
 	hitBox.damage = enemy_damage
 	$GetDirTimer.wait_time = 0.5
@@ -162,7 +173,7 @@ func _on_rush_timer_timeout():
 
 func _on_hide_timer_timeout():
 	var location_dif = global_position - curr_pos
-	if abs(location_dif.x) > (screen_size.x/2) and abs(location_dif.y) > (screen_size.y/2):
+	if abs(location_dif.x) > (screen_size.x/2)*1.1 and abs(location_dif.y) > (screen_size.y/2)*1.1:
 		visible = false
 		collision.call_deferred("set", "disabled", true)
 		
@@ -175,17 +186,16 @@ func frame_save(amount = 20):
 	if rand_disable < amount:
 		collision.call_deferred("set", "disabled", true)
 
-func get_random_position():
-	var vpr = get_viewport_rect().size * randf_range(1.1,1.3)
-	var top_left = Vector2(player.global_position.x - vpr.x/2, player.global_position.y - vpr.y/2)
-	var top_right = Vector2(player.global_position.x + vpr.x/2, player.global_position.y - vpr.y/2)
-	var bottom_left = Vector2(player.global_position.x - vpr.x/2, player.global_position.y + vpr.y/2)
-	var bottom_right = Vector2(player.global_position.x + vpr.x/2, player.global_position.y + vpr.y/2)
-	var pos_side = ["up","down","right","left"].pick_random()
+func get_random_position(dir):
+	var vpr = screen_size * randf_range(1.2,1.5)
+	var top_left = Vector2(curr_pos.x - vpr.x/2, curr_pos.y - vpr.y/2)
+	var top_right = Vector2(curr_pos.x + vpr.x/2, curr_pos.y - vpr.y/2)
+	var bottom_left = Vector2(curr_pos.x - vpr.x/2, curr_pos.y + vpr.y/2)
+	var bottom_right = Vector2(curr_pos.x + vpr.x/2, curr_pos.y + vpr.y/2)
 	var spawn_pos1 = Vector2.ZERO
 	var spawn_pos2 = Vector2.ZERO
 	
-	match pos_side:
+	match dir:
 		"up":
 			spawn_pos1 = top_left
 			spawn_pos2 = top_right
@@ -203,8 +213,15 @@ func get_random_position():
 	return Vector2(x_spawn,y_spawn)
 
 func _on_reset_loc_timer_timeout():
-	if global_position.distance_to(curr_pos) > (screen_size.x/2)*1.5:
-		global_position = get_random_position()
+	if global_position.distance_to(curr_pos) > (screen_size.x/2)*1.4:
+		if (global_position.x>curr_pos.x+screen_size.x/2):
+			global_position = get_random_position("left")
+		elif (global_position.x < curr_pos.x - screen_size.x/2):
+			global_position = get_random_position("right")
+		elif (global_position.y < curr_pos.y - screen_size.y/2):
+			global_position = get_random_position("down")
+		else:
+			global_position = get_random_position("up")
 
 func _on_debuff_timer_timeout():
 	base_color = Color(1,1,1)

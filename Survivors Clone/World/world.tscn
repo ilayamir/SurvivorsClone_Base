@@ -22,7 +22,7 @@ script = ExtResource("5_4dsq2")
 time_start = 0
 time_end = 60
 enemy = ExtResource("4_wtewt")
-enemy_num = 1
+enemy_num = 0
 enemy_spawn_delay = 1
 
 [sub_resource type="Resource" id="Resource_qsxi0"]
@@ -37,7 +37,7 @@ enemy_spawn_delay = 0
 script = ExtResource("5_4dsq2")
 time_start = 140
 time_end = 210
-enemy = ExtResource("4_wtewt")
+enemy = ExtResource("7_dj51l")
 enemy_num = 2
 enemy_spawn_delay = 0
 
@@ -47,7 +47,7 @@ time_start = 60
 time_end = 180
 enemy = ExtResource("6_wopsv")
 enemy_num = 0
-enemy_spawn_delay = 0
+enemy_spawn_delay = 1
 
 [sub_resource type="Resource" id="Resource_6jk8q"]
 script = ExtResource("5_4dsq2")
@@ -118,7 +118,7 @@ script = ExtResource("5_4dsq2")
 time_start = 240
 time_end = 280
 enemy = ExtResource("7_dj51l")
-enemy_num = 15
+enemy_num = 10
 enemy_spawn_delay = 0
 
 [sub_resource type="Resource" id="Resource_3g1os"]
@@ -298,20 +298,25 @@ region_rect = Rect2(0, 0, 2000, 2000)
 
 [node name="EnemySpawner" parent="." instance=ExtResource("3_0s21j")]
 spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_snk2j"), SubResource("Resource_qsxi0"), SubResource("Resource_say2m"), SubResource("Resource_ntktv"), SubResource("Resource_6jk8q"), SubResource("Resource_55pgk"), SubResource("Resource_eqywh"), SubResource("Resource_udmlr"), SubResource("Resource_iye3h"), SubResource("Resource_6ng2s"), SubResource("Resource_6f6wv"), SubResource("Resource_8sr6m"), SubResource("Resource_s6nbd"), SubResource("Resource_3g1os"), SubResource("Resource_d2wci"), SubResource("Resource_6565m"), SubResource("Resource_fogcm")])
+time = 0
 
 [node name="FlockSpawner" parent="." instance=ExtResource("11_ewsey")]
 spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_6f2au"), SubResource("Resource_s1h10"), SubResource("Resource_1ejsn"), SubResource("Resource_ho0bo"), SubResource("Resource_wvqcj"), SubResource("Resource_axo0n"), SubResource("Resource_ppjyf"), SubResource("Resource_4o86k"), SubResource("Resource_egrrn"), SubResource("Resource_p64ao")])
+time = 0
 
 [node name="EnemySpawner2" parent="." instance=ExtResource("3_0s21j")]
 process_mode = 4
 spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_snk2j"), SubResource("Resource_ot8qu"), SubResource("Resource_y2146"), SubResource("Resource_31ons")])
+time = 0
 
 [node name="BossSpawner" parent="." instance=ExtResource("3_0s21j")]
 script = ExtResource("9_8ecga")
 spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_ag140")])
+time = 0
 
 [node name="Loot" type="Node2D" parent="." groups=["loot"]]
 
 [node name="AudioManager" parent="." instance=ExtResource("12_bqjd8")]
+process_mode = 4
 
 [node name="FrameSaver" parent="." instance=ExtResource("12_eg3di")]

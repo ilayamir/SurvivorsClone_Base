@@ -33,3 +33,12 @@ res://Enemy/enemy_kob_fodder.tscn
 res://Enemy/enemy_bat.gd
 res://Player/Attack/katana_manager.gd
 res://Enemy/enemy_bat.tscn
+res://Player/Attack/fswords.gd
+res://Utility/dash.tscn
+res://Utility/dash.gd
+res://Utility/damage_number.tscn
+res://Utility/hurt_box.gd
+res://Utility/hurt_box.tscn
+res://Utility/audio_manager.gd
+res://Player/Attack/ice_spear.tscn
+res://Player/Attack/ice_spear.gd

@@ -31,7 +31,7 @@ const UPGRADES = {
 	"icespear2": {
 		"icon": WEAPON_PATH + "ice_spear.png",
 		"displayname": "Ice Spear",
-		"details": "An addition Ice Spear is thrown",
+		"details": "An additional Ice Spear is thrown, can bounce once",
 		"level": "Level: 2",
 		"prerequisite": ["icespear1"],
 		"type": "weapon_upgrade"
@@ -50,6 +50,14 @@ const UPGRADES = {
 		"details": "An additional 2 Ice Spears are thrown",
 		"level": "Level: 4",
 		"prerequisite": ["icespear3"],
+		"type": "weapon_upgrade"
+	},
+	"icespear5": {
+		"icon": WEAPON_PATH + "ice_spear.png",
+		"displayname": "Ice Spear",
+		"details": "Increase speed, can now bounce thrice",
+		"level": "Level: 5",
+		"prerequisite": ["icespear4"],
 		"type": "weapon_upgrade"
 	},
 	"comet1": {

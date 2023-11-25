@@ -1,11 +1,13 @@
 extends CharacterBody2D
 
-var movement_speed = 55
+var movement_speed = 55.0
 var hp = 80.0
 var maxhp = 80.0
 var last_movement = Vector2.RIGHT
 var time = 0
 var face_dir = Vector2.LEFT
+var dashlength = 0.2
+var dashspeed = 400
 
 var experience = 0
 var stagger = false
@@ -95,7 +97,8 @@ var firegun_level = 0
 #IceSpear
 var icespear_ammo = 0
 var icespear_baseammo = 0
-var icespear_attackspeed = 1.5
+var icespear_additional_ammo = 0
+var icespear_attackspeed = 1.2
 var icespear_level = 0
 
 #Katana
@@ -149,6 +152,7 @@ var shadow = preload("res://Utility/shadow.tscn")
 @onready var loot_base = get_tree().get_first_node_in_group("loot")
 @onready var snd_shot = get_node("%snd_shotgun")
 @onready var death_timer = get_node("%BossDeathTimer")
+@onready var dash = $Dash
 
 #GUI
 @onready var expBar = get_node("%ExperienceBar")
@@ -182,7 +186,7 @@ var shadow = preload("res://Utility/shadow.tscn")
 signal playerdeath
 
 func _ready():
-	upgrade_character("circle1")
+	upgrade_character("firegun1")
 	attack()
 	set_expbar(experience, calculate_experiencecap())
 	healthBar.max_value = maxhp
@@ -217,15 +221,28 @@ func pause():
 	tween.tween_property(pausePanel,"position",Vector2(220,55),1.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	tween.play()
 
-func movement(delta):
+func get_movement():
 	var x_mov = Input.get_action_strength("right") - Input.get_action_strength("left")
 	var y_mov = Input.get_action_strength("down") - Input.get_action_strength("up")
-	var mov = Vector2(x_mov,y_mov)
+	return Vector2(x_mov,y_mov)
+
+func movement(delta):
+	var speed
+	if Input.is_action_just_pressed("dash") and $Dash/dash_cd.is_stopped():
+		dash.start_dash(0.2)
+		trail_timer.wait_time /= 5 
+		$Dash/dash_cd.start()
+	if dash.is_dashing():
+		speed = movement_speed*5
+	else:
+		speed = movement_speed
+		trail_timer.wait_time = trail_cd * (1-spell_cooldown)
+	
+	var mov = get_movement()
 	if mov.x > 0:
 		sprite.flip_h = false
 	elif mov.x < 0:
 		sprite.flip_h = true
-		
 	if mov!=Vector2.ZERO:
 		last_movement = mov
 		if walkTimer.is_stopped():
@@ -234,7 +251,6 @@ func movement(delta):
 			else:
 				sprite.frame += 1
 			walkTimer.start()
-	
 	if mov==Vector2.ZERO:
 		if velocity.length() > (delta *600):
 			velocity-=velocity.normalized() * (delta*600)
@@ -242,7 +258,7 @@ func movement(delta):
 			velocity = Vector2.ZERO
 	else:
 		velocity += mov*delta*1500
-		velocity = velocity.limit_length(movement_speed)
+		velocity = velocity.limit_length(speed)
 		if $ShadowTimer.time_left == 0:
 			$ShadowTimer.start()
 	
@@ -318,6 +334,7 @@ func _on_ice_spear_attack_timer_timeout():
 		icespear_attack.position = position
 		icespear_attack.target = get_random_target()
 		icespear_attack.level = icespear_level
+		icespear_attack.additional_ammo = icespear_additional_ammo
 		add_child(icespear_attack)
 		icespear_ammo -= 1
 		if icespear_ammo > 0:
@@ -380,52 +397,87 @@ func _on_f_sword_attack_timer_timeout():
 	if fsword_ammo > 0:
 		var pos = global_position
 		if fsword_level == 5:
-			change += 5
-			change = change%50
+			change += 10
+			change = change%90
 			var ext_chance = randf_range(0,1)
 			if ext_chance<0.3:
-				var change_ext = change+25
-				change_ext = change_ext%50
 				var fsword1 = fsword.instantiate()
 				fsword1.position = pos
-				fsword1.target = Vector2(global_position.x + change_ext, global_position.y - (50-change_ext))
+				fsword1.angle = Vector2(0,-1).rotated(deg_to_rad(change+45))
 				fsword1.level = fsword_level
 				add_child(fsword1)
 				var fsword2 = fsword.instantiate()
 				fsword2.position = pos
-				fsword2.target = Vector2(global_position.x + (50-change_ext), global_position.y + change_ext)
+				fsword2.angle = Vector2(1,0).rotated(deg_to_rad(change+45))
 				fsword2.level = fsword_level
 				add_child(fsword2)
 				var fsword3 = fsword.instantiate()
 				fsword3.position = pos
-				fsword3.target = Vector2(global_position.x -change_ext, global_position.y + (50-change_ext))
+				fsword3.angle = Vector2(0,1).rotated(deg_to_rad(change+45))
 				fsword3.level = fsword_level
 				add_child(fsword3)
 				var fsword4 = fsword.instantiate()
 				fsword4.position = pos
-				fsword4.target = Vector2(global_position.x - (50-change_ext), global_position.y - change_ext)
+				fsword4.angle = Vector2(-1,0).rotated(deg_to_rad(change+45))
 				fsword4.level = fsword_level
 				add_child(fsword4)
-				
-		var fsword1 = fsword.instantiate()
+		var mov_dir = get_movement()
+		var fsword1 = fsword.instantiate() #up
 		fsword1.position = pos
-		fsword1.target = Vector2(pos.x + change, pos.y - (50-change))
+		fsword1.angle = Vector2(0,-1).rotated(deg_to_rad(change))
 		fsword1.level = fsword_level
-		add_child(fsword1)
-		var fsword2 = fsword.instantiate()
+		
+		var fsword2 = fsword.instantiate() #right
 		fsword2.position = pos
-		fsword2.target = Vector2(pos.x + (50-change), pos.y + change)
+		fsword2.angle = Vector2(1,0).rotated(deg_to_rad(change))
 		fsword2.level = fsword_level
-		add_child(fsword2)
-		var fsword3 = fsword.instantiate()
+		
+		var fsword3 = fsword.instantiate() #down
 		fsword3.position = pos
-		fsword3.target = Vector2(pos.x - change, pos.y + (50-change))
+		fsword3.angle = Vector2(0,1).rotated(deg_to_rad(change))
 		fsword3.level = fsword_level
-		add_child(fsword3)
-		var fsword4 = fsword.instantiate()
+		
+		var fsword4 = fsword.instantiate() #left
 		fsword4.position = pos
-		fsword4.target = Vector2(pos.x - (50-change), pos.y - change)
+		fsword4.angle = Vector2(-1,0).rotated(deg_to_rad(change))
 		fsword4.level = fsword_level
+		
+		match mov_dir:
+			Vector2(1,0):
+				fsword1.angle = fsword1.angle.rotated(deg_to_rad(-10))
+				fsword3.angle = fsword3.angle.rotated(deg_to_rad(10))
+			Vector2(0,1):
+				fsword2.angle = fsword2.angle.rotated(deg_to_rad(-10))
+				fsword4.angle = fsword4.angle.rotated(deg_to_rad(10))
+			Vector2(-1,0):
+				fsword1.angle = fsword1.angle.rotated(deg_to_rad(10))
+				fsword3.angle = fsword3.angle.rotated(deg_to_rad(-10))
+			Vector2(0,-1):
+				fsword2.angle = fsword2.angle.rotated(deg_to_rad(10))
+				fsword4.angle = fsword4.angle.rotated(deg_to_rad(-10))
+			Vector2(1,1):
+				fsword1.angle = fsword1.angle.rotated(deg_to_rad(-15))
+				fsword2.angle = fsword2.angle.rotated(deg_to_rad(-15))
+				fsword3.angle = fsword3.angle.rotated(deg_to_rad(15))
+				fsword4.angle = fsword4.angle.rotated(deg_to_rad(15))
+			Vector2(-1,1):
+				fsword1.angle = fsword1.angle.rotated(deg_to_rad(15))
+				fsword2.angle = fsword2.angle.rotated(deg_to_rad(-15))
+				fsword3.angle = fsword3.angle.rotated(deg_to_rad(-15))
+				fsword4.angle = fsword4.angle.rotated(deg_to_rad(15))
+			Vector2(1,-1):
+				fsword1.angle = fsword1.angle.rotated(deg_to_rad(-15))
+				fsword2.angle = fsword2.angle.rotated(deg_to_rad(15))
+				fsword3.angle = fsword3.angle.rotated(deg_to_rad(15))
+				fsword4.angle = fsword4.angle.rotated(deg_to_rad(-15))
+			Vector2(-1,-1):
+				fsword1.angle = fsword1.angle.rotated(deg_to_rad(15))
+				fsword2.angle = fsword2.angle.rotated(deg_to_rad(15))
+				fsword3.angle = fsword3.angle.rotated(deg_to_rad(-15))
+				fsword4.angle = fsword4.angle.rotated(deg_to_rad(-15))
+		add_child(fsword1)
+		add_child(fsword2)
+		add_child(fsword3)
 		add_child(fsword4)
 		fsword_ammo -= 1
 		if fsword_ammo > 0:
@@ -671,11 +723,15 @@ func upgrade_character(upgrade):
 		"icespear2":
 			icespear_level = 2
 			icespear_baseammo += 1
+			icespear_additional_ammo += 1
 		"icespear3":
 			icespear_level = 3
 		"icespear4":
 			icespear_level = 4
 			icespear_baseammo += 2
+		"icespear5":
+			icespear_level = 5
+			icespear_additional_ammo += 2
 		"tornado1":
 			tornado_level = 1
 			tornado_baseammo += 1
@@ -867,7 +923,7 @@ func heal(healing):
 	add_child(number)
 	number.position = position
 	number.label.text = str(int(healing))
-	number.modulate = Color(0,0.69,0.17,0.77)
+	number.modulate = Color(0,0.75,0.4,0.6)
 	hp = clamp(hp,0,maxhp)
 	healthBar.max_value = maxhp
 	healthBar.value = hp
