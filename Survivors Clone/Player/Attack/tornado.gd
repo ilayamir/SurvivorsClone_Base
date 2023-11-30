@@ -16,31 +16,44 @@ var angle_more = Vector2.ZERO
 signal remove_from_array(object)
 
 func _ready():
+	
 	match level:
 		1:
+			$AnimationPlayer.play("spin")
 			hp = 9999
 			speed = 100.0*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 100
 			attack_size = 1.0 * (1 + player.spell_size)
 		2:
+			$AnimationPlayer.play("spin")
 			hp = 9999
 			speed = 100.0*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 100
 			attack_size = 1.0 * (1 + player.spell_size)
 		3:
+			$AnimationPlayer.play("spin")
 			hp = 9999
 			speed = 100.0*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 100
 			attack_size = 1.0 * (1 + player.spell_size)
 		4:
+			$AnimationPlayer.play("spin")
 			hp = 9999
 			speed = 100.0*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			knockback_amount = 125
 			attack_size = 1.0 * (1 + player.spell_size)
+		5:
+			$AnimationPlayer.play("spin")
+			hp = 9999
+			speed = 100.0*(1+player.speed_bonus)
+			damage = 6*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			knockback_amount = 125
+			attack_size = 1.5 * (1 + player.spell_size)
+			$"Black Hole/CollisionShape2D".call_deferred("set", "disabled", false)
 	
 	var move_to_less = Vector2.ZERO
 	var move_to_more = Vector2.ZERO

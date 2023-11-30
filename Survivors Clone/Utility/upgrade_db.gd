@@ -22,40 +22,40 @@ const UPGRADES = {
 	},
 	"icespear1": {
 		"icon": WEAPON_PATH + "ice_spear.png",
-		"displayname": "Ice Spear",
-		"details": "A spear of ice is thrown at a random enemy",
+		"displayname": "Hell Spear",
+		"details": "A spear of dark magic is thrown at a random enemy",
 		"level": "Level: 1",
 		"prerequisite": [],
 		"type": "weapon"
 	},
 	"icespear2": {
 		"icon": WEAPON_PATH + "ice_spear.png",
-		"displayname": "Ice Spear",
-		"details": "An additional Ice Spear is thrown, can bounce once",
+		"displayname": "Hell Spear",
+		"details": "An additional spear is thrown, can bounce once",
 		"level": "Level: 2",
 		"prerequisite": ["icespear1"],
 		"type": "weapon_upgrade"
 	},
 	"icespear3": {
 		"icon": WEAPON_PATH + "ice_spear.png",
-		"displayname": "Ice Spear",
-		"details": "Ice Spears now pass through another enemy and do more damage",
+		"displayname": "Hell Spear",
+		"details": "Spears do more damage",
 		"level": "Level: 3",
 		"prerequisite": ["icespear2"],
 		"type": "weapon_upgrade"
 	},
 	"icespear4": {
 		"icon": WEAPON_PATH + "ice_spear.png",
-		"displayname": "Ice Spear",
-		"details": "An additional 2 Ice Spears are thrown",
+		"displayname": "Hell Spear",
+		"details": "An additional 2 spears are thrown",
 		"level": "Level: 4",
 		"prerequisite": ["icespear3"],
 		"type": "weapon_upgrade"
 	},
 	"icespear5": {
 		"icon": WEAPON_PATH + "ice_spear.png",
-		"displayname": "Ice Spear",
-		"details": "Increase speed, can now bounce thrice",
+		"displayname": "The Rule of Many",
+		"details": "Increase speed, can now bounce twice and multiplies",
 		"level": "Level: 5",
 		"prerequisite": ["icespear4"],
 		"type": "weapon_upgrade"
@@ -126,7 +126,7 @@ const UPGRADES = {
 	},
 	"fsword5": {
 		"icon": WEAPON_PATH + "sword.png",
-		"displayname": "Throwing Knife",
+		"displayname": "Bullet Hell",
 		"details": "Knives now shoot in a circular fashion, occasionaly shoots extra knives",
 		"level": "Level: 5",
 		"prerequisite": ["fsword4"],
@@ -166,7 +166,7 @@ const UPGRADES = {
 	},
 	"katana5": {
 		"icon": WEAPON_PATH + "katana.png",
-		"displayname": "Katana",
+		"displayname": "Eye of the Storm",
 		"details": "Summon 4 additional katanas, increase base damage",
 		"level": "Level: 5",
 		"prerequisite": ["katana4"],
@@ -238,7 +238,7 @@ const UPGRADES = {
 	},
 	"circle5": {
 		"icon": WEAPON_PATH + "hellcircle.png",
-		"displayname": "Hell Aura",
+		"displayname": "Death Pact",
 		"details": "Increase aura size, damage, and grant life leech",
 		"level": "Level: 5",
 		"prerequisite": ["circle4"],
@@ -278,8 +278,8 @@ const UPGRADES = {
 	},
 	"bow5": {
 		"icon": WEAPON_PATH + "bow_icon.png",
-		"displayname": "Holy Bow",
-		"details": "Shoot an additional arrow and increase damage",
+		"displayname": "Rear Guard",
+		"details": "Summons an additional bow behind the player and increase damage",
 		"level": "Level: 5",
 		"prerequisite": ["bow4"],
 		"type": "weapon_upgrade"
@@ -316,9 +316,9 @@ const UPGRADES = {
 		"prerequisite": ["firegun3"],
 		"type": "weapon_upgrade"
 	},
-		"firegun5": {
+	"firegun5": {
 		"icon": WEAPON_PATH + "shotgun.png",
-		"displayname": "Fire Gun",
+		"displayname": "Doom Eternal",
 		"details": "Shoots more often, increase pellet count",
 		"level": "Level: 5",
 		"prerequisite": ["firegun4"],
@@ -356,10 +356,18 @@ const UPGRADES = {
 		"prerequisite": ["hsword3"],
 		"type": "weapon_upgrade"
 	},
+	"hsword5": {
+		"icon": WEAPON_PATH + "w_longsword_holy.png",
+		"displayname": "Sword and Shield",
+		"details": "Increase size and summon a holy shield that pushes foes",
+		"level": "Level: 5",
+		"prerequisite": ["hsword4"],
+		"type": "weapon_upgrade"
+	},
 	"javelin1": {
 		"icon": WEAPON_PATH + "javelin_3_new_attack.png",
 		"displayname": "Javelin",
-		"details": "A magical javelin will follow you attacking enemies in a straight line",
+		"details": "A holy javelin will follow you attacking enemies in a straight line",
 		"level": "Level: 1",
 		"prerequisite": [],
 		"type": "weapon"
@@ -388,36 +396,52 @@ const UPGRADES = {
 		"prerequisite": ["javelin3"],
 		"type": "weapon_upgrade"
 	},
+	"javelin5": {
+		"icon": WEAPON_PATH + "javelin_3_new_attack.png",
+		"displayname": "The Collector",
+		"details": "The javelin now attacks more often and collects gems for the player",
+		"level": "Level: 5",
+		"prerequisite": ["javelin4"],
+		"type": "weapon_upgrade"
+	},
 	"tornado1": {
 		"icon": WEAPON_PATH + "tornado.png",
-		"displayname": "Tornado",
-		"details": "A tornado is created and random heads somewhere in the players direction",
+		"displayname": "Vortex",
+		"details": "A vortex is created and random heads somewhere in the players direction",
 		"level": "Level: 1",
 		"prerequisite": [],
 		"type": "weapon"
 	},
 	"tornado2": {
 		"icon": WEAPON_PATH + "tornado.png",
-		"displayname": "Tornado",
-		"details": "An additional Tornado is created",
+		"displayname": "Vortex",
+		"details": "An additional vortex is created",
 		"level": "Level: 2",
 		"prerequisite": ["tornado1"],
 		"type": "weapon_upgrade"
 	},
 	"tornado3": {
 		"icon": WEAPON_PATH + "tornado.png",
-		"displayname": "Tornado",
-		"details": "Reduce the cooldown of tornado",
+		"displayname": "Vortex",
+		"details": "Reduce the cooldown of vortex",
 		"level": "Level: 3",
 		"prerequisite": ["tornado2"],
 		"type": "weapon_upgrade"
 	},
 	"tornado4": {
 		"icon": WEAPON_PATH + "tornado.png",
-		"displayname": "Tornado",
-		"details": "An additional tornado is created and the knockback is increased",
+		"displayname": "Vortex",
+		"details": "An additional vortex is created and the knockback is increased",
 		"level": "Level: 4",
 		"prerequisite": ["tornado3"],
+		"type": "weapon_upgrade"
+	},
+	"tornado5": {
+		"icon": WEAPON_PATH + "tornado.png",
+		"displayname": "Black Hole",
+		"details": "Vortex grows larger, now pulls enemies towards it",
+		"level": "Level: 5",
+		"prerequisite": ["tornado4"],
 		"type": "weapon_upgrade"
 	},
 	"armor1": {

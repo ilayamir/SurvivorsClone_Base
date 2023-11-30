@@ -13,15 +13,15 @@ var target
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var tween = create_tween()
-	tween.tween_property(self,"modulate",Color(1,1,1,0.5),1).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self,"modulate",Color(1,1,1,0.75),1).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	tween.play()
 	scale *= attack_size
-	anim.play("RESET")
+	anim.play("flicker")
 
-
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _physics_process(_delta):
-	global_position = target
+#
+## Called every frame. 'delta' is the elapsed time since the previous frame.
+#func _physics_process(_delta):
+#	global_position = target
 
 
 func _on_timer_timeout():

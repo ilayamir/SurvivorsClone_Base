@@ -1,17 +1,11 @@
-[gd_scene load_steps=13 format=3 uid="uid://dadudkfv4nprj"]
+[gd_scene load_steps=17 format=3 uid="uid://dadudkfv4nprj"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_v10fm"]
-[ext_resource type="Texture2D" uid="uid://bdpxrfmebmn3w" path="res://Textures/Enemy/giant_amoeba_new.png" id="2_p2xyg"]
+[ext_resource type="Texture2D" uid="uid://dixhts88aoikq" path="res://Textures/Enemy/goober_purple_cyan.png" id="2_j6nar"]
+[ext_resource type="Material" uid="uid://bnoju1gje7mql" path="res://Enemy/hitflash_shader.tres" id="2_s12sx"]
 [ext_resource type="PackedScene" uid="uid://8qpqxca3v05p" path="res://Utility/hurt_box.tscn" id="3_m71si"]
 [ext_resource type="PackedScene" uid="uid://bfcmpfltcfccm" path="res://Utility/hit_box.tscn" id="4_e8ogk"]
 [ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_aupic"]
-[ext_resource type="PackedScene" uid="uid://drbow2l4igbn6" path="res://Utility/soft_collision_box.tscn" id="6_6omg3"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_8y70w"]
-size = Vector2(84, 90)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_x4r0h"]
-size = Vector2(92, 100)
 
 [sub_resource type="Animation" id="Animation_fndc4"]
 length = 0.001
@@ -53,12 +47,12 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.8), Color(1, 1, 1, 0.6), Color(1, 1, 1, 0.4), Color(1, 1, 1, 0.2), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_pm3nj"]
 resource_name = "walk"
-length = 0.6
+length = 0.7
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -67,10 +61,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.3),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 0]
+"values": [1, 2, 3, 4, 5, 6, 7]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ajlna"]
@@ -80,47 +74,87 @@ _data = {
 "walk": SubResource("Animation_pm3nj")
 }
 
+[sub_resource type="Animation" id="Animation_ns1yd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1.1, 1.1, 1.1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_cnjrx"]
+resource_name = "hitflash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1.1, 1.1, 1.1, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8jiwd"]
+_data = {
+"RESET": SubResource("Animation_ns1yd"),
+"hitflash": SubResource("Animation_cnjrx")
+}
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4kgg6"]
+size = Vector2(242.857, 144.286)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2inhd"]
+size = Vector2(258.571, 182.857)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_kw4o3"]
+radius = 32.8882
+
 [node name="enemy_super" type="CharacterBody2D" groups=["boss"]]
-collision_layer = 4
-collision_mask = 4
+scale = Vector2(0.7, 0.7)
+collision_layer = 65
+collision_mask = 65
 motion_mode = 1
 script = ExtResource("1_v10fm")
-movement_speed = 75.0
-hp = 8000
+movement_speed = 100.0
+hp = 3000
 knockback_recovery = 100.0
 knockback_recovery_base = 100.0
 experience = 100
 enemy_damage = 40
+gem_drop_chance = 1.0
+reset_check_time = 2
+offscreen_timer = 1
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 0.8
+libraries = {
+"": SubResource("AnimationLibrary_ajlna")
+}
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1.1, 1.1, 1.1, 1)
 texture_filter = 1
-scale = Vector2(5, 5)
-texture = ExtResource("2_p2xyg")
-
-[node name="HurtBox" parent="." instance=ExtResource("3_m71si")]
-collision_mask = 20
-HurtBoxType = 1
-
-[node name="CollisionShape2D" parent="HurtBox" index="0"]
-position = Vector2(-3, 15)
-shape = SubResource("RectangleShape2D_8y70w")
-
-[node name="HitBox" parent="." instance=ExtResource("4_e8ogk")]
-visible = false
-position = Vector2(-1.97659, 3.37956)
-collision_layer = 2
-
-[node name="CollisionShape2D" parent="HitBox" index="0" groups=["attacks"]]
-position = Vector2(-1.02341, 5.62044)
-shape = SubResource("RectangleShape2D_x4r0h")
+material = ExtResource("2_s12sx")
+texture = ExtResource("2_j6nar")
+hframes = 3
+vframes = 3
 
 [node name="snd_hit" type="AudioStreamPlayer2D" parent="."]
+scale = Vector2(1, 1)
 stream = ExtResource("5_aupic")
 volume_db = -17.0
 pitch_scale = 0.9
-
-[node name="UltRecovery" type="Timer" parent="."]
-one_shot = true
 
 [node name="RushingTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -128,13 +162,6 @@ wait_time = 10.0
 [node name="RushTimer" type="Timer" parent="RushingTimer"]
 wait_time = 2.0
 one_shot = true
-
-[node name="HideTimer" type="Timer" parent="."]
-wait_time = 3.0
-autostart = true
-
-[node name="ResetLocTimer" type="Timer" parent="."]
-autostart = true
 
 [node name="DebuffTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -144,29 +171,52 @@ one_shot = true
 process_callback = 0
 autostart = true
 
-[node name="SoftCollisionBox" parent="." instance=ExtResource("6_6omg3")]
-position = Vector2(-4, -2)
-
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 1.5
-libraries = {
-"": SubResource("AnimationLibrary_ajlna")
-}
-
 [node name="StaggerTime" type="Timer" parent="."]
 wait_time = 5.0
 one_shot = true
 
-[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
-[connection signal="hurt_ult" from="HurtBox" to="." method="_on_hurt_box_hurt_ult"]
-[connection signal="timeout" from="UltRecovery" to="." method="_on_ult_recovery_timeout"]
-[connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]
-[connection signal="timeout" from="ResetLocTimer" to="." method="_on_reset_loc_timer_timeout"]
+[node name="hitflash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8jiwd")
+}
+
+[node name="HitBox" parent="." instance=ExtResource("4_e8ogk")]
+visible = false
+collision_layer = 2
+
+[node name="CollisionShape2D" parent="HitBox" index="0"]
+position = Vector2(5.71428, 45)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_4kgg6")
+
+[node name="HurtBox" parent="." instance=ExtResource("3_m71si")]
+visible = false
+collision_mask = 52
+HurtBoxType = 1
+
+[node name="CollisionShape2D" parent="HurtBox" index="0"]
+position = Vector2(10.7143, 31.4286)
+scale = Vector2(1, 1)
+shape = SubResource("RectangleShape2D_2inhd")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(2.85714, 41.4286)
+shape = SubResource("CircleShape2D_kw4o3")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-0.714293, 1.42857)
+scale = Vector2(13.5, 13.2857)
+
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="timeout" from="RushingTimer" to="." method="_on_rushing_timer_timeout"]
+[connection signal="timeout" from="RushingTimer/RushTimer" to="." method="_on_rush_timer_timeout"]
 [connection signal="timeout" from="DebuffTimer" to="." method="_on_debuff_timer_timeout"]
 [connection signal="timeout" from="GetDirTimer" to="." method="_on_get_dir_timer_timeout"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="timeout" from="StaggerTime" to="." method="_on_stagger_time_timeout"]
+[connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
+[connection signal="hurt_ult" from="HurtBox" to="." method="_on_hurt_box_hurt_ult"]
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 
-[editable path="HurtBox"]
 [editable path="HitBox"]
-[editable path="SoftCollisionBox"]
+[editable path="HurtBox"]

@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://b5c7ps735jr0k"]
+[gd_scene load_steps=8 format=3 uid="uid://b5c7ps735jr0k"]
 
 [ext_resource type="Texture2D" uid="uid://86byq5gt656e" path="res://Textures/Items/Weapons/Fire-Ball-Edit.png" id="1_c3ih6"]
 [ext_resource type="Script" path="res://Player/Attack/fire_bullet.gd" id="1_g8hyy"]
+[ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="3_rjngd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_wpbdw"]
 
@@ -69,5 +70,8 @@ autostart = true
 libraries = {
 "": SubResource("AnimationLibrary_heqwe")
 }
+
+[node name="light" parent="." instance=ExtResource("3_rjngd")]
+visible = false
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

@@ -61,7 +61,7 @@ func _physics_process(delta):
 
 func create_damage_zone():
 	var new_pit = dmgZone.instantiate()
-	new_pit.position = position
+	new_pit.global_position = global_position
 	new_pit.target = global_position
 	new_pit.hp = hp
 	new_pit.speed = speed
@@ -69,5 +69,5 @@ func create_damage_zone():
 	new_pit.knockback_amount = knockback_amount
 	new_pit.attack_size = attack_size
 	new_pit.cd = cd
-	get_parent().add_child(new_pit)
+	get_parent().get_parent().add_child(new_pit)
 	

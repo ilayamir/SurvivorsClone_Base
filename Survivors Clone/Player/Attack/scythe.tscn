@@ -8,14 +8,16 @@
 size = Vector2(10.2688, 42.1695)
 
 [node name="scythe" type="Area2D" groups=["attacks", "cooldown_hurtbox_enforcers"]]
-top_level = true
+show_behind_parent = true
+z_index = -1
 rotation = 1.13446
-scale = Vector2(1.2, 1.2)
+scale = Vector2(1.4, 1.4)
 collision_layer = 4
 collision_mask = 0
 script = ExtResource("1_8xms1")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+show_behind_parent = true
 texture_filter = 1
 position = Vector2(-20, -20)
 texture = ExtResource("2_spuba")
@@ -39,5 +41,9 @@ autostart = true
 stream = ExtResource("3_ph1wv")
 volume_db = -5.0
 autoplay = true
+
+[node name="HealCD" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

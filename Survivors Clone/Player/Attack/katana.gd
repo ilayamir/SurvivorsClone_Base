@@ -19,32 +19,32 @@ func _ready():
 			hp = 9999
 			speed = 200*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
-			knockback_amount = 200
+			knockback_amount = 120
 			attack_size = 1.0 * (1 + player.spell_size)
 		2:
 			hp = 9999
 			speed = 200*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
-			knockback_amount = 200
+			knockback_amount = 120
 			attack_size = 1.0 * (1 + player.spell_size)
 		3:
 			hp = 9999
 			speed = 200*(1+player.speed_bonus)
 			damage = 5*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
-			knockback_amount = 200
+			knockback_amount = 120
 			attack_size = 2.0 * (1 + player.spell_size)
 		4:
 			hp = 9999
 			speed = 200*(1+player.speed_bonus)
 			damage = 6*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
-			knockback_amount = 200
+			knockback_amount = 120
 			attack_size = 2 * (1 + player.spell_size)
 		
 		5:
 			hp = 9999
 			speed = 200*(1+player.speed_bonus)
 			damage = 7*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
-			knockback_amount = 200
+			knockback_amount = 120
 			attack_size = 2 * (1 + player.spell_size)
 			
 	scale = Vector2(1.0,1.0) * attack_size

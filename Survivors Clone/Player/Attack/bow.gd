@@ -5,6 +5,7 @@ var ammo = 20
 @onready var player = get_tree().get_first_node_in_group("player")
 var angle = Vector2.ZERO
 var arrow = preload("res://Player/Attack/arrow.tscn")
+var flipped = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -14,6 +15,8 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _physics_process(_delta):
 	angle = player.last_movement.normalized()
+	if flipped:
+		angle*=-1
 	rotation = angle.angle() + deg_to_rad(135)
 
 func _on_shoot_timer_timeout():
@@ -27,6 +30,8 @@ func _on_animation_player_animation_finished(_shoot):
 	new_arrow.level = level
 	new_arrow.position = player.position
 	new_arrow.angle = angle
+	if flipped:
+		new_arrow.sound_off = true
 	get_parent().add_child(new_arrow)
 	if ammo == 0:
 		queue_free()

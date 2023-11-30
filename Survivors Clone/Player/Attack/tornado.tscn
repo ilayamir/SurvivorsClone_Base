@@ -1,11 +1,108 @@
-[gd_scene load_steps=5 format=3 uid="uid://s0ml4eogonyr"]
+[gd_scene load_steps=12 format=3 uid="uid://s0ml4eogonyr"]
 
 [ext_resource type="Script" path="res://Player/Attack/tornado.gd" id="1_0vvwv"]
-[ext_resource type="Texture2D" uid="uid://bauv5026rdfw5" path="res://Textures/Items/Weapons/tornado.png" id="1_kgglw"]
+[ext_resource type="Texture2D" uid="uid://dnxu3b0dqxhay" path="res://Textures/Items/Weapons/crystal_gem32.png" id="2_bov3p"]
 [ext_resource type="AudioStream" uid="uid://tcuv5nd5wamp" path="res://Audio/SoundEffect/tornado.ogg" id="3_48g36"]
+[ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="4_r3ocy"]
+[ext_resource type="Script" path="res://Player/Attack/Black Hole.gd" id="5_wbs4a"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_1p6qi"]
-size = Vector2(17, 26)
+size = Vector2(19, 20)
+
+[sub_resource type="Animation" id="Animation_38dxl"]
+resource_name = "spin"
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.4, 0.4), Vector2(0.5, 0.5), Vector2(0.65, 0.65), Vector2(0.75, 0.75), Vector2(0.8, 0.8), Vector2(0.9, 0.9), Vector2(1, 1), Vector2(1, 1), Vector2(0.916667, 0.916667)]
+}
+
+[sub_resource type="Animation" id="Animation_6bby2"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(0.25, 0.25)]
+}
+
+[sub_resource type="Animation" id="Animation_527cw"]
+resource_name = "pull"
+length = 1.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 1.1, 1.2, 1.3, 1.4, 1.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("CollisionShape2D:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 1.6),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector2(2, 2), Vector2(2, 2)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_kmiwj"]
+_data = {
+"RESET": SubResource("Animation_6bby2"),
+"pull": SubResource("Animation_527cw"),
+"spin": SubResource("Animation_38dxl")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_qayr3"]
+radius = 40.0
 
 [node name="Tornado" type="Area2D" groups=["attacks"]]
 top_level = true
@@ -15,10 +112,14 @@ collision_mask = 0
 script = ExtResource("1_0vvwv")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
-texture = ExtResource("1_kgglw")
+texture_filter = 1
+scale = Vector2(1.3, 1.3)
+texture = ExtResource("2_bov3p")
+hframes = 4
+vframes = 4
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.5, 1)
+scale = Vector2(0.25, 0.25)
 shape = SubResource("RectangleShape2D_1p6qi")
 
 [node name="snd_attack" type="AudioStreamPlayer" parent="."]
@@ -31,4 +132,30 @@ autoplay = true
 wait_time = 20.0
 autostart = true
 
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+speed_scale = 1.7
+libraries = {
+"": SubResource("AnimationLibrary_kmiwj")
+}
+
+[node name="light" parent="." instance=ExtResource("4_r3ocy")]
+
+[node name="texturelight" parent="light" index="0"]
+color = Color(0.784314, 0.0156863, 0.341176, 1)
+energy = 0.3
+
+[node name="textureshadow" parent="light" index="1"]
+energy = 0.3
+
+[node name="Black Hole" type="Area2D" parent="." groups=["attacks", "cooldown_hurtbox_enforcers", "suck"]]
+collision_layer = 16
+collision_mask = 0
+script = ExtResource("5_wbs4a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Black Hole"]
+shape = SubResource("CircleShape2D_qayr3")
+disabled = true
+
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+
+[editable path="light"]

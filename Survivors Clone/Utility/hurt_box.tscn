@@ -12,7 +12,7 @@ script = ExtResource("1_8yr20")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 
 [node name="DisableTimer" type="Timer" parent="."]
-wait_time = 0.5
+wait_time = 0.2
 one_shot = true
 
 [node name="snd_crit" type="AudioStreamPlayer" parent="."]

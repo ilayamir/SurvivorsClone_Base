@@ -8,7 +8,7 @@ var managers = []
 @onready var player = get_tree().get_first_node_in_group("player")
 var group_manager = preload("res://Utility/enemy_group_manager.tscn")
 
-@export var time = 238
+@export var time = 0
 signal changetime(time)
 
 func _ready():
@@ -24,7 +24,8 @@ func _on_timer_timeout():
 		var i_manager = group_manager.instantiate()
 		add_child(i_manager)
 		i_manager.update_loc(direction)
-		if time >= i.time_start and time <= i.time_end:
+		var roll = randi_range(1,100)
+		if time >= i.time_start and time <= i.time_end and roll<i.chance:
 			if i.spawn_delay_counter < i.enemy_spawn_delay:
 				i.spawn_delay_counter += 1
 			else:
@@ -43,7 +44,7 @@ func _on_timer_timeout():
 					else:
 						enemies_to_spawn.append(new_enemy)
 					counter += 1
-	if my_children.size()<= enemy_cap and enemies_to_spawn.size()<=enemy_cap and time<300:
+	if my_children.size()<= enemy_cap and enemies_to_spawn.size()<=enemy_cap and time<360:
 		var spawn_number = clamp(enemies_to_spawn.size(), 1, 50) - 1
 		var counter = 0
 		while counter < spawn_number:
@@ -69,8 +70,6 @@ func _on_timer_timeout():
 			manager.update_loc(direction)
 		else:
 			managers.erase(manager)
-	if time == 299:
-		get_tree().call_group("enemy", "death")
 	
 
 func get_random_position(corner):

@@ -1,6 +1,6 @@
 extends CharacterBody2D
 
-var movement_speed = 55.0
+var movement_speed = 50.0
 var hp = 80.0
 var maxhp = 80.0
 var last_movement = Vector2.RIGHT
@@ -8,9 +8,12 @@ var time = 0
 var face_dir = Vector2.LEFT
 var dashlength = 0.2
 var dashspeed = 400
+@export var end_time = 360
 
 var experience = 0
 var stagger = false
+var near_death = false
+@onready var invul = false
 var experience_level = 1
 var collected_experience = 0
 var weapon_count = 0
@@ -25,19 +28,20 @@ var eye_on = false
 var screen_size
 
 #Attacks
-var iceSpear = preload("res://Player/Attack/ice_spear.tscn")
-var tornado = preload("res://Player/Attack/tornado.tscn")
-var javelin = preload("res://Player/Attack/javelin.tscn")
-var fsword = preload("res://Player/Attack/fswords.tscn")
-var sword = preload("res://Player/Attack/sword.tscn")
+var iceSpear = preload("res://Player/Attack/ice_spear.tscn") #dark
+var tornado = preload("res://Player/Attack/tornado.tscn") #dark
+var javelin = preload("res://Player/Attack/javelin.tscn") #holy
+var fsword = preload("res://Player/Attack/fswords.tscn") #holy
+var sword = preload("res://Player/Attack/sword.tscn") #holy
 var scythe = preload("res://Player/Attack/scythe.tscn")
 var eye = preload("res://Player/Attack/eye.tscn")
-var comet = preload("res://Player/Attack/comet.tscn")
-var fire_bullet = preload("res://Player/Attack/fire_bullet.tscn")
-var katana = preload("res://Player/Attack/katana_manager.tscn")
-var hell_circle = preload("res://Player/Attack/hell_circle.tscn")
-var fire_trail = preload("res://Player/Attack/fire_trail.tscn")
-var bow = preload("res://Player/Attack/bow.tscn")
+var comet = preload("res://Player/Attack/comet.tscn") #fire
+var fire_bullet = preload("res://Player/Attack/fire_bullet.tscn") #fire
+var katana = preload("res://Player/Attack/katana_manager.tscn") #fire
+var hell_circle = preload("res://Player/Attack/hell_circle.tscn") #dark
+var fire_trail = preload("res://Player/Attack/fire_trail.tscn") #fire
+var bow = preload("res://Player/Attack/bow.tscn") #holy
+var angel = preload("res://Player/Attack/angel_attack.tscn")
 
 #AttackNodes
 @onready var iceSpearTimer = get_node("%IceSpearTimer")
@@ -59,6 +63,7 @@ var bow = preload("res://Player/Attack/bow.tscn")
 @onready var trail_timer = get_node("%TrailTimer")
 @onready var bowTimer = get_node("%BowTimer")
 @onready var hell_base = []
+@onready var weapon_pool = get_node("%weaponPool")
 
 #UPGRADES
 var collected_upgrades = []
@@ -91,7 +96,7 @@ var hell_circle_level = 0
 #Firegun
 var firegun_ammo = 0
 var firegun_baseammo = 0
-var firegun_attackspeed = 3
+var firegun_attackspeed = 2.8
 var firegun_level = 0
 
 #IceSpear
@@ -124,7 +129,7 @@ var javelin_level = 0
 #FSword
 var fsword_ammo = 0
 var fsword_baseammo = 0
-var fsword_attackspeed = 1
+var fsword_attackspeed = 1.3
 var fsword_level = 0
 var change = 0
 
@@ -153,6 +158,8 @@ var shadow = preload("res://Utility/shadow.tscn")
 @onready var snd_shot = get_node("%snd_shotgun")
 @onready var death_timer = get_node("%BossDeathTimer")
 @onready var dash = $Dash
+@onready var hurtbox = $HurtBox
+@onready var vuln_timer = get_node("%vulnTimer")
 
 #GUI
 @onready var expBar = get_node("%ExperienceBar")
@@ -177,7 +184,8 @@ var shadow = preload("res://Utility/shadow.tscn")
 @onready var pausePanel = get_node("%PausePanel")
 @onready var bossHealthBar = get_node("%BossHealthBar")
 @onready var lblstagger = get_node("%lbl_stagger")
-
+@onready var lblHelp = get_node("%lbl_help")
+@onready var HelperManager = get_tree().get_first_node_in_group("helper")
 #music
 @onready var bgm = get_node("%bgm_snd")
 @onready var boss_bgm = get_node("%boss_snd")
@@ -186,19 +194,31 @@ var shadow = preload("res://Utility/shadow.tscn")
 signal playerdeath
 
 func _ready():
-	upgrade_character("firegun1")
+	time = 0
+	upgrade_character("fsword1")
+	upgrade_character("fsword2")
+	upgrade_character("fsword3")
+	upgrade_character("fsword4")
+	upgrade_character("fsword5")
+	upgrade_character("ring1")
+	upgrade_character("ring2")
+	upgrade_character("scroll1")
+	upgrade_character("scroll2")
+	upgrade_character("scroll3")
+	upgrade_character("scroll4")
 	attack()
 	set_expbar(experience, calculate_experiencecap())
 	healthBar.max_value = maxhp
 	healthBar.value = hp
 	ultTimer.wait_time = ult_cd
 	ultBar.max_value = ult_cd
+	ultRun.wait_time = 0.1
 	ultTimer.start()
 	screen_size = get_viewport_rect().size
 
 func _physics_process(delta):
 	movement(delta)
-	$GUILayer/GUI/lbl_fps.text = str("fps:", Engine.get_frames_per_second())
+	
 
 func _process(_delta):
 	ultBar.value = ult_cd - ultTimer.time_left
@@ -227,15 +247,15 @@ func get_movement():
 	return Vector2(x_mov,y_mov)
 
 func movement(delta):
-	var speed
+	var mov_speed
 	if Input.is_action_just_pressed("dash") and $Dash/dash_cd.is_stopped():
 		dash.start_dash(0.2)
-		trail_timer.wait_time /= 5 
+		trail_timer.wait_time /= 3
 		$Dash/dash_cd.start()
 	if dash.is_dashing():
-		speed = movement_speed*5
+		mov_speed = movement_speed*3
 	else:
-		speed = movement_speed
+		mov_speed = movement_speed
 		trail_timer.wait_time = trail_cd * (1-spell_cooldown)
 	
 	var mov = get_movement()
@@ -258,14 +278,13 @@ func movement(delta):
 			velocity = Vector2.ZERO
 	else:
 		velocity += mov*delta*1500
-		velocity = velocity.limit_length(speed)
+		velocity = velocity.limit_length(mov_speed)
 		if $ShadowTimer.time_left == 0:
 			$ShadowTimer.start()
 	
-	if $SoftCollisionBox.is_colliding():
-		velocity+= $SoftCollisionBox.get_push_vector() * 10
-	
-	move_and_slide()
+	var collision = move_and_collide(velocity*delta)
+	if collision:
+		velocity = velocity.slide(collision.get_normal())
 
 func attack():
 	if icespear_level > 0:
@@ -310,19 +329,47 @@ func attack():
 			bowTimer.start()
 
 func _on_hurt_box_hurt(damage, _angle, _knockback, _special_effect):
-	hp -= clamp(damage-armor,1.0,999.0)
-	if damage>0:
-		$snd_hit.play()
-		var tween = sprite.create_tween()
-		tween.tween_property(sprite, "modulate", Color(4,1,1,1), 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		tween.play()
-		var tween2 = sprite.create_tween()
-		tween2.tween_property(sprite, "modulate", Color(1,1,1,1), 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		tween2.play()
-	healthBar.max_value = maxhp
-	healthBar.value = hp
-	if hp <= 0:
+	if !invul:
+		hp -= clamp(damage-armor,1.0,999.0)
+		if damage>0:
+			$snd_hit.play()
+			var tween = sprite.create_tween()
+			tween.tween_property(sprite, "modulate", Color(4,1,1,1), 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+			tween.play()
+			var tween2 = sprite.create_tween()
+			tween2.tween_property(sprite, "modulate", Color(1,1,1,1), 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+			tween2.play()
+		healthBar.max_value = maxhp
+		healthBar.value = hp
+		if hp <= 0:
+			invul = true
+			hp = 0
+			var roll = randi_range(0,100)
+			var chance = HelperManager.chance
+			if roll <= chance and HelperManager.cd.is_stopped():
+				heal(maxhp/2)
+				HelperManager.assisted()
+				check_for_assistance(true)
+			else:
+				check_for_assistance(false)
+
+func check_for_assistance(helped):
+	if !helped:
 		death()
+	else:
+		ultActiavte.set_collision_layer_value(3,true)
+		ultActiavte.knockback_amount = 500
+		ultRun.start(2)
+		var texts = ["Our Prayers Have Been Answered", "Seek Redemption", "You Have Been Noticed"]
+		lblHelp.text = texts.pick_random()
+		var tween = lblHelp.create_tween()
+		tween.tween_property(lblHelp,"modulate", Color(1,1,1,1), 2)
+		tween.play()
+		vuln_timer.start()
+		var new_angel = angel.instantiate()
+		new_angel.position = position
+		get_parent().call_deferred("add_child", new_angel)
+
 
 func _on_ice_spear_timer_timeout():
 	icespear_ammo += icespear_baseammo + additional_attacks
@@ -335,6 +382,7 @@ func _on_ice_spear_attack_timer_timeout():
 		icespear_attack.target = get_random_target()
 		icespear_attack.level = icespear_level
 		icespear_attack.additional_ammo = icespear_additional_ammo
+		icespear_attack.light_on = true
 		add_child(icespear_attack)
 		icespear_ammo -= 1
 		if icespear_ammo > 0:
@@ -361,16 +409,6 @@ func get_random_target():
 		return enemy_close.pick_random().global_position
 	else:
 		return Vector2.DOWN
-
-func _on_enemy_detection_area_area_entered(body):
-	if body.is_in_group("enemy_collision"):
-		if not enemy_close.has(body):
-			enemy_close.append(body)
-
-func _on_enemy_detection_area_area_exited(body):
-	if body.is_in_group("enemy_collision"):
-		if enemy_close.has(body):
-			enemy_close.erase(body)
 
 func _on_tornado_timer_timeout():
 	tornado_ammo += tornado_baseammo + additional_attacks
@@ -400,44 +438,44 @@ func _on_f_sword_attack_timer_timeout():
 			change += 10
 			change = change%90
 			var ext_chance = randf_range(0,1)
-			if ext_chance<0.3:
-				var fsword1 = fsword.instantiate()
+			if ext_chance<0.5:
+				var fsword1 = weapon_pool.draw_from_pool()
 				fsword1.position = pos
 				fsword1.angle = Vector2(0,-1).rotated(deg_to_rad(change+45))
 				fsword1.level = fsword_level
-				add_child(fsword1)
-				var fsword2 = fsword.instantiate()
+				fsword1.reset()
+				var fsword2 = weapon_pool.draw_from_pool()
 				fsword2.position = pos
 				fsword2.angle = Vector2(1,0).rotated(deg_to_rad(change+45))
 				fsword2.level = fsword_level
-				add_child(fsword2)
-				var fsword3 = fsword.instantiate()
+				fsword2.reset()
+				var fsword3 = weapon_pool.draw_from_pool()
 				fsword3.position = pos
 				fsword3.angle = Vector2(0,1).rotated(deg_to_rad(change+45))
 				fsword3.level = fsword_level
-				add_child(fsword3)
-				var fsword4 = fsword.instantiate()
+				fsword3.reset()
+				var fsword4 = weapon_pool.draw_from_pool()
 				fsword4.position = pos
 				fsword4.angle = Vector2(-1,0).rotated(deg_to_rad(change+45))
 				fsword4.level = fsword_level
-				add_child(fsword4)
+				fsword4.reset()
 		var mov_dir = get_movement()
-		var fsword1 = fsword.instantiate() #up
+		var fsword1 = weapon_pool.draw_from_pool() #up
 		fsword1.position = pos
 		fsword1.angle = Vector2(0,-1).rotated(deg_to_rad(change))
 		fsword1.level = fsword_level
 		
-		var fsword2 = fsword.instantiate() #right
+		var fsword2 = weapon_pool.draw_from_pool() #right
 		fsword2.position = pos
 		fsword2.angle = Vector2(1,0).rotated(deg_to_rad(change))
 		fsword2.level = fsword_level
 		
-		var fsword3 = fsword.instantiate() #down
+		var fsword3 = weapon_pool.draw_from_pool() #down
 		fsword3.position = pos
 		fsword3.angle = Vector2(0,1).rotated(deg_to_rad(change))
 		fsword3.level = fsword_level
 		
-		var fsword4 = fsword.instantiate() #left
+		var fsword4 = weapon_pool.draw_from_pool() #left
 		fsword4.position = pos
 		fsword4.angle = Vector2(-1,0).rotated(deg_to_rad(change))
 		fsword4.level = fsword_level
@@ -475,10 +513,11 @@ func _on_f_sword_attack_timer_timeout():
 				fsword2.angle = fsword2.angle.rotated(deg_to_rad(15))
 				fsword3.angle = fsword3.angle.rotated(deg_to_rad(-15))
 				fsword4.angle = fsword4.angle.rotated(deg_to_rad(-15))
-		add_child(fsword1)
-		add_child(fsword2)
-		add_child(fsword3)
-		add_child(fsword4)
+		fsword1.reset()
+		fsword2.reset()
+		fsword3.reset()
+		fsword4.reset()
+		
 		fsword_ammo -= 1
 		if fsword_ammo > 0:
 			fSwordAttackTimer.start()
@@ -539,12 +578,14 @@ func set_expbar(set_value = 1, set_max_value = 100):
 	expBar.max_value = set_max_value
 
 func ultimate():
+	$light/AnimationPlayer.play("flicker")
 	ultActiavte.set_collision_layer_value(3,true)
-	crit_chance = 0.25
 	if scythe_on == true:
 		var new_scythe = scythe.instantiate()
-		new_scythe.position = position
+		new_scythe.global_position = global_position
 		add_child(new_scythe)
+		new_scythe.global_position = global_position
+		$ult_snd_bell.play()
 	if eye_on == true:
 		var new_eye = eye.instantiate()
 		screen_size = get_viewport_rect().size
@@ -552,15 +593,18 @@ func ultimate():
 		new_eye.position.y = -27
 		crit_chance = 0.5
 		add_child(new_eye)
+		$ult_snd_bell.play()
 	ultDuration.start()
 	ultRun.start()
 
 func _on_activation_time_timeout():
 	ultActiavte.set_collision_layer_value(3,false)
+	ultRun.wait_time = 0.1
 
 func _on_sword_timer_timeout():
 	var sword_attack = sword.instantiate()
 	sword_attack.position = position
+	sword_attack.flipped = false
 	match sprite.flip_h:
 		true:
 			sword_attack.last_movement = Vector2.LEFT
@@ -570,21 +614,17 @@ func _on_sword_timer_timeout():
 	add_child(sword_attack)
 
 func _on_sword_attack_timer_timeout():
-	if sword_ammo > 0:
-		var sword_attack = sword.instantiate()
-		sword_attack.position = position
-		match sprite.flip_h:
-			true:
-				sword_attack.last_movement = Vector2.LEFT
-			false:
-				sword_attack.last_movement = Vector2.RIGHT
-		sword_attack.level = sword_level
-		add_child(sword_attack)
-		sword_ammo -= 1
-		if sword_ammo > 0:
-			swordAttackTimer.start()
-		else:
-			swordAttackTimer.stop()
+	var sword_attack = sword.instantiate()
+	sword_attack.position = position
+	sword_attack.flipped = true
+	match sprite.flip_h:
+		true:
+			sword_attack.last_movement = Vector2.RIGHT
+		false:
+			sword_attack.last_movement = Vector2.LEFT
+	sword_attack.level = sword_level
+	add_child(sword_attack)
+	
 
 func levelup():
 	sndLevelUp.play()
@@ -594,11 +634,10 @@ func levelup():
 	tween.play()
 	levelPanel.visible = true
 	#LevelUp Boosts:
-	movement_speed += 1
+	movement_speed += 0.5
 	maxhp += 0.8
-	if experience_level % 10 == 0:
+	if experience_level % 15 == 0:
 		max_weapon_count+=1
-	
 	var options = 0
 	var optionsmax = 3
 	if experience_level == 10:
@@ -612,7 +651,7 @@ func levelup():
 		upgradeOptions.add_child(option_choice)
 		options += 1
 	get_tree().paused = true
-
+ 
 func upgrade_character(upgrade):
 	match upgrade:
 		"hsword1":
@@ -627,9 +666,12 @@ func upgrade_character(upgrade):
 		"hsword4":
 			sword_level = 4
 			sword_attackspeed -= 2
+		"hsword5":
+			sword_level = 5
 		"bow1":
 			bow_level = 1
 			bow_ammo += 1
+			weapon_count+=1
 		"bow2":
 			bow_level = 2
 			bow_ammo += 1
@@ -641,7 +683,6 @@ func upgrade_character(upgrade):
 			bow_ammo += 1
 		"bow5":
 			bow_level = 5
-			bow_ammo += 1
 		"trail1":
 			trail_level = 1
 			weapon_count += 1
@@ -731,7 +772,7 @@ func upgrade_character(upgrade):
 			icespear_baseammo += 2
 		"icespear5":
 			icespear_level = 5
-			icespear_additional_ammo += 2
+			icespear_additional_ammo += 1
 		"tornado1":
 			tornado_level = 1
 			tornado_baseammo += 1
@@ -745,6 +786,8 @@ func upgrade_character(upgrade):
 		"tornado4":
 			tornado_level = 4
 			tornado_baseammo += 1
+		"tornado5":
+			tornado_level = 5
 		"javelin1":
 			javelin_level = 1
 			javelin_ammo = 1
@@ -755,6 +798,8 @@ func upgrade_character(upgrade):
 			javelin_level = 3
 		"javelin4":
 			javelin_level = 4
+		"javelin5":
+			javelin_level = 5
 		"armor1","armor2","armor3","armor4":
 			armor += 1
 		"speed1","speed2","speed3","speed4":
@@ -769,6 +814,7 @@ func upgrade_character(upgrade):
 			exp_bonus+= 0.05
 		"muscle1","muscle2","muscle3","muscle4":
 			maxhp += 8
+			heal(8)
 		"compass1","compass2","compass3","compass4":
 			collect_area.scale += Vector2(0.15,0.15)
 		"bullet1","bullet2","bullet4","bullet5":
@@ -782,11 +828,11 @@ func upgrade_character(upgrade):
 		"eye":
 			eye_on = true
 	attack()
-	heal(maxhp*0.1)
 	adjust_gui_collection(upgrade)
 	var option_children = upgradeOptions.get_children()
-	for i in option_children:
-		i.queue_free()
+	while option_children.size()>0:
+		var option = option_children.pop_front()
+		option.queue_free()
 	upgrade_options.clear()
 	collected_upgrades.append(upgrade)
 	levelPanel.visible = false
@@ -806,7 +852,7 @@ func get_random_item():
 				pass
 			elif UpgradeDb.UPGRADES[i]["type"] == "ultimate": #Don't pick ult
 				pass
-			elif UpgradeDb.UPGRADES[i]["type"] == "weapon" and weapon_count>=max_weapon_count: #Don't pick food
+			elif UpgradeDb.UPGRADES[i]["type"] == "weapon" and weapon_count>=max_weapon_count: #Cap number of weapons
 				pass
 			elif UpgradeDb.UPGRADES[i]["prerequisite"].size() > 0: #Check for PreRequisites
 				var to_add = true
@@ -834,6 +880,7 @@ func _on_ult_duration_timeout():
 	crit_chance = 0.1
 
 func change_time(argtime = 0, boss = null, boss_max_hp = 0):
+	$GUILayer/GUI/lbl_fps.text = str("fps:", Engine.get_frames_per_second()," kills:", HelperManager.enemies_killed, " rev%: ", HelperManager.chance)
 	time = argtime
 	var get_m = int(time/60.0)
 	var get_s = time % 60
@@ -842,16 +889,22 @@ func change_time(argtime = 0, boss = null, boss_max_hp = 0):
 	if get_s < 10:
 		get_s = str(0,get_s)
 	lblTimer.text = str(get_m,":",get_s)
-	if time == 299:
+	if time == end_time-120:
+		$"weather manager/rain".emitting = false
+		$light.update(2.5)
+	if time == end_time-5:
 		bgm.stream_paused = true
-	if time == 302:
+		$"weather manager/ash".emitting = true
+		$light.update(1)
+	if time == end_time+2:
 		boss_bgm.playing = true
-	if time == 304:
+	if time == end_time+4:
 		bossHealthBar.visible = true
+		$light.update(4)
 		var tween = bossHealthBar.create_tween()
 		tween.tween_property(bossHealthBar, "modulate", Color(1, 1, 1, 1),4).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 		tween.play()
-	if time == 312:
+	if time == end_time+12:
 		funny_timer.start()
 	if boss != null and final_boss == null:
 		final_boss = boss
@@ -884,9 +937,10 @@ func death():
 	tween.tween_property(deathPanel,"position",Vector2(220,55),3.0).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
 	tween.play()
 	if boss_flag == 1:
+		boss_flag = 0
 		lblResult.text = "Victory !"
 		sndVictoryBoss.play()
-	elif time >= 300:
+	elif time >= end_time:
 		lblResult.text = "You Survived...\nBut The Boss Isn't Dead !"
 		sndVictory.play()
 	else:
@@ -925,6 +979,8 @@ func heal(healing):
 	number.label.text = str(int(healing))
 	number.modulate = Color(0,0.75,0.4,0.6)
 	hp = clamp(hp,0,maxhp)
+	if hp>maxhp*10/100:
+		near_death = false
 	healthBar.max_value = maxhp
 	healthBar.value = hp
 
@@ -936,11 +992,11 @@ func _on_comet_attack_timer_timeout():
 		if comet_ammo > 0:
 			var comet_attack = comet.instantiate()
 			var target = Vector2.ZERO
-			target.x = randf_range(global_position.x-screen_size.x/2+40, global_position.x+screen_size.x/2-40)
-			target.y = randf_range(global_position.y-screen_size.y/2+40, global_position.y+screen_size.y/2-40)
+			target.x = randf_range(global_position.x-(screen_size.x/2)+100, global_position.x+(screen_size.x/2)-100)
+			target.y = randf_range(global_position.y-(screen_size.y/2)+50, global_position.y+(screen_size.y/2)-50)
 			comet_attack.target = target
 			comet_attack.position.x = target.x
-			comet_attack.position.y = -screen_size.y/2 -30
+			comet_attack.position.y = target.y -screen_size.y
 			comet_attack.level = comet_level
 			add_child(comet_attack)
 			comet_ammo -= 1
@@ -961,6 +1017,7 @@ func _on_shotgun_attack_timer_timeout():
 		firegun_attack1.position = position
 		firegun_attack1.angle = last_mov
 		firegun_attack1.level = firegun_level
+		firegun_attack1.light_on = true
 		add_child(firegun_attack1)
 		
 		var firegun_attack2 = fire_bullet.instantiate()
@@ -1046,7 +1103,6 @@ func update_hell():
 func _on_boss_death_timer_timeout():
 	death()
 
-
 func _on_trail_timer_timeout():
 	var new_fire = fire_trail.instantiate()
 	new_fire.level = trail_level
@@ -1056,11 +1112,34 @@ func _on_trail_timer_timeout():
 		$Attack/TrailSndTimer.start()
 	add_child(new_fire)
 
-
 func _on_bow_timer_timeout():
 	var new_bow = bow.instantiate()
 	new_bow.level = bow_level
 	new_bow.ammo = bow_ammo + additional_attacks
 	new_bow.angle = last_movement.normalized()
 	add_child(new_bow)
+	if bow_level == 5:
+		var new_bow2 = bow.instantiate()
+		new_bow2.level = bow_level
+		new_bow2.ammo = bow_ammo + additional_attacks
+		new_bow2.angle = -last_movement.normalized()
+		new_bow2.flipped = true
+		add_child(new_bow2)
 
+
+func _on_vuln_timer_timeout():
+	var tween = lblHelp.create_tween()
+	invul = false
+	ultActiavte.knockback_amount = 400
+	tween.tween_property(lblHelp,"modulate", Color(1,1,1,0), 2)
+	tween.play()
+
+
+func _on_enemy_detection_area_body_entered(body):
+	if not enemy_close.has(body):
+		enemy_close.append(body)
+
+
+func _on_enemy_detection_area_body_exited(body):
+	if enemy_close.has(body):
+		enemy_close.erase(body)

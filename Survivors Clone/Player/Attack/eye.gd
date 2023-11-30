@@ -35,3 +35,4 @@ func _on_animation_player_animation_finished(_anim_name):
 	new_lightning.position = target
 	new_lightning.target = target
 	add_child(new_lightning)
+	$Timer.start()

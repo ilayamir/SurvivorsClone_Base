@@ -24,11 +24,14 @@ AudioManager="*res://Utility/audio_manager.tscn"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
-window/size/mode=3
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
+
+[editor]
+
+export/max_fps=0
 
 [input]
 
@@ -91,7 +94,8 @@ dash={
 2d_physics/layer_3="Enemy"
 2d_physics/layer_4="Loot"
 2d_physics/layer_5="EnemyCDEnforced"
-2d_physics/layer_6="Flocks"
+2d_physics/layer_6="Ultimate"
+2d_physics/layer_7="Elites"
 
 [rendering]
 

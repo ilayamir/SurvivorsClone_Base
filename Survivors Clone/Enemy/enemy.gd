@@ -2,15 +2,20 @@ extends CharacterBody2D
 
 @export var movement_speed = 20.0
 var movement_speed_base
-@export var hp = 10
+@export var hp = 20
 var maxhp
 @export var knockback_recovery = 3.5
 @export var knockback_recovery_base = 3.5
 @export var experience = 1
 @export var enemy_damage = 1
 @export var gem_drop_chance = 0.6
+@export var food_drop_chance = 0.001
 @export var crit_vul = false
 @export var base_color = Color(1,1,1,1)
+@export var reset_check_time = 1
+@export var offscreen_timer = 4
+var invis = false
+var invis_time = 0
 var knockback = Vector2.ZERO
 var curr_pos = Vector2.ZERO
 var dead = false
@@ -24,12 +29,14 @@ var stagger = false
 @onready var snd_hit = $snd_hit
 @onready var hitBox = $HitBox
 @onready var hurtBox = $HurtBox
-@onready var UltRecTimer = $UltRecovery
 @onready var rushingTimer = $RushingTimer
 @onready var rushTimer = $RushingTimer/RushTimer
-@onready var hideTimer = $HideTimer
-@onready var reset_location_timer = $ResetLocTimer
-@onready var collision = $SoftCollisionBox
+@onready var dirTimer = $GetDirTimer
+@onready var collision_box = $CollisionShape2D
+@onready var hitflash = $hitflash
+@onready var debuffTimer = $DebuffTimer
+@onready var staggerTimer
+@onready var HelperManager = get_tree().get_first_node_in_group("helper")
 
 var exp_gem = preload("res://Objects/experience_gem.tscn")
 var floor_meat = preload("res://Objects/floor_meat.tscn")
@@ -62,32 +69,42 @@ func _ready():
 			sprite.texture = spr_2
 		else:
 			sprite.texture = spr_3
+	hp *= clamp(player.experience_level*0.5,1, 99999)
 	maxhp = hp
 	stagger_threshold = clamp(int(hp*2/5),1,maxhp)
 	movement_speed_base = movement_speed
 	if is_in_group("rusher"):
-		$RushingTimer.start()
+		rushTimer.wait_time = 0.5
+		rushingTimer.start(randf_range(8,15))
 	var anim_spd = randf_range(0.9,1.1)
 	anim.speed_scale *= anim_spd
-	anim.play("walk")
+	if is_in_group("boss"):
+		staggerTimer = $StaggerTime
 	hitBox.damage = enemy_damage
-	$GetDirTimer.wait_time = 0.5
+	dirTimer.wait_time = 0.2
 	screen_size = get_viewport_rect().size
-	hideTimer.wait_time = 1
 	direction = global_position.direction_to(player.global_position)
+	anim.play("walk")
 	if direction.x > 0.1:
 		sprite.flip_h = true
+		if is_in_group("spider_demon") and !dead: anim.play("walk_right")
 	elif direction.x < -0.1:
 		sprite.flip_h = false
-	velocity = direction*movement_speed
+		if is_in_group("spider_demon") and !dead: anim.play("walk")
 
-func _physics_process(_delta):
-	knockback = knockback.move_toward(Vector2.ZERO, knockback_recovery)
+func _physics_process(delta):
+	if invis:
+		invis_time+=delta
+		if invis_time>=offscreen_timer:
+			launch()
+			invis_time = 0
+			invis = false
 	velocity = direction*movement_speed
-	velocity += knockback
-	if collision.is_colliding():
-		velocity+= collision.get_push_vector() * 20
 	move_and_slide()
+
+func launch():
+	var launch_to = (curr_pos-global_position).normalized()
+	global_position = curr_pos+launch_to*(screen_size.x/2 +20)
 
 func death():
 	AudioManager.play_positional("death", global_position)
@@ -101,7 +118,7 @@ func death():
 		hurtBox.queue_free()
 		hitBox.queue_free()
 	dead = true
-	collision.set("disabled", true)
+	collision_box.call_deferred("set", "disabled", true)
 	var gem_chance = randf_range(0,1)
 	var food_chance = randf_range(0,1)
 	var ult_chance = randf_range(0,1)
@@ -128,10 +145,17 @@ func death():
 		new_magnet.global_position = global_position - Vector2(-5,5)
 		loot_base.call_deferred("add_child",new_magnet)
 
-func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect):
+func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect="none"):
 	hp -= damage
 	if !stagger:
-		knockback = angle * knockback_amount
+		knockback = angle.normalized() * knockback_amount * (100- knockback_recovery) / 100 * 0.1
+		velocity = Vector2()
+		var knock_pos = position+knockback
+		var tween = create_tween()
+		var time = clamp(0.02*(100-knockback_recovery),0,0.2)
+		tween.tween_property(self, "position", knock_pos, time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+		tween.play()
+		knockback = 0
 		if is_in_group("boss"):
 			stagger_threshold -= damage
 	if stagger_threshold <= 0:
@@ -139,55 +163,47 @@ func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect):
 	if hp<=0:
 		death()
 	else:
+		hitflash.play("hitflash")
 		if special_effect!="none":
 			if special_effect == "crit_vul":
-				base_color = Color(3,1,3)
-				sprite.modulate = base_color
 				crit_vul = true
-				$DebuffTimer.start()
-		if is_in_group("boss"):
-			var tween = sprite.create_tween()
-			tween.tween_property(sprite, "modulate", Color(8,8,8,1), 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-			tween.play()
-			var tween2 = sprite.create_tween()
-			tween2.tween_property(sprite, "modulate", base_color, 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-			tween2.play()
+				debuffTimer.start()
 
 func _on_hurt_box_hurt_ult(_damage, angle, knockback_amount):
-	knockback = angle * knockback_amount
-	knockback_recovery = 1
-	UltRecTimer.start()
-
-func _on_ult_recovery_timeout():
+	knockback = angle.normalized() * knockback_amount * 0.4
+	velocity = Vector2()
+	movement_speed = movement_speed_base
 	knockback_recovery = knockback_recovery_base
+	var knock_pos = position+knockback
+	var tween = create_tween()
+	tween.tween_property(self, "position", knock_pos, 0.7).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+	tween.play()
+	if is_in_group("rusher"):
+		rushTimer.stop()
+		rushingTimer.start(randf_range(8,15))
 
 func _on_rushing_timer_timeout():
 	if self.is_in_group("rusher"):
-		movement_speed += 100
-		knockback_recovery += 10
+		movement_speed += 80
+		knockback_recovery = clamp(knockback_recovery+40, knockback_recovery_base, 100)
 		rushTimer.start()
 
 func _on_rush_timer_timeout():
-	movement_speed -= 100
-	knockback_recovery -= 10
-
-func _on_hide_timer_timeout():
-	var location_dif = global_position - curr_pos
-	if abs(location_dif.x) > (screen_size.x/2)*1.1 and abs(location_dif.y) > (screen_size.y/2)*1.1:
-		visible = false
-		collision.call_deferred("set", "disabled", true)
-		
-	else:
-		visible = true
-		collision.call_deferred("set", "disabled", false)
+	movement_speed = movement_speed_base
+	rushingTimer.start(randf_range(8,15))
 
 func frame_save(amount = 20):
 	var rand_disable = randi() % 100
 	if rand_disable < amount:
-		collision.call_deferred("set", "disabled", true)
+		collision_box.call_deferred("set", "disabled", true)
 
 func get_random_position(dir):
-	var vpr = screen_size * randf_range(1.2,1.5)
+	var vpr = screen_size * randf_range(1,1.2)
+	match dir:
+		"up","down":
+			vpr = screen_size * randf_range(1.3,1.5)
+		"left","right":
+			vpr = screen_size * randf_range(1.5,1.7)
 	var top_left = Vector2(curr_pos.x - vpr.x/2, curr_pos.y - vpr.y/2)
 	var top_right = Vector2(curr_pos.x + vpr.x/2, curr_pos.y - vpr.y/2)
 	var bottom_left = Vector2(curr_pos.x - vpr.x/2, curr_pos.y + vpr.y/2)
@@ -212,50 +228,49 @@ func get_random_position(dir):
 	var y_spawn = randf_range(spawn_pos1.y,spawn_pos2.y)
 	return Vector2(x_spawn,y_spawn)
 
-func _on_reset_loc_timer_timeout():
-	if global_position.distance_to(curr_pos) > (screen_size.x/2)*1.4:
-		if (global_position.x>curr_pos.x+screen_size.x/2):
-			global_position = get_random_position("left")
-		elif (global_position.x < curr_pos.x - screen_size.x/2):
-			global_position = get_random_position("right")
-		elif (global_position.y < curr_pos.y - screen_size.y/2):
-			global_position = get_random_position("down")
-		else:
-			global_position = get_random_position("up")
-
 func _on_debuff_timer_timeout():
-	base_color = Color(1,1,1)
-	sprite.modulate = base_color
 	crit_vul = false
 
 func _on_get_dir_timer_timeout():
 	direction = global_position.direction_to(curr_pos)
 	if direction.x >= 0:
 		sprite.flip_h = true
+		if is_in_group("spider_demon") and !dead: anim.play("walk_right")
 	elif direction.x < 0:
 		sprite.flip_h = false
-	velocity = direction*movement_speed
+		if is_in_group("spider_demon") and !dead: anim.play("walk")
 	
 func update_dir(player_position):
 	curr_pos = player_position
 
-func _on_animation_player_animation_finished(_death):
-	queue_free()
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "death":
+		HelperManager.killed()
+		queue_free()
 	
 func staggered():
 	player.lblstagger.visible = true
 	hitBox.set_collision_layer_value(2,false)
 	stagger_threshold = int(maxhp*2/5)
 	stagger = true
-	$StaggerTime.start()
+	staggerTimer.start()
 	movement_speed = 0
-
 
 func _on_stagger_time_timeout():
 	player.lblstagger.visible = false
 	stagger = false
 	movement_speed = movement_speed_base
-	hitBox.set_collision_layer_value(2,true)
+	if !dead:
+		hitBox.set_collision_layer_value(2,true)
 
+func _on_visible_on_screen_notifier_2d_screen_entered():
+	sprite.visible = true
+	invis = false
+	collision_box.call_deferred("set", "disabled", false)
 
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	sprite.visible = false
+	invis = true
+	invis_time = 0
+	collision_box.call_deferred("set", "disabled", true)
 

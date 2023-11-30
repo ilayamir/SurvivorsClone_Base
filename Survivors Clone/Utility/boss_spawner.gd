@@ -8,7 +8,7 @@ var managers = []
 @onready var player = get_tree().get_first_node_in_group("player")
 var group_manager = preload("res://Utility/enemy_group_manager.tscn")
 
-@export var time = 238
+@export var time = 0
 signal changetime(time)
 
 func _ready():

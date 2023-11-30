@@ -4,18 +4,26 @@
 [ext_resource type="Script" path="res://Objects/experience_gem.gd" id="1_vvljx"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6wajt"]
-size = Vector2(13.3333, 16.6667)
+size = Vector2(6.66667, 13.3334)
 
 [node name="ExperienceGem" type="Area2D" groups=["loot"]]
-scale = Vector2(0.3, 0.3)
+texture_filter = 2
+scale = Vector2(0.7, 0.7)
 collision_layer = 8
 collision_mask = 0
 monitoring = false
 script = ExtResource("1_vvljx")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0, -1.66667)
+position = Vector2(0, -5)
 shape = SubResource("RectangleShape2D_6wajt")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_5nxtx")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0, -5)
+scale = Vector2(0.428571, 0.642857)
+
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

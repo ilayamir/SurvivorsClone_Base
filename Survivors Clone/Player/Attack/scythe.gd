@@ -18,15 +18,16 @@ func _ready():
 
 func _physics_process(_delta):
 	rotation += 0.1
-	position = player.global_position
-	angle = position.direction_to(collision.global_position)
+	angle = position.direction_to(collision.position)
 
 func enemy_hit(_charge = 1, crit=false):
 	AudioManager.play_positional("hit", global_position)
-	if crit:
-		player.heal(2)
-	else:
-		player.heal(1)
+	if $HealCD.is_stopped():
+		if crit:
+			player.heal(2)
+		else:
+			player.heal(1)
+		$HealCD.start()
 
 func _on_timer_timeout():
 	emit_signal("remove_from_array", self)

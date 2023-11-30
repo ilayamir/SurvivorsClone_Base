@@ -20,6 +20,7 @@ func _physics_process(_delta):
 func _on_animation_player_animation_finished(_anim_name):
 	$Sprite2D.visible = false
 	$CollisionShape2D.disabled = true
+	$light.visible = false
 
 
 func _on_audio_stream_player_2d_finished():

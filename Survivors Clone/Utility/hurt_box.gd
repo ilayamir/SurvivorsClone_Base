@@ -40,7 +40,7 @@ func _on_area_entered(area):
 							area.tempdisable()
 			var damage = area.damage
 			if get_parent().stagger:
-				damage*=1.5
+				damage*=2
 			var angle = Vector2.ZERO
 			var knockback = 1
 			if not area.get("angle") == null:
@@ -60,12 +60,12 @@ func _on_area_entered(area):
 			else:
 				damage = damage
 				crit = false
-			if area.is_in_group("attacks"):
+			if area.is_in_group("attacks") and !area.is_in_group("suck"):
 				var number = dmg_num.instantiate()
 				get_parent().get_parent().add_child(number)
 				number.position = get_parent().position
-				number.position.x += randi_range(-4,4)
-				number.position.y += randi_range(-2,2)
+				number.position.x += randi_range(-15,15)
+				number.position.y += randi_range(-10,10)
 				number.scale *= randf_range(0.9,1.2)
 				if crit:
 					number.label.text = str(int(damage)) + "!"
@@ -73,9 +73,12 @@ func _on_area_entered(area):
 					number.modulate = Color(0.78,0.57,0.02,0.75)
 				else:
 					number.label.text = str(int(damage))
+				
 			var special_effect = "none"
 			if area.get("special_effect"):
 				special_effect = area.special_effect
+				if special_effect == "suck":
+					angle = global_position.direction_to(area.global_position).normalized()
 			emit_signal("hurt", damage, angle, knockback, special_effect)
 			if area.has_method("enemy_hit"):
 				if get_parent().is_in_group("boss"):
@@ -84,6 +87,7 @@ func _on_area_entered(area):
 					area.enemy_hit(1, crit)
 	elif area.is_in_group("ultimate"):
 		var damage = area.damage
+		
 		var angle = -global_position.direction_to(player.global_position)
 		var knockback = 1
 		if not area.get("knockback_amount") == null:

@@ -5,6 +5,8 @@
 [ext_resource type="Texture2D" uid="uid://1bqodbc8606s" path="res://Textures/Items/Weapons/w_longsword_holy.png" id="3_wbgyc"]
 
 [node name="ItemContainer" type="TextureRect"]
+modulate = Color(0.752941, 0.811765, 0.839216, 1)
+texture_filter = 1
 offset_right = 12.0
 offset_bottom = 12.0
 texture = ExtResource("1_d48nx")

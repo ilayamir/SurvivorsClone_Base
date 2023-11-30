@@ -1,0 +1,78 @@
+[gd_scene load_steps=13 format=3 uid="uid://bw1axv2jx7mkl"]
+
+[ext_resource type="PackedScene" uid="uid://enppeejftyda" path="res://Player/player.tscn" id="2_6eenl"]
+[ext_resource type="Texture2D" uid="uid://cby75pgsrm0xr" path="res://Textures/bg_1.png" id="2_urm4p"]
+[ext_resource type="PackedScene" uid="uid://dq75jgfx5gtcc" path="res://Utility/enemy_spawner.tscn" id="3_0s21j"]
+[ext_resource type="Texture2D" uid="uid://b8ru1ks630wex" path="res://Textures/parallax_space/bkgd_2.png" id="4_6pmyw"]
+[ext_resource type="PackedScene" uid="uid://b6rvw0jlif31y" path="res://Enemy/enemy_kob_weak.tscn" id="4_wtewt"]
+[ext_resource type="Script" path="res://Utility/boss_spawner.gd" id="9_8ecga"]
+[ext_resource type="PackedScene" uid="uid://ctjd1mbq30m3i" path="res://Utility/new_enemy_spawner.tscn" id="10_73fk1"]
+[ext_resource type="Script" path="res://Utility/spawn_info_new.gd" id="10_gjxaw"]
+[ext_resource type="PackedScene" uid="uid://crkrq7hw21diw" path="res://Utility/flock_spawner.tscn" id="11_ewsey"]
+[ext_resource type="PackedScene" uid="uid://djtsvnmjneqls" path="res://Utility/audio_manager.tscn" id="12_bqjd8"]
+[ext_resource type="PackedScene" uid="uid://bahxppku4g5fq" path="res://Utility/frame_saver.tscn" id="12_eg3di"]
+
+[sub_resource type="Resource" id="Resource_ggh65"]
+script = ExtResource("10_gjxaw")
+time_start = 0
+time_end = 60
+enemy = Array[Resource]([ExtResource("4_wtewt")])
+enemy_chance = Array[int]([100])
+enemy_minimum = 10
+enemy_spawn_rate = 1.0
+
+[node name="World" type="Node2D"]
+
+[node name="Player" parent="." instance=ExtResource("2_6eenl")]
+scale = Vector2(1, 1)
+ult_cd = 45
+
+[node name="Purple_Background" type="ParallaxBackground" parent="." groups=["background"]]
+
+[node name="ParallaxLayer" type="ParallaxLayer" parent="Purple_Background"]
+texture_repeat = 2
+motion_mirroring = Vector2(1280, 640)
+
+[node name="Sprite2D" type="Sprite2D" parent="Purple_Background/ParallaxLayer"]
+texture_filter = 2
+texture_repeat = 2
+position = Vector2(320, 160)
+texture = ExtResource("2_urm4p")
+region_enabled = true
+region_rect = Rect2(0, 0, 1280, 640)
+region_filter_clip_enabled = true
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="Purple_Background"]
+visible = false
+motion_mirroring = Vector2(2000, 2000)
+
+[node name="Sprite2D" type="Sprite2D" parent="Purple_Background/ParallaxLayer2"]
+texture_filter = 1
+texture = ExtResource("4_6pmyw")
+region_enabled = true
+region_rect = Rect2(0, 0, 2000, 2000)
+
+[node name="EnemySpawner" parent="." instance=ExtResource("3_0s21j")]
+process_mode = 4
+
+[node name="FlockSpawner" parent="." instance=ExtResource("11_ewsey")]
+process_mode = 4
+time = 240
+
+[node name="EnemySpawner2" parent="." instance=ExtResource("3_0s21j")]
+process_mode = 4
+time = 240
+
+[node name="BossSpawner" parent="." instance=ExtResource("3_0s21j")]
+process_mode = 4
+script = ExtResource("9_8ecga")
+time = 240
+
+[node name="Loot" type="Node2D" parent="." groups=["loot"]]
+
+[node name="AudioManager" parent="." instance=ExtResource("12_bqjd8")]
+
+[node name="FrameSaver" parent="." instance=ExtResource("12_eg3di")]
+
+[node name="NewEnemySpawner" parent="." instance=ExtResource("10_73fk1")]
+spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_ggh65")])

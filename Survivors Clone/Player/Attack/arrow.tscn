@@ -1,13 +1,18 @@
-[gd_scene load_steps=7 format=3 uid="uid://cjk8f6j4bweip"]
+[gd_scene load_steps=9 format=3 uid="uid://cjk8f6j4bweip"]
 
 [ext_resource type="Script" path="res://Player/Attack/arrow.gd" id="1_5mdnx"]
 [ext_resource type="Texture2D" uid="uid://t00edfxp1lg5" path="res://Textures/Items/Weapons/arrow.png" id="2_qt8uu"]
 [ext_resource type="PackedScene" uid="uid://blefoq1ykd26f" path="res://Utility/trail.tscn" id="2_wtmw7"]
 [ext_resource type="AudioStream" uid="uid://6biydoubh6sd" path="res://Audio/SoundEffect/laser5.wav" id="3_aticb"]
 [ext_resource type="Script" path="res://Utility/trail.gd" id="4_djino"]
+[ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="6_15vex"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vanvm"]
 size = Vector2(2.4, 3.9)
+
+[sub_resource type="Gradient" id="Gradient_50twv"]
+resource_local_to_scene = true
+colors = PackedColorArray(0.196078, 0.988235, 0.654902, 1, 1, 1, 1, 1)
 
 [node name="Arrow" type="Area2D" groups=["attacks"]]
 top_level = true
@@ -35,14 +40,23 @@ autostart = true
 stream = ExtResource("3_aticb")
 volume_db = -20.0
 pitch_scale = 0.9
-autoplay = true
 
 [node name="Trail" parent="." instance=ExtResource("2_wtmw7")]
 top_level = true
 texture_filter = 2
+points = PackedVector2Array(0, 1)
 width = 6.0
+gradient = SubResource("Gradient_50twv")
 joint_mode = 2
 script = ExtResource("4_djino")
-MAX_LENGTH = 70
+MAX_LENGTH = 25
+
+[node name="light" parent="." instance=ExtResource("6_15vex")]
+light_scale = 0.3
+
+[node name="texturelight" parent="light" index="0"]
+color = Color(0.196078, 0.988235, 0.654902, 1)
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+
+[editable path="light"]

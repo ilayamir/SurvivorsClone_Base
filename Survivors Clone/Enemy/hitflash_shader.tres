@@ -1,0 +1,9 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=3 uid="uid://bnoju1gje7mql"]
+
+[ext_resource type="Shader" uid="uid://brmuho5g1qbxv" path="res://Enemy/hitflash.tres" id="1_lh44u"]
+
+[resource]
+shader = ExtResource("1_lh44u")
+shader_parameter/enabled = false
+shader_parameter/ALPHA = 0.2
+shader_parameter/tint = Color(0.752941, 0.811765, 0.839216, 1)

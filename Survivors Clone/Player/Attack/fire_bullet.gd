@@ -6,13 +6,15 @@ var speed = 100
 var damage = 5
 var knockback_amount = 100
 var attack_size = 1.0
-
+var light_on = false
 var angle = Vector2.ZERO
 
 @onready var player = get_tree().get_first_node_in_group("player")
 signal remove_from_array(object)
 
 func _ready():
+	if light_on:
+		$light.visible = true
 	rotation = angle.angle()
 	$AnimationPlayer.play("shoot")
 	match level:

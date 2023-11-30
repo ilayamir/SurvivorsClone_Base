@@ -1,11 +1,11 @@
-[gd_scene load_steps=14 format=3 uid="uid://cyqke1j1hpx4h"]
+[gd_scene load_steps=17 format=3 uid="uid://cyqke1j1hpx4h"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_56pqo"]
+[ext_resource type="Material" uid="uid://bnoju1gje7mql" path="res://Enemy/hitflash_shader.tres" id="2_oiolo"]
 [ext_resource type="Texture2D" uid="uid://dubh0v1qemm6c" path="res://Textures/Enemy/big_slime_green.png" id="2_ysbg1"]
 [ext_resource type="PackedScene" uid="uid://8qpqxca3v05p" path="res://Utility/hurt_box.tscn" id="3_puumq"]
 [ext_resource type="PackedScene" uid="uid://bfcmpfltcfccm" path="res://Utility/hit_box.tscn" id="4_p2fx1"]
 [ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_2wlmg"]
-[ext_resource type="PackedScene" uid="uid://drbow2l4igbn6" path="res://Utility/soft_collision_box.tscn" id="6_6v546"]
 
 [sub_resource type="Animation" id="Animation_fndc4"]
 length = 0.001
@@ -80,9 +80,45 @@ size = Vector2(24.5833, 25)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4r0h"]
 size = Vector2(15.6667, 24)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_35tpl"]
-radius = 5.0
-height = 15.0
+[sub_resource type="Animation" id="Animation_ns1yd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1.1, 1.1, 1.1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_cnjrx"]
+resource_name = "hitflash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1.1, 1.1, 1.1, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8jiwd"]
+_data = {
+"RESET": SubResource("Animation_ns1yd"),
+"hitflash": SubResource("Animation_cnjrx")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_7m185"]
+radius = 6.66667
 
 [node name="enemy_kob_strong" type="CharacterBody2D" groups=["enemy"]]
 scale = Vector2(1.2, 1.2)
@@ -91,14 +127,17 @@ collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_56pqo")
 movement_speed = 40.0
-hp = 20
-knockback_recovery = 7.0
-knockback_recovery_base = 7.0
+knockback_recovery = 20.0
+knockback_recovery_base = 20.0
 experience = 3
 enemy_damage = 4
 gem_drop_chance = 0.7
+reset_check_time = 5
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1.1, 1.1, 1.1, 1)
+texture_filter = 1
+material = ExtResource("2_oiolo")
 texture = ExtResource("2_ysbg1")
 hframes = 2
 
@@ -110,7 +149,7 @@ libraries = {
 
 [node name="HurtBox" parent="." instance=ExtResource("3_puumq")]
 visible = false
-collision_mask = 20
+collision_mask = 52
 HurtBoxType = 1
 
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
@@ -132,23 +171,12 @@ stream = ExtResource("5_2wlmg")
 volume_db = -17.0
 pitch_scale = 0.9
 
-[node name="UltRecovery" type="Timer" parent="."]
-one_shot = true
-
 [node name="RushingTimer" type="Timer" parent="."]
 wait_time = 10.0
 
 [node name="RushTimer" type="Timer" parent="RushingTimer"]
 wait_time = 2.0
 one_shot = true
-
-[node name="HideTimer" type="Timer" parent="."]
-wait_time = 3.0
-autostart = true
-
-[node name="ResetLocTimer" type="Timer" parent="."]
-wait_time = 4.0
-autostart = true
 
 [node name="DebuffTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -158,23 +186,27 @@ one_shot = true
 process_callback = 0
 autostart = true
 
-[node name="SoftCollisionBox" parent="." instance=ExtResource("6_6v546")]
-visible = false
-position = Vector2(0, 2.38419e-07)
+[node name="hitflash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8jiwd")
+}
 
-[node name="CollisionShape2D" parent="SoftCollisionBox" index="0"]
-position = Vector2(1.66667, -2.38419e-07)
-shape = SubResource("CapsuleShape2D_35tpl")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_7m185")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(0.833333, -1.25)
+scale = Vector2(1.66667, 1.375)
 
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
 [connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
 [connection signal="hurt_ult" from="HurtBox" to="." method="_on_hurt_box_hurt_ult"]
-[connection signal="timeout" from="UltRecovery" to="." method="_on_ult_recovery_timeout"]
-[connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]
-[connection signal="timeout" from="ResetLocTimer" to="." method="_on_reset_loc_timer_timeout"]
+[connection signal="timeout" from="RushingTimer" to="." method="_on_rushing_timer_timeout"]
+[connection signal="timeout" from="RushingTimer/RushTimer" to="." method="_on_rush_timer_timeout"]
 [connection signal="timeout" from="DebuffTimer" to="." method="_on_debuff_timer_timeout"]
 [connection signal="timeout" from="GetDirTimer" to="." method="_on_get_dir_timer_timeout"]
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 
 [editable path="HurtBox"]
 [editable path="HitBox"]
-[editable path="SoftCollisionBox"]

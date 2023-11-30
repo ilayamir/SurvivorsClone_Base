@@ -31,3 +31,11 @@ func collect():
 	sprite.visible = false
 	queue_free()
 	return experience
+
+
+func _on_visible_on_screen_notifier_2d_screen_entered():
+	sprite.visible = true
+
+
+func _on_visible_on_screen_notifier_2d_screen_exited():
+	sprite.visible = false

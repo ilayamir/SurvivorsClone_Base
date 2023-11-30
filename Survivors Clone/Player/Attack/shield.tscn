@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://bxoguuytntc48"]
+
+[ext_resource type="Script" path="res://Player/Attack/shield.gd" id="1_8dbgy"]
+[ext_resource type="Texture2D" uid="uid://bguxinnbv0ql1" path="res://Textures/Items/Weapons/spr_shield.png" id="1_8wun1"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_ndcnl"]
+radius = 26.0192
+
+[node name="Shield" type="Area2D" groups=["ultimate"]]
+top_level = true
+collision_layer = 20
+collision_mask = 0
+script = ExtResource("1_8dbgy")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_8wun1")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_ndcnl")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.4
+one_shot = true
+autostart = true

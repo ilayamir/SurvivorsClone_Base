@@ -1,14 +1,15 @@
 extends Node2D
 
 @export var spawns: Array[Spawn_info] = []
-var enemy_cap = 400
+var enemy_cap = 300
 var enemies_to_spawn = []
 var managers = []
 
 @onready var player = get_tree().get_first_node_in_group("player")
 var group_manager = preload("res://Utility/enemy_group_manager.tscn")
+@onready var enemy_base = $EnemyBase
 
-@export var time = 238
+@export var time = 0
 signal changetime(time)
 
 func _ready():
@@ -17,12 +18,13 @@ func _ready():
 func _on_timer_timeout():
 	time += 1
 	var enemy_spawns = spawns
-	var my_children = get_children()
+	var my_children = enemy_base.get_children()
 	var direction = player.global_position
 	for i in enemy_spawns:
 		var i_manager = group_manager.instantiate()
 		add_child(i_manager)
 		i_manager.update_loc(direction)
+		managers.append(i_manager)
 		if time >= i.time_start and time <= i.time_end:
 			if i.spawn_delay_counter < i.enemy_spawn_delay:
 				i.spawn_delay_counter += 1
@@ -33,10 +35,10 @@ func _on_timer_timeout():
 				while counter <= i.enemy_num:
 					if my_children.size() <= enemy_cap:
 						var enemy_spawn = new_enemy.instantiate()
+						print(enemy_spawn)
 						enemy_spawn.global_position = get_random_position()
-						add_child(enemy_spawn)
+						enemy_base.add_child(enemy_spawn)
 						i_manager.mob_array.append(enemy_spawn)
-						managers.append(i_manager)
 					else:
 						enemies_to_spawn.append(new_enemy)
 					counter += 1
@@ -49,12 +51,12 @@ func _on_timer_timeout():
 			add_child(leftover_manager)
 			var new_enemy = enemies_to_spawn[0].instantiate()
 			new_enemy.global_position = get_random_position()
-			add_child(new_enemy)
+			enemy_base.add_child(new_enemy)
 			enemies_to_spawn.remove_at(0)
 			leftover_manager.mob_array.append(new_enemy)
 			managers.append(leftover_manager)
 			counter += 1
-	elif time == 298:
+	elif time == 355:
 		enemies_to_spawn.clear()
 	emit_signal("changetime",time)
 	for manager in managers:
@@ -63,12 +65,12 @@ func _on_timer_timeout():
 			manager.update_loc(direction)
 		else:
 			managers.erase(manager)
-	if time == 299:
+	if time == 355:
 		get_tree().call_group("enemy", "death")
 	
 
 func get_random_position():
-	var vpr = get_viewport_rect().size * randf_range(1.05,1.05)
+	var vpr = get_viewport_rect().size * randf_range(1.05,1.1)
 	var top_left = Vector2(player.global_position.x - vpr.x/2, player.global_position.y - vpr.y/2)
 	var top_right = Vector2(player.global_position.x + vpr.x/2, player.global_position.y - vpr.y/2)
 	var bottom_left = Vector2(player.global_position.x - vpr.x/2, player.global_position.y + vpr.y/2)

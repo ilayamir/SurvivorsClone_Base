@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://rsm1kdoaifjy"]
+[gd_scene load_steps=9 format=3 uid="uid://rsm1kdoaifjy"]
 
 [ext_resource type="AudioStream" uid="uid://cjsljesitghke" path="res://Audio/SoundEffect/18_Thunder_02.wav" id="1_4l5cx"]
 [ext_resource type="Script" path="res://Utility/lightning_strike.gd" id="1_78hke"]
 [ext_resource type="Texture2D" uid="uid://00tf3nlg564a" path="res://Textures/Items/Weapons/Lightning_Cyan.png" id="2_6lqhh"]
+[ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="4_xkfeh"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_mk86d"]
 radius = 750.0
@@ -77,6 +78,22 @@ libraries = {
 "": SubResource("AnimationLibrary_g7u7i")
 }
 
+[node name="light" parent="." instance=ExtResource("4_xkfeh")]
+position = Vector2(-53.3333, -678.333)
+scale = Vector2(1.5, 1.5)
+light_scale = 10.0
+
+[node name="texturelight" parent="light" index="0"]
+color = Color(0.784314, 0.0156863, 0.341176, 1)
+energy = 0.75
+texture_scale = 10.0
+
+[node name="textureshadow" parent="light" index="1"]
+energy = 0.75
+texture_scale = 5.0
+
 [connection signal="area_entered" from="." to="." method="_on_area_entered"]
 [connection signal="finished" from="AudioStreamPlayer2D" to="." method="_on_audio_stream_player_2d_finished"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+
+[editable path="light"]

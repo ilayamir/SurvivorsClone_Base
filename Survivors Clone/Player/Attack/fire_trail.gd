@@ -18,22 +18,22 @@ func _ready():
 		1:
 			damage = 1*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)+(player.movement_speed*2/100)
 			attack_size = 0.5 * (1 + player.spell_size)
-			cd = 0.5
+			cd = 0.75
 			duration = 1.0 + (player.movement_speed*2/100)
 		2:
 			damage = 2*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)+(player.movement_speed*2/100)
 			attack_size = 0.5 * (1 + player.spell_size)
-			cd = 0.5
+			cd = 0.75
 			duration = 1.0 + (player.movement_speed*2/100)
 		3:
 			damage = 2*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)+(player.movement_speed*2/100)
 			attack_size = 0.5 * (1 + player.spell_size)
-			cd = 0.5
+			cd = 0.75
 			duration = 2.0 + (player.movement_speed*2/100)
 		4:
 			damage = 3*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)+(player.movement_speed*2/100)
 			attack_size = 0.5 * (1 + player.spell_size)
-			cd = 0.5
+			cd = 0.75
 			duration = 3.0 + (player.movement_speed*2/100)
 	scale = Vector2(1,1) * attack_size
 	base_dmg = damage

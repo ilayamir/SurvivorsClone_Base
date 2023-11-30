@@ -1,17 +1,24 @@
-[gd_scene load_steps=13 format=3 uid="uid://da0qty8n3gilg"]
+[gd_scene load_steps=18 format=3 uid="uid://da0qty8n3gilg"]
 
 [ext_resource type="Script" path="res://Enemy/enemy.gd" id="1_6ocse"]
-[ext_resource type="Texture2D" uid="uid://iy2w246j8tvg" path="res://Textures/Enemy/cyclops.png" id="2_er0ac"]
+[ext_resource type="Texture2D" uid="uid://bmsgsh7rse2h4" path="res://Textures/Enemy/spider_1.png" id="2_0pfps"]
+[ext_resource type="Shader" uid="uid://brmuho5g1qbxv" path="res://Enemy/hitflash.tres" id="2_ld4m7"]
 [ext_resource type="PackedScene" uid="uid://8qpqxca3v05p" path="res://Utility/hurt_box.tscn" id="3_r6o00"]
 [ext_resource type="PackedScene" uid="uid://bfcmpfltcfccm" path="res://Utility/hit_box.tscn" id="4_62odl"]
 [ext_resource type="AudioStream" uid="uid://bbw71khcsg613" path="res://Audio/SoundEffect/enemy_hit.ogg" id="5_1jeme"]
-[ext_resource type="PackedScene" uid="uid://drbow2l4igbn6" path="res://Utility/soft_collision_box.tscn" id="6_tx4fb"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_6ybww"]
+resource_local_to_scene = true
+shader = ExtResource("2_ld4m7")
+shader_parameter/enabled = false
+shader_parameter/ALPHA = null
+shader_parameter/tint = Color(0.752941, 0.811765, 0.839216, 1)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_8y70w"]
 size = Vector2(34, 34)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x4r0h"]
-size = Vector2(28, 25)
+size = Vector2(33, 25)
 
 [sub_resource type="Animation" id="Animation_fndc4"]
 length = 0.001
@@ -53,7 +60,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
 "transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Color(1, 1, 1, 1), Color(1.5, 1.5, 1.5, 0.8), Color(2, 2, 2, 0.6), Color(2.5, 2.5, 2.5, 0.4), Color(3, 3, 3, 0.2), Color(3, 3, 3, 0)]
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.8), Color(1, 1, 1, 0.6), Color(1, 1, 1, 0.4), Color(1, 1, 1, 0.2), Color(1, 1, 1, 0)]
 }
 
 [sub_resource type="Animation" id="Animation_pm3nj"]
@@ -80,28 +87,97 @@ _data = {
 "walk": SubResource("Animation_pm3nj")
 }
 
+[sub_resource type="Animation" id="Animation_ns1yd"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1.1, 1.1, 1.1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_cnjrx"]
+resource_name = "hitflash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = false
+tracks/0/path = NodePath("Sprite2D:material:shader_parameter/enabled")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [true, false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1.1, 1.1, 1.1, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_8jiwd"]
+_data = {
+"RESET": SubResource("Animation_ns1yd"),
+"hitflash": SubResource("Animation_cnjrx")
+}
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_xn7n5"]
+radius = 7.2
+
 [node name="enemy_cyclops" type="CharacterBody2D" groups=["enemy", "rusher"]]
-collision_layer = 4
-collision_mask = 4
+texture_filter = 1
+scale = Vector2(1.25, 1.25)
+collision_layer = 5
+collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_6ocse")
-movement_speed = 16.0
-hp = 100
-knockback_recovery = 20.0
-knockback_recovery_base = 20.0
+movement_speed = 35.0
+hp = 75
+knockback_recovery = 60.0
+knockback_recovery_base = 60.0
 experience = 12
-enemy_damage = 8
+enemy_damage = 10
 gem_drop_chance = 1.0
+reset_check_time = 2
+offscreen_timer = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1.1, 1.1, 1.1, 1)
+material = SubResource("ShaderMaterial_6ybww")
 scale = Vector2(1.1, 1.1)
-texture = ExtResource("2_er0ac")
+texture = ExtResource("2_0pfps")
 hframes = 2
 
 [node name="HurtBox" parent="." instance=ExtResource("3_r6o00")]
 visible = false
-collision_mask = 20
-monitorable = true
+collision_mask = 52
 HurtBoxType = 1
 
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
@@ -114,7 +190,7 @@ collision_layer = 2
 collision_mask = 2
 
 [node name="CollisionShape2D" parent="HitBox" index="0" groups=["attacks"]]
-position = Vector2(-1.02341, -4.87956)
+position = Vector2(1.47659, -2.87956)
 shape = SubResource("RectangleShape2D_x4r0h")
 
 [node name="snd_hit" type="AudioStreamPlayer2D" parent="."]
@@ -122,21 +198,11 @@ stream = ExtResource("5_1jeme")
 volume_db = -17.0
 pitch_scale = 0.9
 
-[node name="UltRecovery" type="Timer" parent="."]
-one_shot = true
-
 [node name="RushingTimer" type="Timer" parent="."]
 wait_time = 10.0
 
 [node name="RushTimer" type="Timer" parent="RushingTimer"]
 one_shot = true
-
-[node name="HideTimer" type="Timer" parent="."]
-wait_time = 3.0
-autostart = true
-
-[node name="ResetLocTimer" type="Timer" parent="."]
-autostart = true
 
 [node name="DebuffTimer" type="Timer" parent="."]
 wait_time = 10.0
@@ -146,29 +212,34 @@ one_shot = true
 process_callback = 0
 autostart = true
 
-[node name="SoftCollisionBox" parent="." instance=ExtResource("6_tx4fb")]
-position = Vector2(-3, -2)
-
-[node name="CollisionShape2D" parent="SoftCollisionBox" index="0"]
-position = Vector2(3, -1)
-
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 1.5
+speed_scale = 0.7
 libraries = {
 "": SubResource("AnimationLibrary_ajlna")
 }
 
+[node name="hitflash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_8jiwd")
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -0.8)
+shape = SubResource("CircleShape2D_xn7n5")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-0.400001, -2.38419e-07)
+scale = Vector2(1.8, 1.76)
+
 [connection signal="hurt" from="HurtBox" to="." method="_on_hurt_box_hurt"]
 [connection signal="hurt_ult" from="HurtBox" to="." method="_on_hurt_box_hurt_ult"]
-[connection signal="timeout" from="UltRecovery" to="." method="_on_ult_recovery_timeout"]
 [connection signal="timeout" from="RushingTimer" to="." method="_on_rushing_timer_timeout"]
 [connection signal="timeout" from="RushingTimer/RushTimer" to="." method="_on_rush_timer_timeout"]
-[connection signal="timeout" from="HideTimer" to="." method="_on_hide_timer_timeout"]
-[connection signal="timeout" from="ResetLocTimer" to="." method="_on_reset_loc_timer_timeout"]
 [connection signal="timeout" from="DebuffTimer" to="." method="_on_debuff_timer_timeout"]
 [connection signal="timeout" from="GetDirTimer" to="." method="_on_get_dir_timer_timeout"]
 [connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[connection signal="screen_entered" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
 
 [editable path="HurtBox"]
 [editable path="HitBox"]
-[editable path="SoftCollisionBox"]

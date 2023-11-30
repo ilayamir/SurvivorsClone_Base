@@ -21,6 +21,7 @@ var spr_jav_atk = preload("res://Textures/Items/Weapons/javelin_3_new_attack.png
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var sprite = $Sprite2D
 @onready var collision = $CollisionShape2D
+@onready var collect_zone = $GrabArea/CollisionShape2D
 @onready var attackTimer = get_node("%AttackTimer")
 @onready var changeDirectionTimer = get_node("%ChangeDirection")
 @onready var resetPosTimer = get_node ("%ResetPosTimer")
@@ -67,21 +68,31 @@ func update_javelin():
 			paths = 3
 			attack_size = 1.0 * (1 + player.spell_size)
 			attack_speed = 5.0 * (1-player.spell_cooldown)
+		5:
+			hp = 9999
+			speed = 200.0*(1+player.speed_bonus)
+			damage = 15*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			knockback_amount = 120
+			paths = 4
+			attack_size = 1.0 * (1 + player.spell_size)
+			attack_speed = 4.0 * (1-player.spell_cooldown)
 	
 	scale = Vector2(1.0,1.0) * attack_size
 	attackTimer.wait_time = attack_speed
 	
 func _physics_process(delta):
+	var distance_dif = global_position - player.global_position
 	if target_array.size() > 0:
 		position += angle*speed*delta
 	else:
 		var player_angle = global_position.direction_to(reset_pos)
-		var distance_dif = global_position - player.global_position
 		var return_speed = 20
 		if abs(distance_dif.x) > 500 or abs(distance_dif.y) > 500:
 			return_speed = 120
 		position += player_angle*return_speed*delta
 		rotation = global_position.direction_to(player.global_position).angle() + deg_to_rad(135)
+	if abs(distance_dif.x) > 900 or abs(distance_dif.y) > 900:
+		global_position = player.global_position
 
 func add_paths():
 	snd_attack.play()
@@ -106,11 +117,17 @@ func process_path():
 
 func enable_attack(atk = true):
 	if atk:
+		if level == 5:
+			collect_zone.call_deferred("set","disabled",false)
 		collision.call_deferred("set","disabled",false)
 		sprite.texture = spr_jav_atk
+		$light.visible = true
 	else:
+		if level == 5:
+			collect_zone.call_deferred("set","disabled",true)
 		collision.call_deferred("set","disabled",true)
 		sprite.texture = spr_jav_reg
+		$light.visible = false
 
 func _on_attack_timer_timeout():
 	add_paths()
@@ -147,3 +164,7 @@ func _on_reset_pos_timer_timeout():
 			reset_pos.y += 50
 		3:
 			reset_pos.y -= 50
+
+func _on_grab_area_area_entered(area):
+	if area.is_in_group("loot"):
+		area.target = player

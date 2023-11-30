@@ -23,6 +23,8 @@ var knockback = Vector2.ZERO
 @onready var rushTimer = $RushingTimer/RushTimer
 @onready var collision = $SoftCollisionBox
 @onready var hideTimer = $HideTimer
+@onready var HelperManager = get_tree().get_first_node_in_group("helper")
+
 var direction
 var dead = false
 var stagger = false
@@ -116,12 +118,6 @@ func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect):
 				sprite.modulate = base_color
 				crit_vul = true
 				$DebuffTimer.start()
-		var tween = sprite.create_tween()
-		tween.tween_property(sprite, "modulate", Color(8,8,8,1), 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		tween.play()
-		var tween2 = sprite.create_tween()
-		tween2.tween_property(sprite, "modulate", base_color, 0.5).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		tween2.play()
 
 func _on_hurt_box_hurt_ult(_damage, angle, knockback_amount):
 	knockback = angle * knockback_amount
@@ -156,3 +152,9 @@ func _on_hide_timer_timeout():
 
 func update_dir(_pos):
 	pass
+
+
+func _on_animation_player_animation_finished(anim_name):
+	if anim_name == "death":
+		HelperManager.killed()
+		queue_free()

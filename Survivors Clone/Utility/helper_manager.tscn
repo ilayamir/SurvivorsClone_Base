@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bv7gxlif0vc8s"]
+
+[ext_resource type="Script" path="res://Utility/helper_manager.gd" id="1_hgrdw"]
+
+[node name="HelperManager" type="Node"]
+script = ExtResource("1_hgrdw")
+
+[node name="HelpCD" type="Timer" parent="."]
+wait_time = 90.0
+one_shot = true

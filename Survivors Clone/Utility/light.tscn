@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://b0amkhxl1lq81"]
+
+[ext_resource type="Script" path="res://Utility/light.gd" id="1_7ejqe"]
+[ext_resource type="Texture2D" uid="uid://hpyx8g0bfj68" path="res://Textures/Utility/2d_lights_and_shadows_neutral_point_light.webp" id="1_qfqck"]
+
+[node name="light" type="Node2D"]
+script = ExtResource("1_7ejqe")
+
+[node name="texturelight" type="PointLight2D" parent="."]
+energy = 0.5
+range_layer_min = -2
+texture = ExtResource("1_qfqck")
+texture_scale = 1.5
+
+[node name="textureshadow" type="PointLight2D" parent="."]
+energy = 0.5
+texture = ExtResource("1_qfqck")
+texture_scale = 0.75

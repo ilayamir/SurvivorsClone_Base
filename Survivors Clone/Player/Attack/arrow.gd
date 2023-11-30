@@ -6,6 +6,7 @@ var speed = 600
 var damage = 10
 var knockback_amount = 100
 var attack_size = 1.0
+var sound_off = false
 @export var angle = Vector2(1,0).normalized()
 
 @onready var player = get_tree().get_first_node_in_group("player")
@@ -13,6 +14,8 @@ signal remove_from_array(object)
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	if !sound_off:
+		$AudioStreamPlayer.play()
 	rotation = angle.angle() + deg_to_rad(-90)
 	match level:
 		1:
