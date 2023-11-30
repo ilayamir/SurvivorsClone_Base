@@ -1,8 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://cp3ro61g27ede"]
+[gd_scene load_steps=5 format=3 uid="uid://cp3ro61g27ede"]
 
 [ext_resource type="Script" path="res://Player/Attack/ice_spear.gd" id="1_cu84o"]
 [ext_resource type="Texture2D" uid="uid://b385locn2g6kn" path="res://Textures/Items/Weapons/ice_spear.png" id="1_e5abd"]
-[ext_resource type="AudioStream" uid="uid://dm8hiss63ngbh" path="res://Audio/SoundEffect/ice.wav" id="3_u2syu"]
 [ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="4_e0gf2"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6o31u"]
@@ -19,7 +18,6 @@ metadata/_edit_horizontal_guides_ = []
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-9, -9)
 rotation = -0.785398
-scale = Vector2(1, 1)
 shape = SubResource("RectangleShape2D_6o31u")
 
 [node name="Timer" type="Timer" parent="."]
@@ -27,21 +25,15 @@ wait_time = 10.0
 one_shot = true
 autostart = true
 
-[node name="snd_play" type="AudioStreamPlayer" parent="."]
-stream = ExtResource("3_u2syu")
-volume_db = -20.0
-pitch_scale = 10.0
-autoplay = true
-
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 rotation = -1.5708
 texture = ExtResource("1_e5abd")
 
 [node name="light" parent="." instance=ExtResource("4_e0gf2")]
+visible = false
 z_index = -2
 position = Vector2(-5.5, -5.5)
-scale = Vector2(1, 1)
 light_scale = 0.5
 
 [node name="texturelight" parent="light" index="0"]

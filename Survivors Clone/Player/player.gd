@@ -200,12 +200,13 @@ func _ready():
 	upgrade_character("fsword3")
 	upgrade_character("fsword4")
 	upgrade_character("fsword5")
+	upgrade_character("icespear1")
+	upgrade_character("icespear2")
+	upgrade_character("icespear3")
+	upgrade_character("icespear4")
+	upgrade_character("icespear5")
 	upgrade_character("ring1")
 	upgrade_character("ring2")
-	upgrade_character("scroll1")
-	upgrade_character("scroll2")
-	upgrade_character("scroll3")
-	upgrade_character("scroll4")
 	attack()
 	set_expbar(experience, calculate_experiencecap())
 	healthBar.max_value = maxhp
@@ -384,6 +385,7 @@ func _on_ice_spear_attack_timer_timeout():
 		icespear_attack.additional_ammo = icespear_additional_ammo
 		icespear_attack.light_on = true
 		add_child(icespear_attack)
+		$Attack/snd_ice_spear.play()
 		icespear_ammo -= 1
 		if icespear_ammo > 0:
 			iceSpearAttackTimer.start()
@@ -517,7 +519,7 @@ func _on_f_sword_attack_timer_timeout():
 		fsword2.reset()
 		fsword3.reset()
 		fsword4.reset()
-		
+		$Attack/snd_fsword.play()
 		fsword_ammo -= 1
 		if fsword_ammo > 0:
 			fSwordAttackTimer.start()

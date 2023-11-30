@@ -25,7 +25,6 @@ func shut_down():
 	
 func reset():
 	$Timer.start()
-	$snd_attack.play()
 	$CollisionShape2D.call_deferred("set","disabled",false)
 	visible = true
 	disabled = false

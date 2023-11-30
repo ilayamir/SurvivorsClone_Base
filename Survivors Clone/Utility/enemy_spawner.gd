@@ -35,7 +35,6 @@ func _on_timer_timeout():
 				while counter <= i.enemy_num:
 					if my_children.size() <= enemy_cap:
 						var enemy_spawn = new_enemy.instantiate()
-						print(enemy_spawn)
 						enemy_spawn.global_position = get_random_position()
 						enemy_base.add_child(enemy_spawn)
 						i_manager.mob_array.append(enemy_spawn)

@@ -1,4 +1,4 @@
-[gd_scene load_steps=44 format=3 uid="uid://enppeejftyda"]
+[gd_scene load_steps=46 format=3 uid="uid://enppeejftyda"]
 
 [ext_resource type="Script" path="res://Player/player.gd" id="1_2xhn0"]
 [ext_resource type="AudioStream" uid="uid://b8jqmflw6l0ny" path="res://Audio/SoundEffect/punch-1-166694.mp3" id="2_joqqs"]
@@ -14,8 +14,10 @@
 [ext_resource type="Texture2D" uid="uid://bs7qsd27evsr0" path="res://Textures/GUI/ult_progress.png" id="8_ht4mt"]
 [ext_resource type="AudioStream" uid="uid://6ul6twlnohn5" path="res://Audio/SoundEffect/levelup.ogg" id="9_e0bu1"]
 [ext_resource type="Script" path="res://Player/UltPushArea.gd" id="9_e7dy3"]
+[ext_resource type="AudioStream" uid="uid://dm8hiss63ngbh" path="res://Audio/SoundEffect/ice.wav" id="9_nodcr"]
 [ext_resource type="Texture2D" uid="uid://mrs0ss7fo4n" path="res://Textures/GUI/healthbar.png" id="10_0awwn"]
 [ext_resource type="FontFile" uid="uid://h0kdxqctvkus" path="res://Font/QueensidesMedium-x30zV.ttf" id="10_88fie"]
+[ext_resource type="AudioStream" uid="uid://tcuv5nd5wamp" path="res://Audio/SoundEffect/tornado.ogg" id="10_ii6yf"]
 [ext_resource type="Texture2D" uid="uid://bivavj1fa20rq" path="res://Textures/GUI/boss_hp.png" id="11_spxdi"]
 [ext_resource type="Texture2D" uid="uid://b8sjykpn3ng7x" path="res://Textures/GUI/health.png" id="11_uf4lx"]
 [ext_resource type="AudioStream" uid="uid://btu4yvjlvm5pu" path="res://Audio/Music/lvl1bgm2.wav" id="13_fxid2"]
@@ -201,6 +203,7 @@ collision_mask = 2
 [node name="CollisionShape2D" parent="HurtBox" index="0"]
 position = Vector2(0.5, 3)
 shape = SubResource("RectangleShape2D_4pd43")
+disabled = true
 
 [node name="Attack" type="Node2D" parent="."]
 
@@ -296,6 +299,16 @@ wait_time = 6.0
 [node name="weaponPool" type="Node" parent="Attack"]
 unique_name_in_owner = true
 script = ExtResource("8_go1tb")
+
+[node name="snd_ice_spear" type="AudioStreamPlayer" parent="Attack"]
+stream = ExtResource("9_nodcr")
+volume_db = -20.0
+pitch_scale = 10.0
+
+[node name="snd_fsword" type="AudioStreamPlayer" parent="Attack"]
+stream = ExtResource("10_ii6yf")
+volume_db = -20.0
+pitch_scale = 2.5
 
 [node name="EnemyDetectionArea" type="Area2D" parent="."]
 visible = false
@@ -677,7 +690,7 @@ process_material = SubResource("ParticleProcessMaterial_81ecp")
 lifetime = 9.0
 
 [node name="light" parent="." instance=ExtResource("28_1kfd4")]
-light_scale = 2.0
+light_scale = 5.0
 
 [node name="texturelight" parent="light" index="0"]
 texture_scale = 2.0

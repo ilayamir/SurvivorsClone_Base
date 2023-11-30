@@ -145,13 +145,13 @@ _data = {
 radius = 3.0
 
 [node name="enemy_kob_fodder" type="CharacterBody2D" groups=["enemy", "skell"]]
-collision_layer = 5
+collision_layer = 4
 collision_mask = 5
 motion_mode = 1
-safe_margin = 0.15
+safe_margin = 0.04
 script = ExtResource("1_33g71")
 movement_speed = 50.0
-hp = 2
+hp = 5
 knockback_recovery = 5.0
 knockback_recovery_base = 5.0
 gem_drop_chance = 0.5

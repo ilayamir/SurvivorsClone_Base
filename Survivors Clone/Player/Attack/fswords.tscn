@@ -1,8 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://cg5uukfwwl63f"]
+[gd_scene load_steps=4 format=3 uid="uid://cg5uukfwwl63f"]
 
 [ext_resource type="Texture2D" uid="uid://bhd2g37xsxj6r" path="res://Textures/Items/Weapons/sword.png" id="1_ad38w"]
 [ext_resource type="Script" path="res://Player/Attack/fswords.gd" id="1_r3nbt"]
-[ext_resource type="AudioStream" uid="uid://tcuv5nd5wamp" path="res://Audio/SoundEffect/tornado.ogg" id="2_ufmop"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_y0ddc"]
 size = Vector2(31.8198, 8.48528)
@@ -16,12 +15,6 @@ collision_layer = 4
 collision_mask = 0
 monitoring = false
 script = ExtResource("1_r3nbt")
-
-[node name="snd_attack" type="AudioStreamPlayer2D" parent="."]
-position = Vector2(2, 2)
-stream = ExtResource("2_ufmop")
-volume_db = -20.0
-pitch_scale = 2.5
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0.25, 0.25)

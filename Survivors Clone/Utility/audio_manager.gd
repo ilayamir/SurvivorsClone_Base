@@ -5,8 +5,8 @@ extends Node
 @onready var enemy_death_snd = get_node("%snd_explosion")
 @onready var crit_snd = get_node("%snd_crit")
 
-var num_players = 6
-var max_queue = 4
+var num_players = 3
+var max_queue = 3
 var available_collect = []
 var available_death = []
 var available_hit = []
@@ -73,6 +73,7 @@ func play_collect():
 		if $gem_delay.is_stopped():
 			collect_queue+=1
 			$gem_delay.start()
+
 
 func play_positional(sound, position):
 	if sound == "hit" and hit_queue.size()<max_queue:

@@ -11,10 +11,11 @@ var maxhp
 @export var gem_drop_chance = 0.6
 @export var food_drop_chance = 0.001
 @export var crit_vul = false
-@export var base_color = Color(1,1,1,1)
 @export var reset_check_time = 1
 @export var offscreen_timer = 4
+@export var hpxlvl = false
 var invis = false
+var physic_proccessing_index
 var invis_time = 0
 var knockback = Vector2.ZERO
 var curr_pos = Vector2.ZERO
@@ -55,6 +56,7 @@ signal remove_from_array(object)
 var screen_size
 
 func _ready():
+	physic_proccessing_index = randi_range(1,3)
 	if is_in_group("slime"):
 		var color = randi_range(1,2)
 		if color == 1:
@@ -69,7 +71,8 @@ func _ready():
 			sprite.texture = spr_2
 		else:
 			sprite.texture = spr_3
-	hp *= clamp(player.experience_level*0.5,1, 99999)
+	if hpxlvl:
+		hp *= clamp(player.experience_level*0.4,1, 99999)
 	maxhp = hp
 	stagger_threshold = clamp(int(hp*2/5),1,maxhp)
 	movement_speed_base = movement_speed
@@ -83,7 +86,7 @@ func _ready():
 	hitBox.damage = enemy_damage
 	dirTimer.wait_time = 0.2
 	screen_size = get_viewport_rect().size
-	direction = global_position.direction_to(player.global_position)
+	direction = global_position.direction_to(player.global_position).normalized()
 	anim.play("walk")
 	if direction.x > 0.1:
 		sprite.flip_h = true
@@ -93,14 +96,18 @@ func _ready():
 		if is_in_group("spider_demon") and !dead: anim.play("walk")
 
 func _physics_process(delta):
-	if invis:
-		invis_time+=delta
-		if invis_time>=offscreen_timer:
-			launch()
-			invis_time = 0
-			invis = false
-	velocity = direction*movement_speed
-	move_and_slide()
+	if (Engine.get_physics_frames()+physic_proccessing_index)%3:
+		if invis:
+			invis_time+=delta
+			if invis_time>=offscreen_timer:
+				launch()
+				invis_time = 0
+				invis = false
+		if !dead:
+			velocity = direction*movement_speed
+	#		global_position+=velocity
+			move_and_slide()
+	#		move_and_collide(velocity*delta)
 
 func launch():
 	var launch_to = (curr_pos-global_position).normalized()
@@ -118,7 +125,7 @@ func death():
 		hurtBox.queue_free()
 		hitBox.queue_free()
 	dead = true
-	collision_box.call_deferred("set", "disabled", true)
+	collision_box.set_deferred("disabled", true)
 	var gem_chance = randf_range(0,1)
 	var food_chance = randf_range(0,1)
 	var ult_chance = randf_range(0,1)
@@ -126,21 +133,21 @@ func death():
 	if gem_chance<gem_drop_chance:
 		var super_gem_chance = randf_range(0,1)
 		var new_gem = exp_gem.instantiate()
-		if super_gem_chance<0.005:
+		if super_gem_chance<0.002:
 			new_gem.experience = experience*10
 		else:
 			new_gem.experience = experience
 		new_gem.global_position = global_position
 		loot_base.call_deferred("add_child",new_gem)
-	if food_chance<0.003:
+	if food_chance<food_drop_chance:
 		var new_food = floor_meat.instantiate()
 		new_food.global_position = global_position + Vector2(5,5)
 		loot_base.call_deferred("add_child",new_food)
-	if ult_chance<0.003:
+	if ult_chance<0.001:
 		var new_ult = ult_potion.instantiate()
 		new_ult.global_position = global_position - Vector2(5,5)
 		loot_base.call_deferred("add_child",new_ult)
-	if magnet_chance<0.003:
+	if magnet_chance<0.001:
 		var new_magnet = gem_magnet.instantiate()
 		new_magnet.global_position = global_position - Vector2(-5,5)
 		loot_base.call_deferred("add_child",new_magnet)
@@ -152,7 +159,7 @@ func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect="none"):
 		velocity = Vector2()
 		var knock_pos = position+knockback
 		var tween = create_tween()
-		var time = clamp(0.02*(100-knockback_recovery),0,0.2)
+		var time = clamp(0.002*(100-knockback_recovery),0,0.2)
 		tween.tween_property(self, "position", knock_pos, time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 		tween.play()
 		knockback = 0
@@ -170,17 +177,18 @@ func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect="none"):
 				debuffTimer.start()
 
 func _on_hurt_box_hurt_ult(_damage, angle, knockback_amount):
-	knockback = angle.normalized() * knockback_amount * 0.4
+	knockback = angle.normalized() * knockback_amount * 0.3
 	velocity = Vector2()
+	if is_in_group("rusher"):
+		rushTimer.stop()
+		rushingTimer.start(randf_range(8,15))
 	movement_speed = movement_speed_base
 	knockback_recovery = knockback_recovery_base
 	var knock_pos = position+knockback
 	var tween = create_tween()
-	tween.tween_property(self, "position", knock_pos, 0.7).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
+	tween.tween_property(self, "position", knock_pos, 0.4).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 	tween.play()
-	if is_in_group("rusher"):
-		rushTimer.stop()
-		rushingTimer.start(randf_range(8,15))
+
 
 func _on_rushing_timer_timeout():
 	if self.is_in_group("rusher"):
@@ -232,7 +240,7 @@ func _on_debuff_timer_timeout():
 	crit_vul = false
 
 func _on_get_dir_timer_timeout():
-	direction = global_position.direction_to(curr_pos)
+	direction = global_position.direction_to(curr_pos).normalized()
 	if direction.x >= 0:
 		sprite.flip_h = true
 		if is_in_group("spider_demon") and !dead: anim.play("walk_right")
@@ -273,4 +281,3 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 	invis = true
 	invis_time = 0
 	collision_box.call_deferred("set", "disabled", true)
-

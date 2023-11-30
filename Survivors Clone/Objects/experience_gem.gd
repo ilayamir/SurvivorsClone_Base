@@ -39,3 +39,9 @@ func _on_visible_on_screen_notifier_2d_screen_entered():
 
 func _on_visible_on_screen_notifier_2d_screen_exited():
 	sprite.visible = false
+
+
+func _on_area_entered(area):
+	if area.get("experience"):
+		area.experience += experience
+		queue_free()
