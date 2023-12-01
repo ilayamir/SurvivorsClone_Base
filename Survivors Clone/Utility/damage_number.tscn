@@ -1,7 +1,7 @@
 [gd_scene load_steps=3 format=3 uid="uid://dce2ch3ybu4lr"]
 
 [ext_resource type="Script" path="res://Utility/damage_number.gd" id="1_6jcu2"]
-[ext_resource type="FontFile" uid="uid://bhrsi6k88jpsc" path="res://Font/tenderness.otf" id="1_yoegy"]
+[ext_resource type="FontFile" uid="uid://dpysvsm0654a5" path="res://Font/AtomicMd-OVJ4A.otf" id="2_1tvx3"]
 
 [node name="DamageNumber" type="Node2D"]
 modulate = Color(0.792157, 0.0156863, 0.756863, 0.6)
@@ -13,7 +13,12 @@ offset_left = 6.0
 offset_top = -36.0
 offset_right = 46.0
 offset_bottom = -13.0
-theme_override_fonts/font = ExtResource("1_yoegy")
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_fonts/font = ExtResource("2_1tvx3")
+theme_override_font_sizes/font_size = 7
+text = "15"
+vertical_alignment = 2
 
 [node name="Timer" type="Timer" parent="."]
 one_shot = true

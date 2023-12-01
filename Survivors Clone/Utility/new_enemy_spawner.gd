@@ -6,6 +6,7 @@ extends Node2D
 
 @export var spawns: Array[New_spawn_info] = []
 var enemy_cap = 300
+var enemies_on_screen = 0
 var enemies_to_spawn = []
 var managers = []
 var end_time = 0
@@ -13,7 +14,11 @@ var current_wave = []
 var current_wave_rates = []
 var current_wave_minimum = 0
 var current_wave_end = 0
+var current_wave_instantanious = false
+var current_wave_flock = false
+var current_wave_chance = 0
 var direction = Vector2.ZERO
+var move_num = 0
 @export var preload_manager_count = 8
 
 @onready var player = get_tree().get_first_node_in_group("player")
@@ -31,8 +36,10 @@ func _ready():
 		manager.update_loc(direction)
 		managers.append(manager)
 
-func get_random_position():
+func get_random_position(predetermined = false, left = false):
 	var vpr = get_viewport_rect().size * randf_range(1.05,1.15)
+	if predetermined:
+		vpr = get_viewport_rect().size
 	var top_left = Vector2(player.global_position.x - vpr.x/2, player.global_position.y - vpr.y/2)
 	var top_right = Vector2(player.global_position.x + vpr.x/2, player.global_position.y - vpr.y/2)
 	var bottom_left = Vector2(player.global_position.x - vpr.x/2, player.global_position.y + vpr.y/2)
@@ -40,22 +47,32 @@ func get_random_position():
 	var pos_side = ["up","down","right","left"].pick_random()
 	var spawn_pos1 = Vector2.ZERO
 	var spawn_pos2 = Vector2.ZERO
-	
-	match pos_side:
-		"up":
-			spawn_pos1 = top_left
-			spawn_pos2 = top_right
-		"down":
-			spawn_pos1 = bottom_left
-			spawn_pos2 = bottom_right
-		"left":
-			spawn_pos1 = top_left
-			spawn_pos2 = bottom_left
-		"right":
-			spawn_pos1 = top_right
-			spawn_pos2 = bottom_right
-	var x_spawn = randf_range(spawn_pos1.x, spawn_pos2.x)
-	var y_spawn = randf_range(spawn_pos1.y,spawn_pos2.y)
+	var x_spawn = 0
+	var y_spawn = 0
+	if !predetermined:
+		match pos_side:
+			"up":
+				spawn_pos1 = top_left
+				spawn_pos2 = top_right
+			"down":
+				spawn_pos1 = bottom_left
+				spawn_pos2 = bottom_right
+			"left":
+				spawn_pos1 = top_left
+				spawn_pos2 = bottom_left
+			"right":
+				spawn_pos1 = top_right
+				spawn_pos2 = bottom_right
+		x_spawn = randf_range(spawn_pos1.x, spawn_pos2.x)
+		y_spawn = randf_range(spawn_pos1.y,spawn_pos2.y)
+	else:
+		var spawn_pos = Vector2.ZERO
+		if left:
+			spawn_pos = top_left
+		else:
+			spawn_pos = top_right
+		x_spawn = randf_range(spawn_pos.x-30,spawn_pos.x+30)
+		y_spawn = randf_range(spawn_pos.y-30,spawn_pos.y+30)
 	return Vector2(x_spawn,y_spawn)
 
 func _on_global_timer_timeout():
@@ -67,8 +84,11 @@ func _on_global_timer_timeout():
 			$SpawnRateTimer.wait_time = wave.enemy_spawn_rate
 			current_wave = wave.enemy
 			current_wave_rates = wave.enemy_chance
-			current_wave_minimum = wave.enemy_minimum
+			current_wave_minimum = wave.enemy_minimum #if instantanious, this is the amount spawned each interval
 			current_wave_end = wave.time_end
+			current_wave_instantanious = wave.instantanious
+			current_wave_flock = wave.flock
+			current_wave_chance = wave.chance
 			$SpawnRateTimer.start()
 			spawns.pop_front()
 	if current_wave_end<time:
@@ -83,36 +103,62 @@ func _on_global_timer_timeout():
 		get_tree().call_group("enemy", "death")
 		$SpawnRateTimer.stop()
 
-
-
 func _on_spawn_rate_timer_timeout():
-	var enemies_alive = $EnemyBase.get_child_count()
-	var manager = get_manager()
-	if manager == null:
-		manager = group_manager.instantiate()
-		$ManagerBase.add_child(manager)
-		manager.update_loc(direction)
-		managers.append(manager)
-
-	if enemies_alive<current_wave_minimum:
-		for i in range(1, current_wave_minimum-enemies_alive+1):
-			var enemy_spawn = get_enemy().instantiate()
+	if !current_wave_instantanious:
+		var enemies_alive = enemies_on_screen
+		var manager = get_manager()
+		if manager == null:
+			manager = group_manager.instantiate()
+			$ManagerBase.add_child(manager)
+			manager.update_loc(direction)
+			managers.append(manager)
+		if enemies_alive<current_wave_minimum:
+			for i in range(current_wave_minimum-enemies_alive):
+				var enemy_spawn = get_enemy()#.instantiate()
+				enemy_spawn.global_position = get_random_position()
+				#$EnemyBase.add_child(enemy_spawn)
+				manager.mob_array.append(enemy_spawn)
+				enemy_spawn.connect("remove_from_array", Callable(manager, "remove"))
+				enemies_on_screen+=1
+		elif enemies_alive<enemy_cap:
+			var enemy_spawn = get_enemy()#.instantiate()
 			enemy_spawn.global_position = get_random_position()
-			$EnemyBase.add_child(enemy_spawn)
+			#$EnemyBase.add_child(enemy_spawn)
 			manager.mob_array.append(enemy_spawn)
+			enemy_spawn.connect("remove_from_array", Callable(manager, "remove"))
+			enemies_on_screen+=1
+	else:
+		var corner = randi_range(0,1)
+		var left = false if (corner == 0) else true
+		var roll = randi_range(1,100)
+		if roll<=current_wave_chance:
+			var manager = get_manager()
+			if manager == null:
+				manager = group_manager.instantiate()
+				$ManagerBase.add_child(manager)
+				manager.update_loc(direction)
+				managers.append(manager)
+			for i in range(current_wave_minimum):
+				var enemy_spawn = get_enemy()#.instantiate()
+				if !current_wave_flock:
+					enemy_spawn.global_position = get_random_position()
+				else:
+					enemy_spawn.global_position = get_random_position(true,left)
+					enemy_spawn.in_flock = true
+					enemies_on_screen+=1
+				#$EnemyBase.add_child(enemy_spawn)
+				manager.mob_array.append(enemy_spawn)
+				enemy_spawn.connect("remove_from_array", Callable(manager, "remove"))
 
-	elif enemies_alive<enemy_cap:
-		var enemy_spawn = get_enemy().instantiate()
-		enemy_spawn.global_position = get_random_position()
-		$EnemyBase.add_child(enemy_spawn)
-		manager.mob_array.append(enemy_spawn)
 
 func get_enemy():
 	var choose = randi_range(1,100)
 	var option_cnt = current_wave_rates.size()
 	for i in range(0, option_cnt):
 		if choose <= current_wave_rates[i]:
-			return current_wave[i]
+			var enemy = $EnemyBase.draw_from_pool(current_wave[i].get_path())
+			enemy.enable()
+			return enemy
 
 func get_manager():
 	var manager = null

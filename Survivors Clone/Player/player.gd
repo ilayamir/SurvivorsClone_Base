@@ -410,7 +410,7 @@ func get_random_target():
 	if enemy_close.size() > 0:
 		return enemy_close.pick_random().global_position
 	else:
-		return Vector2.DOWN
+		return Vector2.LEFT
 
 func _on_tornado_timer_timeout():
 	tornado_ammo += tornado_baseammo + additional_attacks
@@ -1140,8 +1140,15 @@ func _on_vuln_timer_timeout():
 func _on_enemy_detection_area_body_entered(body):
 	if not enemy_close.has(body):
 		enemy_close.append(body)
+		if !body.is_connected("remove_from_array", Callable(self, "remove_from_nearby")):
+			body.connect("remove_from_array", Callable(self, "remove_from_nearby"))
 
+func remove_from_nearby(body):
+	if enemy_close.has(body):
+		enemy_close.erase(body)
 
 func _on_enemy_detection_area_body_exited(body):
 	if enemy_close.has(body):
 		enemy_close.erase(body)
+		if body.is_connected("remove_from_array", Callable(self, "remove_from_nearby")):
+			body.disconnect("remove_from_array", Callable(self, "remove_from_nearby"))

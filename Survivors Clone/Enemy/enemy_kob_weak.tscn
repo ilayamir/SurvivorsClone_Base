@@ -177,10 +177,10 @@ process_callback = 0
 autostart = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 1.2
 libraries = {
 "": SubResource("AnimationLibrary_ajlna")
 }
+speed_scale = 1.2
 
 [node name="hitflash" type="AnimationPlayer" parent="."]
 libraries = {

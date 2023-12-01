@@ -39,7 +39,7 @@ func _on_area_entered(area):
 						if area.has_method("tempdisable"):
 							area.tempdisable()
 			var damage = area.damage
-			if get_parent().stagger:
+			if get_parent().get_parent().staggered: 
 				damage*=2
 			var angle = Vector2.ZERO
 			var knockback = 1
@@ -52,7 +52,7 @@ func _on_area_entered(area):
 			var crit_chance = randf_range(0,1)
 			if crit_chance<player.crit_chance and area.is_in_group("attacks"):
 				var crit_dmg = 1.5
-				if get_parent().crit_vul == true:
+				if get_parent().get_parent().crit_vul == true:
 					crit_dmg = 2.5
 				damage = damage*crit_dmg
 				crit = true
@@ -62,8 +62,8 @@ func _on_area_entered(area):
 				crit = false
 			if area.is_in_group("attacks") and !area.is_in_group("suck"):
 				var number = dmg_num.instantiate()
-				get_parent().get_parent().add_child(number)
-				number.position = get_parent().position
+				get_parent().get_parent().get_parent().get_parent().add_child(number)
+				number.position = get_parent().get_parent().position
 				number.position.x += randi_range(-15,15)
 				number.position.y += randi_range(-10,10)
 				number.scale *= randf_range(0.9,1.2)
@@ -81,7 +81,7 @@ func _on_area_entered(area):
 					angle = global_position.direction_to(area.global_position).normalized()
 			emit_signal("hurt", damage, angle, knockback, special_effect)
 			if area.has_method("enemy_hit"):
-				if get_parent().is_in_group("boss"):
+				if get_parent().get_parent().boss:
 					area.enemy_hit(100, crit)
 				else:
 					area.enemy_hit(1, crit)

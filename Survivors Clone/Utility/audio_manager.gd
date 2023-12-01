@@ -5,8 +5,8 @@ extends Node
 @onready var enemy_death_snd = get_node("%snd_explosion")
 @onready var crit_snd = get_node("%snd_crit")
 
-var num_players = 3
-var max_queue = 3
+var num_players = 5
+var max_queue = 8
 var available_collect = []
 var available_death = []
 var available_hit = []

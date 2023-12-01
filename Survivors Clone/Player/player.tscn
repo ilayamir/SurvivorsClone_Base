@@ -60,9 +60,9 @@ emission_shape = 3
 emission_box_extents = Vector3(210, 1, 1)
 direction = Vector3(-0.3, 1, 0)
 spread = 0.0
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 50.0
 initial_velocity_max = 80.0
+gravity = Vector3(0, 0, 0)
 color_ramp = SubResource("GradientTexture1D_0dp4e")
 
 [sub_resource type="Gradient" id="Gradient_oqawd"]
@@ -75,9 +75,9 @@ gradient = SubResource("Gradient_oqawd")
 emission_shape = 3
 emission_box_extents = Vector3(320, 1, 1)
 direction = Vector3(-0.4, 1, 0)
-gravity = Vector3(0, 0, 0)
 initial_velocity_min = 100.0
 initial_velocity_max = 150.0
+gravity = Vector3(0, 0, 0)
 scale_max = 1.5
 color_ramp = SubResource("GradientTexture1D_rum46")
 

@@ -1,0 +1,218 @@
+[gd_scene load_steps=15 format=3 uid="uid://bnqioobgnrk2l"]
+
+[ext_resource type="Script" path="res://Enemy/enemy_base.gd" id="1_pnvq7"]
+[ext_resource type="PackedScene" uid="uid://dhegskr833qbs" path="res://Enemy/enemy_base.tscn" id="2_v1xjk"]
+[ext_resource type="Texture2D" uid="uid://bmsgsh7rse2h4" path="res://Textures/Enemy/spider_1.png" id="3_sdqwh"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_uf61h"]
+size = Vector2(44, 43)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_143d2"]
+size = Vector2(40, 26)
+
+[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_jbn1a"]
+resource_local_to_scene = true
+particles_animation = true
+particles_anim_h_frames = 6
+particles_anim_v_frames = 6
+particles_anim_loop = true
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_q1is2"]
+radius = 7.0
+
+[sub_resource type="Animation" id="Animation_wdfi3"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyBase/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EnemyBase/Sprite2D:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("EnemyBase/GPUParticles2D:emitting")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="Animation" id="Animation_fmur8"]
+resource_name = "death"
+length = 0.5
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyBase/Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("EnemyBase/GPUParticles2D:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_e5tsm"]
+resource_name = "walk"
+length = 0.6
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyBase/Sprite2D:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [0, 1]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_rakn0"]
+_data = {
+"RESET": SubResource("Animation_wdfi3"),
+"death": SubResource("Animation_fmur8"),
+"walk": SubResource("Animation_e5tsm")
+}
+
+[sub_resource type="Animation" id="Animation_xqp6t"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyBase/Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_024os"]
+resource_name = "hitflash"
+length = 0.2
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("EnemyBase/Sprite2D:modulate")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2),
+"transitions": PackedFloat32Array(1, 1),
+"update": 1,
+"values": [Color(1.2, 1.2, 1.2, 1), Color(1, 1, 1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_3rrje"]
+_data = {
+"RESET": SubResource("Animation_xqp6t"),
+"hitflash": SubResource("Animation_024os")
+}
+
+[node name="EnemyNormalGoober" type="CharacterBody2D"]
+collision_layer = 4
+collision_mask = 5
+motion_mode = 1
+script = ExtResource("1_pnvq7")
+basehp = 75.0
+base_speed = 45.0
+gem_drop_chance = 0.8
+food_drop_chance = 0.001
+knockback_res = 50
+enemy_damage = 10
+experience = 10
+time_before_loc_reset = 3.0
+rusher = true
+
+[node name="EnemyBase" parent="." instance=ExtResource("2_v1xjk")]
+
+[node name="Sprite2D" parent="EnemyBase" index="0"]
+texture_filter = 1
+scale = Vector2(1.4, 1.4)
+texture = ExtResource("3_sdqwh")
+hframes = 2
+
+[node name="CollisionShape2D" parent="EnemyBase/HurtBox" index="0"]
+position = Vector2(0, -1.5)
+shape = SubResource("RectangleShape2D_uf61h")
+
+[node name="CollisionShape2D" parent="EnemyBase/HitBox" index="0"]
+position = Vector2(0, -3)
+shape = SubResource("RectangleShape2D_143d2")
+
+[node name="VisibleOnScreenNotifier2D" parent="EnemyBase" index="6"]
+position = Vector2(0.5, -7.15256e-07)
+scale = Vector2(2.25, 2.2)
+
+[node name="GPUParticles2D" parent="EnemyBase" index="8"]
+material = SubResource("CanvasItemMaterial_jbn1a")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, 0)
+shape = SubResource("CircleShape2D_q1is2")
+disabled = true
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_rakn0")
+}
+speed_scale = 0.8
+
+[node name="HitFlash" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_3rrje")
+}
+
+[connection signal="hurt" from="EnemyBase/HurtBox" to="." method="_on_hurt_box_hurt"]
+[connection signal="hurt_ult" from="EnemyBase/HurtBox" to="." method="_on_hurt_box_hurt_ult"]
+[connection signal="timeout" from="EnemyBase/RushingTimer" to="." method="_on_rushing_timer_timeout"]
+[connection signal="timeout" from="EnemyBase/RushingTimer/RushTime" to="." method="_on_rush_time_timeout"]
+[connection signal="timeout" from="EnemyBase/GetDirTimer" to="." method="_on_get_dir_timer_timeout"]
+[connection signal="timeout" from="EnemyBase/DebuffTimer" to="." method="_on_debuff_timer_timeout"]
+[connection signal="screen_entered" from="EnemyBase/VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_entered"]
+[connection signal="screen_exited" from="EnemyBase/VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]
+[connection signal="timeout" from="EnemyBase/StaggerTimer" to="." method="_on_stagger_timer_timeout"]
+[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+
+[editable path="EnemyBase"]
+[editable path="EnemyBase/HurtBox"]
+[editable path="EnemyBase/HitBox"]

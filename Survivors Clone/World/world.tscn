@@ -1,4 +1,4 @@
-[gd_scene load_steps=37 format=3 uid="uid://bw1axv2jx7mkl"]
+[gd_scene load_steps=42 format=3 uid="uid://bw1axv2jx7mkl"]
 
 [ext_resource type="PackedScene" uid="uid://enppeejftyda" path="res://Player/player.tscn" id="2_6eenl"]
 [ext_resource type="Texture2D" uid="uid://cby75pgsrm0xr" path="res://Textures/bg_1.png" id="2_urm4p"]
@@ -18,7 +18,12 @@
 [ext_resource type="PackedScene" uid="uid://crkrq7hw21diw" path="res://Utility/flock_spawner.tscn" id="11_ewsey"]
 [ext_resource type="PackedScene" uid="uid://djtsvnmjneqls" path="res://Utility/audio_manager.tscn" id="12_bqjd8"]
 [ext_resource type="PackedScene" uid="uid://bahxppku4g5fq" path="res://Utility/frame_saver.tscn" id="12_eg3di"]
+[ext_resource type="PackedScene" uid="uid://8p5ykqdyr8e2" path="res://Enemy/enemy_elite_goober.tscn" id="17_f22w4"]
+[ext_resource type="PackedScene" uid="uid://c50j30fl3uxpk" path="res://Enemy/enemy_weak_slime.tscn" id="17_khk0v"]
+[ext_resource type="PackedScene" uid="uid://cudxxg0muktf7" path="res://Enemy/enemy_strong_slime.tscn" id="17_u43r8"]
 [ext_resource type="PackedScene" uid="uid://bv7gxlif0vc8s" path="res://Utility/helper_manager.tscn" id="18_q3qnt"]
+[ext_resource type="PackedScene" uid="uid://bnqioobgnrk2l" path="res://Enemy/enemy_normal_goober.tscn" id="18_sf0fy"]
+[ext_resource type="PackedScene" uid="uid://dw4fjw3g3d1be" path="res://Enemy/enemy_skell.tscn" id="19_bwiq8"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_rgqdx"]
 texture = ExtResource("2_urm4p")
@@ -104,6 +109,9 @@ enemy = Array[Resource]([ExtResource("4_wtewt")])
 enemy_chance = Array[int]([100])
 enemy_minimum = 15
 enemy_spawn_rate = 1.0
+instantanious = false
+flock = false
+chance = 0
 
 [sub_resource type="Resource" id="Resource_o15lc"]
 script = ExtResource("10_gjxaw")
@@ -113,6 +121,9 @@ enemy = Array[Resource]([ExtResource("6_wopsv"), ExtResource("4_wtewt")])
 enemy_chance = Array[int]([33, 100])
 enemy_minimum = 30
 enemy_spawn_rate = 1.0
+instantanious = false
+flock = false
+chance = 0
 
 [sub_resource type="Resource" id="Resource_grw8t"]
 script = ExtResource("10_gjxaw")
@@ -122,6 +133,9 @@ enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("6_wopsv"), ExtReso
 enemy_chance = Array[int]([5, 40, 70, 100])
 enemy_minimum = 45
 enemy_spawn_rate = 0.8
+instantanious = false
+flock = false
+chance = 0
 
 [sub_resource type="Resource" id="Resource_1wkmk"]
 script = ExtResource("10_gjxaw")
@@ -131,6 +145,9 @@ enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("6_wopsv"), ExtReso
 enemy_chance = Array[int]([15, 50, 75, 100])
 enemy_minimum = 60
 enemy_spawn_rate = 0.5
+instantanious = false
+flock = false
+chance = 0
 
 [sub_resource type="Resource" id="Resource_2jibb"]
 script = ExtResource("10_gjxaw")
@@ -140,6 +157,9 @@ enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("7_dj51l")])
 enemy_chance = Array[int]([10, 100])
 enemy_minimum = 200
 enemy_spawn_rate = 0.3
+instantanious = false
+flock = false
+chance = 0
 
 [sub_resource type="Resource" id="Resource_p88db"]
 script = ExtResource("10_gjxaw")
@@ -149,15 +169,21 @@ enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("6_wopsv"), ExtReso
 enemy_chance = Array[int]([20, 35, 100])
 enemy_minimum = 250
 enemy_spawn_rate = 0.2
+instantanious = false
+flock = false
+chance = 0
 
-[sub_resource type="Resource" id="Resource_ti61a"]
+[sub_resource type="Resource" id="Resource_wm1v1"]
 script = ExtResource("10_gjxaw")
 time_start = 0
-time_end = 120
-enemy = Array[Resource]([ExtResource("7_dj51l")])
-enemy_chance = Array[int]([100])
-enemy_minimum = 300
+time_end = 60
+enemy = Array[Resource]([ExtResource("17_f22w4"), ExtResource("18_sf0fy"), ExtResource("17_u43r8"), ExtResource("17_khk0v"), ExtResource("19_bwiq8")])
+enemy_chance = Array[int]([1, 15, 30, 60, 100])
+enemy_minimum = 250
 enemy_spawn_rate = 0.25
+instantanious = false
+flock = false
+chance = 0
 
 [node name="World" type="Node2D"]
 texture_filter = 1
@@ -180,7 +206,7 @@ region_rect = Rect2(0, 0, 1200, 1200)
 visible = false
 texture_filter = 1
 tile_set = SubResource("TileSet_gicvn")
-cell_quadrant_size = 32
+rendering_quadrant_size = 32
 format = 2
 layer_0/tile_data = PackedInt32Array(0, 0, 0, 65536, 0, 0, 131072, 0, 0, 196608, 0, 0, 262144, 0, 0, 327680, 0, 0, 393216, 0, 0, 458752, 0, 0, 524288, 0, 0, 589824, 0, 0, 655360, 0, 0, 720896, 0, 0, 1, 0, 0, 65537, 0, 0, 131073, 0, 0, 196609, 0, 0, 262145, 0, 0, 327681, 0, 0, 393217, 0, 0, 458753, 0, 0, 524289, 0, 0, 589825, 0, 0, 655361, 0, 0, 720897, 0, 0, 2, 0, 0, 65538, 0, 0, 131074, 0, 0, 196610, 0, 0, 262146, 0, 0, 327682, 0, 0, 393218, 0, 0, 458754, 0, 0, 524290, 0, 0, 589826, 0, 0, 655362, 0, 0, 720898, 0, 0, 3, 0, 0, 65539, 0, 0, 131075, 0, 0, 196611, 0, 0, 262147, 0, 0, 327683, 0, 0, 393219, 0, 0, 458755, 0, 0, 524291, 0, 0, 589827, 0, 0, 655363, 0, 0, 720899, 0, 0, 4, 0, 0, 65540, 0, 0, 131076, 0, 0, 196612, 0, 0, 262148, 0, 0, 327684, 0, 0, 393220, 0, 0, 458756, 0, 0, 524292, 0, 0, 589828, 0, 0, 655364, 0, 0, 720900, 0, 0, 5, 0, 0, 65541, 0, 0, 131077, 0, 0, 196613, 0, 0, 262149, 0, 0, 327685, 0, 0, 393221, 0, 0, 458757, 0, 0, 524293, 0, 0, 589829, 0, 0, 655365, 0, 0, 720901, 0, 0, 6, 0, 0, 65542, 0, 0, 131078, 0, 0, 196614, 0, 0, 262150, 0, 0, 327686, 0, 0, 393222, 0, 0, 458758, 0, 0, 524294, 0, 0, 589830, 0, 0, 655366, 0, 0, 720902, 0, 0, 7, 0, 0, 65543, 0, 0, 131079, 0, 0, 196615, 0, 0, 262151, 0, 0, 327687, 0, 0, 393223, 0, 0, 458759, 0, 0, 524295, 0, 0, 589831, 0, 0, 655367, 0, 0, 720903, 0, 0, 8, 0, 0, 65544, 0, 0, 131080, 0, 0, 196616, 0, 0, 262152, 0, 0, 327688, 0, 0, 393224, 0, 0, 458760, 0, 0, 524296, 0, 0, 589832, 0, 0, 655368, 0, 0, 720904, 0, 0, 9, 0, 0, 65545, 0, 0, 131081, 0, 0, 196617, 0, 0, 262153, 0, 0, 327689, 0, 0, 393225, 0, 0, 458761, 0, 0, 524297, 0, 0, 589833, 0, 0, 655369, 0, 0, 720905, 0, 0, 10, 0, 0, 65546, 0, 0, 131082, 0, 0, 196618, 0, 0, 262154, 0, 0, 327690, 0, 0, 393226, 0, 0, 458762, 0, 0, 524298, 0, 0, 589834, 0, 0, 655370, 0, 0, 720906, 0, 0, 11, 0, 0, 65547, 0, 0, 131083, 0, 0, 196619, 0, 0, 262155, 0, 0, 327691, 0, 0, 393227, 0, 0, 458763, 0, 0, 524299, 0, 0, 589835, 0, 0, 655371, 0, 0, 720907, 0, 0, 12, 0, 0, 65548, 0, 0, 131084, 0, 0, 196620, 0, 0, 262156, 0, 0, 327692, 0, 0, 393228, 0, 0, 458764, 0, 0, 524300, 0, 0, 589836, 0, 0, 655372, 0, 0, 720908, 0, 0, 13, 0, 0, 65549, 0, 0, 131085, 0, 0, 196621, 0, 0, 262157, 0, 0, 327693, 0, 0, 393229, 0, 0, 458765, 0, 0, 524301, 0, 0, 589837, 0, 0, 655373, 0, 0, 720909, 0, 0, 14, 0, 0, 65550, 0, 0, 131086, 0, 0, 196622, 0, 0, 262158, 0, 0, 327694, 0, 0, 393230, 0, 0, 458766, 0, 0, 524302, 0, 0, 589838, 0, 0, 655374, 0, 0, 720910, 0, 0, 15, 0, 0, 65551, 0, 0, 131087, 0, 0, 196623, 0, 0, 262159, 0, 0, 327695, 0, 0, 393231, 0, 0, 458767, 0, 0, 524303, 0, 0, 589839, 0, 0, 655375, 0, 0, 720911, 0, 0, 16, 0, 0, 65552, 0, 0, 131088, 0, 0, 196624, 0, 0, 262160, 0, 0, 327696, 0, 0, 393232, 0, 0, 458768, 0, 0, 524304, 0, 0, 589840, 0, 0, 655376, 0, 0, 720912, 0, 0, 17, 0, 0, 65553, 0, 0, 131089, 0, 0, 196625, 0, 0, 262161, 0, 0, 327697, 0, 0, 393233, 0, 0, 458769, 0, 0, 524305, 0, 0, 589841, 0, 0, 655377, 0, 0, 720913, 0, 0, 18, 0, 0, 65554, 0, 0, 131090, 0, 0, 196626, 0, 0, 262162, 0, 0, 327698, 0, 0, 393234, 0, 0, 458770, 0, 0, 524306, 0, 0, 589842, 0, 0, 655378, 0, 0, 720914, 0, 0, 19, 0, 0, 65555, 0, 0, 131091, 0, 0, 196627, 0, 0, 262163, 0, 0, 327699, 0, 0, 393235, 0, 0, 458771, 0, 0, 524307, 0, 0, 589843, 0, 0, 655379, 0, 0, 720915, 0, 0)
 
@@ -198,7 +224,7 @@ offset_bottom = 1200.0
 
 [node name="Player" parent="." instance=ExtResource("2_6eenl")]
 scale = Vector2(1, 1)
-ult_cd = 60
+ult_cd = 2
 
 [node name="FlockSpawner" parent="." instance=ExtResource("11_ewsey")]
 process_mode = 4
@@ -218,7 +244,7 @@ process_mode = 4
 spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_i0nh0"), SubResource("Resource_o15lc"), SubResource("Resource_grw8t"), SubResource("Resource_1wkmk"), SubResource("Resource_2jibb"), SubResource("Resource_p88db")])
 
 [node name="DebugEnemySpawner" parent="." instance=ExtResource("10_73fk1")]
-spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_ti61a")])
+spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_wm1v1")])
 
 [node name="Loot" type="Node2D" parent="." groups=["loot"]]
 

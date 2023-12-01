@@ -56,7 +56,7 @@ signal remove_from_array(object)
 var screen_size
 
 func _ready():
-	physic_proccessing_index = randi_range(1,3)
+	physic_proccessing_index = get_parent().get_child_count()%3
 	if is_in_group("slime"):
 		var color = randi_range(1,2)
 		if color == 1:
@@ -98,13 +98,13 @@ func _ready():
 func _physics_process(delta):
 	if (Engine.get_physics_frames()+physic_proccessing_index)%3:
 		if invis:
-			invis_time+=delta
+			invis_time+=delta*3
 			if invis_time>=offscreen_timer:
 				launch()
 				invis_time = 0
 				invis = false
 		if !dead:
-			velocity = direction*movement_speed
+			velocity = direction*movement_speed*3
 	#		global_position+=velocity
 			move_and_slide()
 	#		move_and_collide(velocity*delta)
@@ -162,7 +162,7 @@ func _on_hurt_box_hurt(damage, angle, knockback_amount, special_effect="none"):
 		var time = clamp(0.002*(100-knockback_recovery),0,0.2)
 		tween.tween_property(self, "position", knock_pos, time).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 		tween.play()
-		knockback = 0
+		knockback = Vector2.ZERO
 		if is_in_group("boss"):
 			stagger_threshold -= damage
 	if stagger_threshold <= 0:
@@ -188,7 +188,6 @@ func _on_hurt_box_hurt_ult(_damage, angle, knockback_amount):
 	var tween = create_tween()
 	tween.tween_property(self, "position", knock_pos, 0.4).set_trans(Tween.TRANS_LINEAR).set_ease(Tween.EASE_OUT)
 	tween.play()
-
 
 func _on_rushing_timer_timeout():
 	if self.is_in_group("rusher"):

@@ -261,10 +261,10 @@ wait_time = 5.0
 one_shot = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 0.8
 libraries = {
 "": SubResource("AnimationLibrary_jbr03")
 }
+speed_scale = 0.8
 
 [node name="hitflash" type="AnimationPlayer" parent="."]
 libraries = {

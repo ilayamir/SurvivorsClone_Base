@@ -8,6 +8,9 @@ class_name New_spawn_info
 @export var enemy_chance: Array[int]
 @export var enemy_minimum:int
 @export var enemy_spawn_rate:float
+@export var instantanious: bool
+@export var flock: bool
+@export var chance:int
 
 var spawn_delay_counter = 0
 

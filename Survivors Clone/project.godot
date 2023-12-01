@@ -12,7 +12,7 @@ config_version=5
 
 config/name="Survivors Clone"
 run/main_scene="res://TitleScreen/menu.tscn"
-config/features=PackedStringArray("4.1", "Mobile")
+config/features=PackedStringArray("4.2", "Mobile")
 config/icon="res://icon.svg"
 
 [autoload]
@@ -96,6 +96,10 @@ dash={
 2d_physics/layer_5="EnemyCDEnforced"
 2d_physics/layer_6="Ultimate"
 2d_physics/layer_7="Elites"
+
+[physics]
+
+2d/physics_engine="Rapier2D"
 
 [rendering]
 

@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://ctjd1mbq30m3i"]
+[gd_scene load_steps=3 format=3 uid="uid://ctjd1mbq30m3i"]
 
 [ext_resource type="Script" path="res://Utility/new_enemy_spawner.gd" id="1_huxn0"]
+[ext_resource type="Script" path="res://Utility/EnemyBase.gd" id="2_fdmec"]
 
 [node name="NewEnemySpawner" type="Node2D"]
 script = ExtResource("1_huxn0")
@@ -11,6 +12,7 @@ autostart = true
 [node name="SpawnRateTimer" type="Timer" parent="."]
 
 [node name="EnemyBase" type="Node2D" parent="."]
+script = ExtResource("2_fdmec")
 
 [node name="ManagerBase" type="Node2D" parent="."]
 

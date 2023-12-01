@@ -9,7 +9,7 @@ var attack_size = 1.0
 var additional_ammo = 0
 var target = Vector2.ZERO
 var angle = Vector2.ZERO
-var light_on = true
+var light_on = false
 
 @onready var player = get_tree().get_first_node_in_group("player")
 signal remove_from_array(object)
