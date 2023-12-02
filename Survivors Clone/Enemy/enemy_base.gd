@@ -92,7 +92,7 @@ func enable():
 	hit_box_collision.set_deferred("disabled",false)
 	hitbox.damage = enemy_damage
 	invis_time = 0
-	physic_proccessing_index = randi_range(1,3)
+	physic_proccessing_index = get_parent().get_parent().enemies_on_screen%3
 	get_dir_timer.wait_time = 0.4
 	get_dir_timer.start()
 	anim.speed_scale *= randf_range(0.9,1.1)
@@ -286,4 +286,5 @@ func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "death":
 		emit_signal("pool_back",self)
 		helper_manager.killed()
+		#queue_free()
 		disable()
