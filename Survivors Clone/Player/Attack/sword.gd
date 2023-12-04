@@ -85,7 +85,7 @@ func _ready():
 	initial_tween.play()
 
 func _physics_process(_delta):
-	delt += 0.9
+	delt += 1.8
 	if !flipped:
 		match player.sprite.flip_h:
 			true:

@@ -8,12 +8,15 @@ var duration = 2.0
 @onready var player = get_tree().get_first_node_in_group("player")
 var fade = 1
 var base_dmg = 5
+var enable_damage = false
 signal remove_from_array(object)
 
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	$AnimationPlayer.play("flicker")
+	if enable_damage:
+		$CollisionShape2D.set_deferred("disabled",false)
 	match level:
 		1:
 			damage = 1*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)+(player.movement_speed*2/100)

@@ -3,11 +3,9 @@
 [ext_resource type="Texture2D" uid="uid://bhd2g37xsxj6r" path="res://Textures/Items/Weapons/sword.png" id="1_ad38w"]
 [ext_resource type="Script" path="res://Player/Attack/fswords.gd" id="1_r3nbt"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_y0ddc"]
-size = Vector2(31.8198, 8.48528)
+[sub_resource type="CircleShape2D" id="CircleShape2D_t6t1d"]
 
 [node name="FSword" type="Area2D" groups=["attacks"]]
-visible = false
 top_level = true
 z_index = -2
 position = Vector2(-2, -2)
@@ -17,10 +15,10 @@ monitoring = false
 script = ExtResource("1_r3nbt")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(0.25, 0.25)
+position = Vector2(-1, -1)
 rotation = 0.785398
 scale = Vector2(0.5, 0.5)
-shape = SubResource("RectangleShape2D_y0ddc")
+shape = SubResource("CircleShape2D_t6t1d")
 disabled = true
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

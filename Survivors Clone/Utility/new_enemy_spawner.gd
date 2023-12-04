@@ -16,6 +16,7 @@ var current_wave_minimum = 0
 var current_wave_end = 0
 var current_wave_instantanious = false
 var current_wave_flock = false
+var current_wave_boss = false #an option under instantanious waves to signal the player the boss's health bar
 var current_wave_chance = 0
 var direction = Vector2.ZERO
 var move_num = 0
@@ -78,7 +79,6 @@ func get_random_position(predetermined = false, left = false):
 func _on_global_timer_timeout():
 	time+=1
 	direction = player.global_position
-	emit_signal("changetime",time)
 	for wave in spawns:
 		if wave.time_start<=time and wave.time_end>time:
 			$SpawnRateTimer.wait_time = wave.enemy_spawn_rate
@@ -89,10 +89,12 @@ func _on_global_timer_timeout():
 			current_wave_instantanious = wave.instantanious
 			current_wave_flock = wave.flock
 			current_wave_chance = wave.chance
+			current_wave_boss = wave.boss
 			$SpawnRateTimer.start()
 			spawns.pop_front()
 	if current_wave_end<time:
 		$SpawnRateTimer.stop()
+	emit_signal("changetime",time)
 	for manager in managers:
 		var wr = weakref(manager)
 		if wr.get_ref():
@@ -102,10 +104,12 @@ func _on_global_timer_timeout():
 	if time == end_time-5:
 		get_tree().call_group("enemy", "death")
 		$SpawnRateTimer.stop()
+	if time == end_time-4:
+		get_tree().call_group("enemy", "death")
 
 func _on_spawn_rate_timer_timeout():
 	if !current_wave_instantanious:
-		var enemies_alive = enemies_on_screen
+		var enemies_alive = $EnemyBase.get_child_count()#enemies_on_screen
 		var manager = get_manager()
 		if manager == null:
 			manager = group_manager.instantiate()
@@ -116,6 +120,7 @@ func _on_spawn_rate_timer_timeout():
 			for i in range(current_wave_minimum-enemies_alive):
 				var enemy_spawn = get_enemy()#.instantiate()
 				enemy_spawn.global_position = get_random_position()
+				enemy_spawn.enable()
 				#$EnemyBase.add_child(enemy_spawn)
 				manager.mob_array.append(enemy_spawn)
 				enemy_spawn.connect("remove_from_array", Callable(manager, "remove"))
@@ -123,6 +128,7 @@ func _on_spawn_rate_timer_timeout():
 		elif enemies_alive<enemy_cap:
 			var enemy_spawn = get_enemy()#.instantiate()
 			enemy_spawn.global_position = get_random_position()
+			enemy_spawn.enable()
 			#$EnemyBase.add_child(enemy_spawn)
 			manager.mob_array.append(enemy_spawn)
 			enemy_spawn.connect("remove_from_array", Callable(manager, "remove"))
@@ -142,9 +148,13 @@ func _on_spawn_rate_timer_timeout():
 				var enemy_spawn = get_enemy()#.instantiate()
 				if !current_wave_flock:
 					enemy_spawn.global_position = get_random_position()
+					enemy_spawn.enable()
+					if current_wave_boss:
+						emit_signal("changetime",time,enemy_spawn,enemy_spawn.maxhp)
 				else:
 					enemy_spawn.global_position = get_random_position(true,left)
 					enemy_spawn.in_flock = true
+					enemy_spawn.enable()
 					enemies_on_screen+=1
 				#$EnemyBase.add_child(enemy_spawn)
 				manager.mob_array.append(enemy_spawn)
@@ -157,7 +167,7 @@ func get_enemy():
 	for i in range(0, option_cnt):
 		if choose <= current_wave_rates[i]:
 			var enemy = $EnemyBase.draw_from_pool(current_wave[i].get_path())
-			enemy.enable()
+			#enemy.enable()
 			return enemy
 
 func get_manager():

@@ -19,19 +19,19 @@ func _ready():
 	rotation = angle.angle() + deg_to_rad(-90)
 	match level:
 		1:
-			damage = 10*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 16*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			attack_size = 1.0*(1 + player.spell_size)
 		2:
-			damage = 10*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 16*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			attack_size = 1.0*(1 + player.spell_size)
 		3:
-			damage = 15*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 18*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			attack_size = 1.0*(1 + player.spell_size)
 		4:
-			damage = 15*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 18*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			attack_size = 1.0*(1 + player.spell_size)
 		5:
-			damage = 20*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
+			damage = 22*(1+player.damage_bonus)*(1+player.dmg_inc_per_lvl*player.experience_level)
 			attack_size = 1.0*(1 + player.spell_size)
 
 

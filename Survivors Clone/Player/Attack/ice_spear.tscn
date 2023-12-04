@@ -4,8 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://b385locn2g6kn" path="res://Textures/Items/Weapons/ice_spear.png" id="1_e5abd"]
 [ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="4_e0gf2"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o31u"]
-size = Vector2(6, 18)
+[sub_resource type="CircleShape2D" id="CircleShape2D_ymt71"]
 
 [node name="IceSpear" type="Area2D" groups=["attacks"]]
 top_level = true
@@ -18,7 +17,7 @@ metadata/_edit_horizontal_guides_ = []
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-9, -9)
 rotation = -0.785398
-shape = SubResource("RectangleShape2D_6o31u")
+shape = SubResource("CircleShape2D_ymt71")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 10.0

@@ -239,7 +239,7 @@ _data = {
 "hitflash": SubResource("Animation_024os")
 }
 
-[node name="EnemyEliteGoober" type="CharacterBody2D"]
+[node name="EnemyEliteGoober" type="CharacterBody2D" groups=["enemy"]]
 z_index = 1
 scale = Vector2(1.2, 1.2)
 collision_layer = 64

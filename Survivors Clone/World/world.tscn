@@ -1,23 +1,14 @@
-[gd_scene load_steps=42 format=3 uid="uid://bw1axv2jx7mkl"]
+[gd_scene load_steps=33 format=3 uid="uid://bw1axv2jx7mkl"]
 
 [ext_resource type="PackedScene" uid="uid://enppeejftyda" path="res://Player/player.tscn" id="2_6eenl"]
 [ext_resource type="Texture2D" uid="uid://cby75pgsrm0xr" path="res://Textures/bg_1.png" id="2_urm4p"]
 [ext_resource type="Shader" uid="uid://brseicnjbins2" path="res://World/world.tres" id="2_x2rr4"]
-[ext_resource type="PackedScene" uid="uid://dq75jgfx5gtcc" path="res://Utility/enemy_spawner.tscn" id="3_0s21j"]
-[ext_resource type="PackedScene" uid="uid://b6rvw0jlif31y" path="res://Enemy/enemy_kob_weak.tscn" id="4_wtewt"]
-[ext_resource type="Script" path="res://Utility/spawn_info.gd" id="5_4dsq2"]
-[ext_resource type="PackedScene" uid="uid://cyqke1j1hpx4h" path="res://Enemy/enemy_kob_strong.tscn" id="6_wopsv"]
-[ext_resource type="PackedScene" uid="uid://da0qty8n3gilg" path="res://Enemy/enemy_cyclops.tscn" id="7_5byxq"]
-[ext_resource type="PackedScene" uid="uid://c0owmup3as1g0" path="res://Enemy/enemy_kob_fodder.tscn" id="7_dj51l"]
-[ext_resource type="PackedScene" uid="uid://bbq76kbt478mr" path="res://Enemy/enemy_juggernaut.tscn" id="8_d58ao"]
-[ext_resource type="Script" path="res://Utility/boss_spawner.gd" id="9_8ecga"]
-[ext_resource type="PackedScene" uid="uid://dadudkfv4nprj" path="res://Enemy/enemy_super.tscn" id="9_a13nc"]
 [ext_resource type="PackedScene" uid="uid://ctjd1mbq30m3i" path="res://Utility/new_enemy_spawner.tscn" id="10_73fk1"]
 [ext_resource type="Script" path="res://Utility/spawn_info_new.gd" id="10_gjxaw"]
-[ext_resource type="PackedScene" uid="uid://cqrsgqrv40hao" path="res://Enemy/enemy_bat.tscn" id="10_tkcsy"]
-[ext_resource type="PackedScene" uid="uid://crkrq7hw21diw" path="res://Utility/flock_spawner.tscn" id="11_ewsey"]
+[ext_resource type="PackedScene" uid="uid://jueuqujsif1t" path="res://Enemy/enemy_bat_linear.tscn" id="11_yno00"]
 [ext_resource type="PackedScene" uid="uid://djtsvnmjneqls" path="res://Utility/audio_manager.tscn" id="12_bqjd8"]
 [ext_resource type="PackedScene" uid="uid://bahxppku4g5fq" path="res://Utility/frame_saver.tscn" id="12_eg3di"]
+[ext_resource type="PackedScene" uid="uid://b8hp1peodabyi" path="res://Enemy/enemy_boss.tscn" id="13_nxvds"]
 [ext_resource type="PackedScene" uid="uid://8p5ykqdyr8e2" path="res://Enemy/enemy_elite_goober.tscn" id="17_f22w4"]
 [ext_resource type="PackedScene" uid="uid://c50j30fl3uxpk" path="res://Enemy/enemy_weak_slime.tscn" id="17_khk0v"]
 [ext_resource type="PackedScene" uid="uid://cudxxg0muktf7" path="res://Enemy/enemy_strong_slime.tscn" id="17_u43r8"]
@@ -38,152 +29,187 @@ sources/0 = SubResource("TileSetAtlasSource_rgqdx")
 shader = ExtResource("2_x2rr4")
 shader_parameter/FloatParameter = -0.9
 
-[sub_resource type="Resource" id="Resource_iu02w"]
-script = ExtResource("5_4dsq2")
-time_start = 0
-time_end = 355
-enemy = ExtResource("10_tkcsy")
-enemy_num = 30
-enemy_spawn_delay = 10
-chance = 50
-
-[sub_resource type="Resource" id="Resource_xcm6e"]
-script = ExtResource("5_4dsq2")
-time_start = 120
-time_end = 120
-enemy = ExtResource("8_d58ao")
-enemy_num = 0
-enemy_spawn_delay = 0
-chance = 100
-
-[sub_resource type="Resource" id="Resource_sdmag"]
-script = ExtResource("5_4dsq2")
-time_start = 180
-time_end = 180
-enemy = ExtResource("8_d58ao")
-enemy_num = 0
-enemy_spawn_delay = 0
-chance = 100
-
-[sub_resource type="Resource" id="Resource_tcim4"]
-script = ExtResource("5_4dsq2")
-time_start = 240
-time_end = 240
-enemy = ExtResource("8_d58ao")
-enemy_num = 1
-enemy_spawn_delay = 0
-chance = 100
-
-[sub_resource type="Resource" id="Resource_h43v3"]
-script = ExtResource("5_4dsq2")
-time_start = 240
-time_end = 300
-enemy = ExtResource("10_tkcsy")
-enemy_num = 10
-enemy_spawn_delay = 1
-chance = 100
-
-[sub_resource type="Resource" id="Resource_ftgft"]
-script = ExtResource("5_4dsq2")
-time_start = 300
-time_end = 300
-enemy = ExtResource("8_d58ao")
-enemy_num = 2
-enemy_spawn_delay = 0
-chance = 100
-
-[sub_resource type="Resource" id="Resource_sjm6d"]
-script = ExtResource("5_4dsq2")
-time_start = 365
-time_end = 365
-enemy = ExtResource("9_a13nc")
-enemy_num = 0
-enemy_spawn_delay = 0
-chance = 0
-
-[sub_resource type="Resource" id="Resource_i0nh0"]
-script = ExtResource("10_gjxaw")
-time_start = 0
-time_end = 60
-enemy = Array[Resource]([ExtResource("4_wtewt")])
-enemy_chance = Array[int]([100])
-enemy_minimum = 15
-enemy_spawn_rate = 1.0
-instantanious = false
-flock = false
-chance = 0
-
-[sub_resource type="Resource" id="Resource_o15lc"]
-script = ExtResource("10_gjxaw")
-time_start = 60
-time_end = 120
-enemy = Array[Resource]([ExtResource("6_wopsv"), ExtResource("4_wtewt")])
-enemy_chance = Array[int]([33, 100])
-enemy_minimum = 30
-enemy_spawn_rate = 1.0
-instantanious = false
-flock = false
-chance = 0
-
-[sub_resource type="Resource" id="Resource_grw8t"]
-script = ExtResource("10_gjxaw")
-time_start = 120
-time_end = 180
-enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("6_wopsv"), ExtResource("4_wtewt"), ExtResource("7_dj51l")])
-enemy_chance = Array[int]([5, 40, 70, 100])
-enemy_minimum = 45
-enemy_spawn_rate = 0.8
-instantanious = false
-flock = false
-chance = 0
-
-[sub_resource type="Resource" id="Resource_1wkmk"]
-script = ExtResource("10_gjxaw")
-time_start = 180
-time_end = 240
-enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("6_wopsv"), ExtResource("4_wtewt"), ExtResource("7_dj51l")])
-enemy_chance = Array[int]([15, 50, 75, 100])
-enemy_minimum = 60
-enemy_spawn_rate = 0.5
-instantanious = false
-flock = false
-chance = 0
-
-[sub_resource type="Resource" id="Resource_2jibb"]
-script = ExtResource("10_gjxaw")
-time_start = 240
-time_end = 300
-enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("7_dj51l")])
-enemy_chance = Array[int]([10, 100])
-enemy_minimum = 200
-enemy_spawn_rate = 0.3
-instantanious = false
-flock = false
-chance = 0
-
-[sub_resource type="Resource" id="Resource_p88db"]
-script = ExtResource("10_gjxaw")
-time_start = 300
-time_end = 360
-enemy = Array[Resource]([ExtResource("7_5byxq"), ExtResource("6_wopsv"), ExtResource("7_dj51l")])
-enemy_chance = Array[int]([20, 35, 100])
-enemy_minimum = 250
-enemy_spawn_rate = 0.2
-instantanious = false
-flock = false
-chance = 0
-
 [sub_resource type="Resource" id="Resource_wm1v1"]
 script = ExtResource("10_gjxaw")
 time_start = 0
 time_end = 60
-enemy = Array[Resource]([ExtResource("17_f22w4"), ExtResource("18_sf0fy"), ExtResource("17_u43r8"), ExtResource("17_khk0v"), ExtResource("19_bwiq8")])
-enemy_chance = Array[int]([1, 15, 30, 60, 100])
-enemy_minimum = 250
+enemy = Array[Resource]([ExtResource("17_khk0v")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 10
+enemy_spawn_rate = 1.5
+instantanious = false
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_fn2ct"]
+script = ExtResource("10_gjxaw")
+time_start = 60
+time_end = 120
+enemy = Array[Resource]([ExtResource("17_u43r8"), ExtResource("17_khk0v")])
+enemy_chance = Array[float]([33.0, 100.0])
+enemy_minimum = 20
+enemy_spawn_rate = 1.0
+instantanious = false
+flock = false
+chance = 0
+boss = false
+
+[sub_resource type="Resource" id="Resource_p824h"]
+script = ExtResource("10_gjxaw")
+time_start = 120
+time_end = 180
+enemy = Array[Resource]([ExtResource("17_u43r8"), ExtResource("17_khk0v"), ExtResource("19_bwiq8")])
+enemy_chance = Array[float]([33.0, 75.0, 100.0])
+enemy_minimum = 50
+enemy_spawn_rate = 0.5
+instantanious = false
+flock = false
+chance = 0
+boss = false
+
+[sub_resource type="Resource" id="Resource_6ncjo"]
+script = ExtResource("10_gjxaw")
+time_start = 180
+time_end = 240
+enemy = Array[Resource]([ExtResource("18_sf0fy"), ExtResource("17_u43r8"), ExtResource("17_khk0v"), ExtResource("19_bwiq8")])
+enemy_chance = Array[float]([5.0, 50.0, 75.0, 100.0])
+enemy_minimum = 100
+enemy_spawn_rate = 0.4
+instantanious = false
+flock = false
+chance = 0
+boss = false
+
+[sub_resource type="Resource" id="Resource_lx35e"]
+script = ExtResource("10_gjxaw")
+time_start = 240
+time_end = 300
+enemy = Array[Resource]([ExtResource("18_sf0fy"), ExtResource("19_bwiq8")])
+enemy_chance = Array[float]([10.0, 100.0])
+enemy_minimum = 160
 enemy_spawn_rate = 0.25
 instantanious = false
 flock = false
 chance = 0
+boss = false
+
+[sub_resource type="Resource" id="Resource_20078"]
+script = ExtResource("10_gjxaw")
+time_start = 300
+time_end = 355
+enemy = Array[Resource]([ExtResource("18_sf0fy"), ExtResource("17_u43r8"), ExtResource("19_bwiq8")])
+enemy_chance = Array[float]([5.0, 30.0, 100.0])
+enemy_minimum = 200
+enemy_spawn_rate = 0.15
+instantanious = false
+flock = false
+chance = 0
+boss = false
+
+[sub_resource type="Resource" id="Resource_5gpch"]
+script = ExtResource("10_gjxaw")
+time_start = 0
+time_end = 355
+enemy = Array[Resource]([ExtResource("11_yno00")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 40
+enemy_spawn_rate = 10.0
+instantanious = true
+flock = true
+chance = 20
+boss = false
+
+[sub_resource type="Resource" id="Resource_mwqm3"]
+script = ExtResource("10_gjxaw")
+time_start = 120
+time_end = 121
+enemy = Array[Resource]([ExtResource("17_f22w4")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 1
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_bwq7b"]
+script = ExtResource("10_gjxaw")
+time_start = 180
+time_end = 181
+enemy = Array[Resource]([ExtResource("17_f22w4")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 1
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_xewi7"]
+script = ExtResource("10_gjxaw")
+time_start = 240
+time_end = 241
+enemy = Array[Resource]([ExtResource("17_f22w4")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 2
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_7ohkh"]
+script = ExtResource("10_gjxaw")
+time_start = 241
+time_end = 300
+enemy = Array[Resource]([ExtResource("11_yno00")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 15
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_s3cmb"]
+script = ExtResource("10_gjxaw")
+time_start = 300
+time_end = 301
+enemy = Array[Resource]([ExtResource("17_f22w4")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 2
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_ivjs5"]
+script = ExtResource("10_gjxaw")
+time_start = 301
+time_end = 355
+enemy = Array[Resource]([ExtResource("11_yno00")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 20
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = false
+
+[sub_resource type="Resource" id="Resource_1lrts"]
+script = ExtResource("10_gjxaw")
+time_start = 361
+time_end = 362
+enemy = Array[Resource]([ExtResource("13_nxvds")])
+enemy_chance = Array[float]([100.0])
+enemy_minimum = 1
+enemy_spawn_rate = 1.0
+instantanious = true
+flock = false
+chance = 100
+boss = true
 
 [node name="World" type="Node2D"]
 texture_filter = 1
@@ -223,27 +249,16 @@ offset_bottom = 1200.0
 
 [node name="Player" parent="." instance=ExtResource("2_6eenl")]
 scale = Vector2(1, 1)
-ult_cd = 2
+ult_cd = 60
 
-[node name="FlockSpawner" parent="." instance=ExtResource("11_ewsey")]
-process_mode = 4
-spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_iu02w")])
+[node name="WaveSpawner" parent="." instance=ExtResource("10_73fk1")]
+spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_wm1v1"), SubResource("Resource_fn2ct"), SubResource("Resource_p824h"), SubResource("Resource_6ncjo"), SubResource("Resource_lx35e"), SubResource("Resource_20078")])
 
-[node name="EventSpawner" parent="." instance=ExtResource("3_0s21j")]
-process_mode = 4
-spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_xcm6e"), SubResource("Resource_sdmag"), SubResource("Resource_tcim4"), SubResource("Resource_h43v3"), SubResource("Resource_ftgft")])
+[node name="FlockSpawner" parent="." instance=ExtResource("10_73fk1")]
+spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_5gpch")])
 
-[node name="BossSpawner" parent="." instance=ExtResource("3_0s21j")]
-process_mode = 4
-script = ExtResource("9_8ecga")
-spawns = Array[ExtResource("5_4dsq2")]([SubResource("Resource_sjm6d")])
-
-[node name="EnemySpawner" parent="." instance=ExtResource("10_73fk1")]
-process_mode = 4
-spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_i0nh0"), SubResource("Resource_o15lc"), SubResource("Resource_grw8t"), SubResource("Resource_1wkmk"), SubResource("Resource_2jibb"), SubResource("Resource_p88db")])
-
-[node name="DebugEnemySpawner" parent="." instance=ExtResource("10_73fk1")]
-spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_wm1v1")])
+[node name="EventSpawner" parent="." instance=ExtResource("10_73fk1")]
+spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_mwqm3"), SubResource("Resource_bwq7b"), SubResource("Resource_xewi7"), SubResource("Resource_7ohkh"), SubResource("Resource_s3cmb"), SubResource("Resource_ivjs5"), SubResource("Resource_1lrts")])
 
 [node name="Loot" type="Node2D" parent="." groups=["loot"]]
 

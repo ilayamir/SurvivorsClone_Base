@@ -8,6 +8,8 @@ var spr_red = preload("res://Textures/Items/Gems/Gem_red.png")
 
 var target = null
 var speed = -1
+var merging = false
+var unmergeable = false
 
 @onready var sprite = $Sprite2D
 @onready var collision = $CollisionShape2D
@@ -42,6 +44,13 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 
 
 func _on_area_entered(area):
-	if area.get("experience"):
-		area.experience += experience
-		queue_free()
+	if area.get("experience"): 
+		if !merging and !area.merging and !unmergeable and !area.unmergeable:
+			area.merging = true
+			experience += area.experience
+			area.queue_free()
+			merging = true
+			call_deferred("reset_merging")
+
+func reset_merging():
+	merging = false

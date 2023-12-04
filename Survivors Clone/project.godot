@@ -24,10 +24,12 @@ AudioManager="*res://Utility/audio_manager.tscn"
 
 window/size/viewport_width=640
 window/size/viewport_height=360
+window/size/mode=4
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
 window/vsync/vsync_mode=0
+mouse_cursor/custom_image="res://Textures/Utility/Cursor1.png"
 
 [editor]
 
@@ -99,7 +101,11 @@ dash={
 
 [physics]
 
-2d/physics_engine="Rapier2D"
+common/physics_ticks_per_second=30
+2d/physics_engine="GodotPhysics2D"
+2d/solver/solver_iterations=4
+rapier_2d/solver/max_velocity_iterations=5
+rapier_2d/solver/max_velocity_friction_iterations=7
 
 [rendering]
 

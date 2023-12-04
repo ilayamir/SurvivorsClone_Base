@@ -148,20 +148,20 @@ _data = {
 "hitflash": SubResource("Animation_x4an1")
 }
 
-[node name="EnemyWeakSlime" type="CharacterBody2D"]
+[node name="EnemyWeakSlime" type="CharacterBody2D" groups=["enemy"]]
 texture_filter = 1
 collision_layer = 4
 collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_4g7lj")
 basehp = 8.0
-base_speed = 30.0
-gem_drop_chance = 0.5
+base_speed = 40.0
+gem_drop_chance = 0.6
 food_drop_chance = 0.001
 knockback_res = 10
 enemy_damage = 2
 experience = 1
-time_before_loc_reset = 4.0
+time_before_loc_reset = 2.0
 
 [node name="EnemyBase" parent="." instance=ExtResource("1_ogprq")]
 

@@ -148,19 +148,19 @@ _data = {
 "hitflash": SubResource("Animation_024os")
 }
 
-[node name="EnemyNormalGoober" type="CharacterBody2D"]
+[node name="EnemyNormalGoober" type="CharacterBody2D" groups=["enemy"]]
 collision_layer = 4
 collision_mask = 5
 motion_mode = 1
 script = ExtResource("1_pnvq7")
-basehp = 75.0
+basehp = 60.0
 base_speed = 45.0
 gem_drop_chance = 0.8
 food_drop_chance = 0.001
 knockback_res = 50
 enemy_damage = 10
 experience = 10
-time_before_loc_reset = 3.0
+time_before_loc_reset = 1.0
 rusher = true
 
 [node name="EnemyBase" parent="." instance=ExtResource("2_v1xjk")]

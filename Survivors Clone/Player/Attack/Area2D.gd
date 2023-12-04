@@ -14,3 +14,7 @@ func _ready():
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
 	angle = player.position.direction_to(position)
+
+
+func _on_timer_2_timeout():
+	queue_free()

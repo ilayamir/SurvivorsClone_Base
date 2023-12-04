@@ -11,7 +11,7 @@ var dashspeed = 400
 @export var end_time = 360
 
 var experience = 0
-var stagger = false
+var staggered = false
 var near_death = false
 @onready var invul = false
 var experience_level = 1
@@ -96,7 +96,7 @@ var hell_circle_level = 0
 #Firegun
 var firegun_ammo = 0
 var firegun_baseammo = 0
-var firegun_attackspeed = 2.8
+var firegun_attackspeed = 2
 var firegun_level = 0
 
 #IceSpear
@@ -115,6 +115,7 @@ var katana_level = 0
 #FireTrail
 var trail_cd = 0.1
 var trail_level = 0
+var damage_on = 0
 
 #Tornado
 var tornado_ammo = 0
@@ -195,18 +196,7 @@ signal playerdeath
 
 func _ready():
 	time = 0
-	upgrade_character("fsword1")
-	upgrade_character("fsword2")
-	upgrade_character("fsword3")
-	upgrade_character("fsword4")
-	upgrade_character("fsword5")
-	upgrade_character("icespear1")
-	upgrade_character("icespear2")
-	upgrade_character("icespear3")
-	upgrade_character("icespear4")
-	upgrade_character("icespear5")
-	upgrade_character("ring1")
-	upgrade_character("ring2")
+	upgrade_character("firegun1")
 	attack()
 	set_expbar(experience, calculate_experiencecap())
 	healthBar.max_value = maxhp
@@ -441,26 +431,26 @@ func _on_f_sword_attack_timer_timeout():
 			change = change%90
 			var ext_chance = randf_range(0,1)
 			if ext_chance<0.5:
-				var fsword1 = weapon_pool.draw_from_pool()
-				fsword1.position = pos
-				fsword1.angle = Vector2(0,-1).rotated(deg_to_rad(change+45))
-				fsword1.level = fsword_level
-				fsword1.reset()
-				var fsword2 = weapon_pool.draw_from_pool()
-				fsword2.position = pos
-				fsword2.angle = Vector2(1,0).rotated(deg_to_rad(change+45))
-				fsword2.level = fsword_level
-				fsword2.reset()
-				var fsword3 = weapon_pool.draw_from_pool()
-				fsword3.position = pos
-				fsword3.angle = Vector2(0,1).rotated(deg_to_rad(change+45))
-				fsword3.level = fsword_level
-				fsword3.reset()
-				var fsword4 = weapon_pool.draw_from_pool()
-				fsword4.position = pos
-				fsword4.angle = Vector2(-1,0).rotated(deg_to_rad(change+45))
-				fsword4.level = fsword_level
-				fsword4.reset()
+				var fsword5 = weapon_pool.draw_from_pool()
+				fsword5.position = pos
+				fsword5.angle = Vector2(0,-1).rotated(deg_to_rad(change+45))
+				fsword5.level = fsword_level
+				fsword5.reset()
+				var fsword6 = weapon_pool.draw_from_pool()
+				fsword6.position = pos
+				fsword6.angle = Vector2(1,0).rotated(deg_to_rad(change+45))
+				fsword6.level = fsword_level
+				fsword6.reset()
+				var fsword7 = weapon_pool.draw_from_pool()
+				fsword7.position = pos
+				fsword7.angle = Vector2(0,1).rotated(deg_to_rad(change+45))
+				fsword7.level = fsword_level
+				fsword7.reset()
+				var fsword8 = weapon_pool.draw_from_pool()
+				fsword8.position = pos
+				fsword8.angle = Vector2(-1,0).rotated(deg_to_rad(change+45))
+				fsword8.level = fsword_level
+				fsword8.reset()
 		var mov_dir = get_movement()
 		var fsword1 = weapon_pool.draw_from_pool() #up
 		fsword1.position = pos
@@ -569,9 +559,9 @@ func calculate_experiencecap():
 	if experience_level < 20:
 		exp_cap = experience_level*5
 	elif experience_level < 40:
-		exp_cap = 100 + (experience_level-19)*13
+		exp_cap = 100 + (experience_level-19)*12
 	else:
-		exp_cap = 260 + (experience_level-39)*25
+		exp_cap = 240 + (experience_level-39)*16
 		
 	return exp_cap
 
@@ -739,7 +729,7 @@ func upgrade_character(upgrade):
 			weapon_count += 1
 		"firegun2":
 			firegun_level = 2
-			firegun_attackspeed -= 1
+			firegun_attackspeed -= 0.4
 		"firegun3":
 			firegun_level = 3
 		"firegun4":
@@ -747,7 +737,7 @@ func upgrade_character(upgrade):
 			firegun_baseammo += 1
 		"firegun5":
 			firegun_level = 5
-			firegun_attackspeed -= 1
+			firegun_attackspeed -= 0.4
 		"circle1":
 			hell_circle_level = 1
 			weapon_count += 1
@@ -882,7 +872,7 @@ func _on_ult_duration_timeout():
 	crit_chance = 0.1
 
 func change_time(argtime = 0, boss = null, boss_max_hp = 0):
-	$GUILayer/GUI/lbl_fps.text = str("fps:", Engine.get_frames_per_second()," kills:", HelperManager.enemies_killed, " rev%: ", HelperManager.chance)
+	$GUILayer/GUI/lbl_fps.text = str("fps:", Engine.get_frames_per_second()," kills:", HelperManager.enemies_killed)
 	time = argtime
 	var get_m = int(time/60.0)
 	var get_s = time % 60
@@ -898,19 +888,18 @@ func change_time(argtime = 0, boss = null, boss_max_hp = 0):
 		bgm.stream_paused = true
 		$"weather manager/ash".emitting = true
 		$light.update(1)
-	if time == end_time+2:
+	if time == end_time:
 		boss_bgm.playing = true
-	if time == end_time+4:
-		bossHealthBar.visible = true
 		$light.update(4)
-		var tween = bossHealthBar.create_tween()
-		tween.tween_property(bossHealthBar, "modulate", Color(1, 1, 1, 1),4).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
-		tween.play()
 	if time == end_time+12:
 		funny_timer.start()
 	if boss != null and final_boss == null:
 		final_boss = boss
 		final_boss_hp = boss_max_hp
+		var tween = bossHealthBar.create_tween()
+		tween.tween_property(bossHealthBar, "modulate", Color(1, 1, 1, 1),4).set_trans(Tween.TRANS_QUINT).set_ease(Tween.EASE_OUT)
+		tween.play()
+		bossHealthBar.visible = true
 
 func adjust_gui_collection(upgrade):
 	var get_upgraded_displayname = UpgradeDb.UPGRADES[upgrade]["displayname"]
@@ -1109,6 +1098,9 @@ func _on_trail_timer_timeout():
 	var new_fire = fire_trail.instantiate()
 	new_fire.level = trail_level
 	new_fire.position = position
+	new_fire.enable_damage = true if damage_on == 1 else false
+	damage_on+=1
+	damage_on = damage_on%2
 	if $Attack/TrailSndTimer.is_stopped():
 		$Attack/snd_trail.play()
 		$Attack/TrailSndTimer.start()

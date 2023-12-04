@@ -1,7 +1,7 @@
 extends Node2D
 
 var level = 1
-var ammo = 20
+var ammo = 0
 @onready var player = get_tree().get_first_node_in_group("player")
 var angle = Vector2.ZERO
 var arrow = preload("res://Player/Attack/arrow.tscn")
@@ -23,7 +23,7 @@ func _on_shoot_timer_timeout():
 	if ammo > 0:
 		$AnimationPlayer.play("shoot")
 		ammo -= 1
-		$ShootTimer.start()
+		
 
 func _on_animation_player_animation_finished(_shoot):
 	var new_arrow = arrow.instantiate()
@@ -35,3 +35,5 @@ func _on_animation_player_animation_finished(_shoot):
 	get_parent().add_child(new_arrow)
 	if ammo == 0:
 		queue_free()
+	else:
+		$ShootTimer.start()

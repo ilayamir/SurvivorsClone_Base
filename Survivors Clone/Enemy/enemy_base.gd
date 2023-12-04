@@ -17,6 +17,7 @@ const CONTAINER = Vector2(4000,4000)
 @export var staggerable = false
 @export var boss = false
 @export var in_flock = false
+@export var drops_unmergable_gems = false
 
 var hp = 0.0
 var maxhp = 0.0
@@ -48,6 +49,7 @@ var screen_size = Vector2.ZERO
 @onready var stagger_timer = $EnemyBase/StaggerTimer
 @onready var debuff_timer = $EnemyBase/DebuffTimer
 @onready var particles = $EnemyBase/GPUParticles2D
+@onready var disable_timer = $EnemyBase/DisableNetTimer
 @onready var helper_manager = get_tree().get_first_node_in_group("helper")
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var loot_base = get_tree().get_first_node_in_group("loot")
@@ -66,9 +68,10 @@ func enable():
 	invis = false
 	staggered = false
 	dead = false
+	disable_timer.connect("timeout",Callable(self,"disable_check"))
 	screen_size = get_viewport_rect().size
 	curr_player_pos = player.global_position
-	direction = global_position.direction_to(curr_player_pos).normalized()
+	direction = global_position.direction_to(curr_player_pos)
 	if in_flock:
 		direction = Vector2(-screen_size.x,screen_size.y).normalized() if global_position.x>curr_player_pos.x else Vector2(screen_size.x,screen_size.y).normalized()
 	if direction.x>0:
@@ -92,7 +95,7 @@ func enable():
 	hit_box_collision.set_deferred("disabled",false)
 	hitbox.damage = enemy_damage
 	invis_time = 0
-	physic_proccessing_index = get_parent().get_parent().enemies_on_screen%3
+	#physic_proccessing_index = get_parent().get_parent().enemies_on_screen%3
 	get_dir_timer.wait_time = 0.4
 	get_dir_timer.start()
 	anim.speed_scale *= randf_range(0.9,1.1)
@@ -127,11 +130,11 @@ func extra_disable_things():
 
 func _physics_process(delta):
 	if !disabled:
-		if (Engine.get_physics_frames()+physic_proccessing_index)%3 == 0 and !dead:
-			velocity = direction*speed*3
+		if !dead: #(Engine.get_physics_frames()+physic_proccessing_index)%3 == 0 and !dead:
+			velocity = direction*speed
 			move_and_slide()
 		if invis:
-				invis_time+=delta
+				invis_time+=delta*2
 				if invis_time>time_before_loc_reset:
 					launch()
 					invis_time = 0
@@ -140,21 +143,21 @@ func launch():
 	if !disabled and !linear_movement:
 		var launch_to = Vector2.ZERO
 		if global_position.x >= curr_player_pos.x + screen_size.x/2:
-			launch_to.x = curr_player_pos.x - screen_size.x/2-40
-			launch_to.y = randf_range(curr_player_pos.y-screen_size.y/2+20, curr_player_pos.y+screen_size.y/2-20)
+			launch_to.x = curr_player_pos.x - screen_size.x/2-80
+			launch_to.y = randf_range(curr_player_pos.y-screen_size.y/2+60, curr_player_pos.y+screen_size.y/2-60)
 		elif global_position.x <= curr_player_pos.x - screen_size.x/2:
-			launch_to.x = curr_player_pos.x + screen_size.x/2+40
-			launch_to.y = randf_range(curr_player_pos.y-screen_size.y/2+20, curr_player_pos.y+screen_size.y/2-20)
+			launch_to.x = curr_player_pos.x + screen_size.x/2+80
+			launch_to.y = randf_range(curr_player_pos.y-screen_size.y/2+60, curr_player_pos.y+screen_size.y/2-60)
 		elif global_position.y> curr_player_pos.y + screen_size.y/2:
-			launch_to.y = curr_player_pos.y - screen_size.y/2-20
-			launch_to.x = randf_range(curr_player_pos.x-screen_size.x/2+40, curr_player_pos.x+screen_size.x/2-40)
+			launch_to.y = curr_player_pos.y - screen_size.y/2-60
+			launch_to.x = randf_range(curr_player_pos.x-screen_size.x/2+80, curr_player_pos.x+screen_size.x/2-80)
 		elif global_position.y< curr_player_pos.y - screen_size.y/2:
-			launch_to.y = curr_player_pos.y + screen_size.y/2+20
-			launch_to.x = randf_range(curr_player_pos.x-screen_size.x/2+40, curr_player_pos.x+screen_size.x/2-40)
+			launch_to.y = curr_player_pos.y + screen_size.y/2+60
+			launch_to.x = randf_range(curr_player_pos.x-screen_size.x/2+80, curr_player_pos.x+screen_size.x/2-80)
 		global_position = launch_to
 	if !disabled and linear_movement:
 		dead = true
-		disable()
+		queue_free()
 
 func _on_rushing_timer_timeout():
 	if !disabled:
@@ -254,10 +257,13 @@ func _on_hurt_box_hurt_ult(_damage, angle, knockback_amount):
 		tween.play()
 
 func update_dir(pos):
-	curr_player_pos = pos
+	if !linear_movement:
+		curr_player_pos = pos
 
 func death():
 	if !disabled:
+		disabled = true
+		disable_timer.start()
 		AudioManager.play_positional("death", global_position)
 		anim.play("death")
 		if boss:
@@ -276,6 +282,7 @@ func death():
 			else:
 				new_gem.experience = experience
 			new_gem.global_position = global_position
+			new_gem.unmergeable = drops_unmergable_gems
 			loot_base.call_deferred("add_child",new_gem)
 		if food_chance<food_drop_chance:
 			var new_food = floor_meat.instantiate()
@@ -284,7 +291,11 @@ func death():
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "death":
-		emit_signal("pool_back",self)
+		#emit_signal("pool_back",self)
 		helper_manager.killed()
-		#queue_free()
-		disable()
+		queue_free()
+		#disable()
+
+func disable_check():
+	if disabled:
+		queue_free()

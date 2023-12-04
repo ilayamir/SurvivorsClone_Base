@@ -12,6 +12,7 @@
 resource_local_to_scene = true
 shader = ExtResource("2_8ogff")
 shader_parameter/enabled = false
+shader_parameter/ALPHA = null
 shader_parameter/tint = Color(0.752941, 0.811765, 0.839216, 1)
 
 [sub_resource type="Animation" id="Animation_fndc4"]
@@ -103,10 +104,10 @@ texture = ExtResource("2_042st")
 hframes = 3
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 0.7
 libraries = {
 "": SubResource("AnimationLibrary_ajlna")
 }
+speed_scale = 0.7
 
 [node name="HurtBox" parent="." instance=ExtResource("3_acmkr")]
 visible = false

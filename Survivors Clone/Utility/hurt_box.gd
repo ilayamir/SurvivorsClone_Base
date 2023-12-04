@@ -39,8 +39,9 @@ func _on_area_entered(area):
 						if area.has_method("tempdisable"):
 							area.tempdisable()
 			var damage = area.damage
-			if get_parent().get_parent().staggered: 
-				damage*=2
+			if get_parent() != player:
+				if get_parent().get_parent().staggered: 
+					damage*=2
 			var angle = Vector2.ZERO
 			var knockback = 1
 			if not area.get("angle") == null:

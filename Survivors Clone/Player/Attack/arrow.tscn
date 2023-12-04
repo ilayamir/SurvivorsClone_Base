@@ -10,7 +10,7 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vanvm"]
 size = Vector2(2.4, 3.9)
 
-[sub_resource type="Gradient" id="Gradient_50twv"]
+[sub_resource type="Gradient" id="Gradient_ei6po"]
 resource_local_to_scene = true
 colors = PackedColorArray(0.196078, 0.988235, 0.654902, 1, 1, 1, 1, 1)
 
@@ -46,7 +46,7 @@ top_level = true
 texture_filter = 2
 points = PackedVector2Array(0, 1)
 width = 6.0
-gradient = SubResource("Gradient_50twv")
+gradient = SubResource("Gradient_ei6po")
 joint_mode = 2
 script = ExtResource("4_djino")
 MAX_LENGTH = 25

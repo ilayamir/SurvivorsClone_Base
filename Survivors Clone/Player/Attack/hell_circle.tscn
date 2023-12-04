@@ -109,15 +109,17 @@ show_behind_parent = true
 texture = ExtResource("1_t2yh3")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+visible = false
 shape = SubResource("CircleShape2D_rqn5f")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-speed_scale = 0.1
 libraries = {
 "": SubResource("AnimationLibrary_lh4t0")
 }
+speed_scale = 0.1
 
 [node name="Timer" type="Timer" parent="."]
+wait_time = 1.2
 one_shot = true
 autostart = true
 

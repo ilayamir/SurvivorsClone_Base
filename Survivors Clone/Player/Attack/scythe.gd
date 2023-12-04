@@ -17,7 +17,7 @@ func _ready():
 	damage = player.experience_level/5
 
 func _physics_process(_delta):
-	rotation += 0.1
+	rotation += 0.2
 	angle = position.direction_to(collision.position)
 
 func enemy_hit(_charge = 1, crit=false):

@@ -13,7 +13,7 @@ func _ready():
 func _on_target_update_timeout():
 	for mob in mob_array:
 		var wr = weakref(mob)
-		if !mob.disabled:
+		if wr.get_ref(): #!mob.disabled:
 			mob.update_dir(player_pos)
 		else:
 			mob_array.erase(mob)

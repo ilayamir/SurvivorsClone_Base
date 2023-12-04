@@ -148,21 +148,22 @@ _data = {
 "hitflash": SubResource("Animation_024os")
 }
 
-[node name="EnemyLinearBat" type="CharacterBody2D"]
+[node name="EnemyLinearBat" type="CharacterBody2D" groups=["enemy"]]
 scale = Vector2(0.5, 0.5)
-collision_layer = 64
-collision_mask = 69
+collision_layer = 0
+collision_mask = 0
 motion_mode = 1
 script = ExtResource("1_u0d5p")
 basehp = 2.0
 base_speed = 300.0
-gem_drop_chance = 0.3
+gem_drop_chance = 0.6
 food_drop_chance = 0.001
 knockback_res = 1
-enemy_damage = 4
+enemy_damage = 2
 experience = 2
 time_before_loc_reset = 4.0
 linear_movement = true
+drops_unmergable_gems = true
 
 [node name="EnemyBase" parent="." instance=ExtResource("2_h6h6t")]
 
@@ -171,15 +172,10 @@ texture_filter = 1
 texture = ExtResource("3_h8etn")
 hframes = 3
 
-[node name="HurtBox" parent="EnemyBase" index="1"]
-visible = false
-
 [node name="CollisionShape2D" parent="EnemyBase/HurtBox" index="0"]
 position = Vector2(0, 4)
 shape = SubResource("RectangleShape2D_uf61h")
-
-[node name="HitBox" parent="EnemyBase" index="2"]
-visible = false
+disabled = false
 
 [node name="CollisionShape2D" parent="EnemyBase/HitBox" index="0"]
 position = Vector2(1, 3)

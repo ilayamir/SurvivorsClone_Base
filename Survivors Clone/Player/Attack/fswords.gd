@@ -72,10 +72,12 @@ func enemy_hit(charge = 1,_crit=false):
 	hp -= charge
 	if hp <= 0:
 		emit_signal("remove_from_array", self)
-		shut_down()
+		queue_free()
+		#shut_down()
 #		queue_free()
 
 func _on_timer_timeout():
 	emit_signal("remove_from_array", self)
-	shut_down()
+	queue_free()
+	#shut_down()
 #	queue_free()
