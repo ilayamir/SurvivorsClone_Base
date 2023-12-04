@@ -188,6 +188,8 @@ scale = Vector2(1.6, 0.8)
 
 [node name="GPUParticles2D" parent="EnemyBase" index="8"]
 material = SubResource("CanvasItemMaterial_xkfiy")
+scale_amount_min = 0.3
+scale_amount_max = 0.3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(0, 2)

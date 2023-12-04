@@ -628,8 +628,11 @@ func levelup():
 	#LevelUp Boosts:
 	movement_speed += 0.5
 	maxhp += 0.8
-	if experience_level % 15 == 0:
+	if experience_level % 10 == 0 and experience_level<=20:
 		max_weapon_count+=1
+	elif (experience_level-20)%15==0 and experience_level>20:
+		max_weapon_count+=1
+	
 	var options = 0
 	var optionsmax = 3
 	if experience_level == 10:

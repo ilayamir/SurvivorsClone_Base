@@ -8,7 +8,6 @@ func _ready():
 	pass
 
 
-
 func _on_timer_timeout():
 	$AnimationPlayer.play("burn")
 	$snd.play()
