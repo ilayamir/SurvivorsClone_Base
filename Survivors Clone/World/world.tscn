@@ -250,7 +250,6 @@ offset_bottom = 1200.0
 
 [node name="Player" parent="." instance=ExtResource("2_6eenl")]
 scale = Vector2(1, 1)
-ult_cd = 5
 
 [node name="WaveSpawner" parent="." instance=ExtResource("10_73fk1")]
 spawns = Array[ExtResource("10_gjxaw")]([SubResource("Resource_wm1v1"), SubResource("Resource_fn2ct"), SubResource("Resource_p824h"), SubResource("Resource_6ncjo"), SubResource("Resource_lx35e"), SubResource("Resource_20078")])

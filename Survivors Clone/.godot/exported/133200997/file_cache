@@ -22,7 +22,7 @@ res://Utility/hit_box.tscn::a819cad24c3dd65b45668447b3f71768::1701010577::res://
 res://Utility/hurt_box.tscn::b25f6062b2b7f14bdae0076527dda59e::1701472548::res://.godot/exported/133200997/export-a60fe6600d20ea02ad9949a92024b18d-hurt_box.scn
 res://Utility/item_option.tscn::9489d8b78a81c67bff4812cd905d2959::1701008647::res://.godot/exported/133200997/export-4cd66e9d2ef6bda90c064d5e204f02d5-item_option.scn
 res://Utility/upgrade_db.tscn::0e931a21574db73f2cf3537ad61b1e37::1701291195::res://.godot/exported/133200997/export-9b6981a41d3fab107a2d9e7cf0c27c8d-upgrade_db.scn
-res://World/world.tscn::de862dd8700585f38579738516f79f53::1702563274::res://.godot/exported/133200997/export-89647171d5d7bdb8a088d65cc9aa3a3a-world.scn
+res://World/world.tscn::24ea32da8e4c34210e27349d63e46bec::1702630537::res://.godot/exported/133200997/export-89647171d5d7bdb8a088d65cc9aa3a3a-world.scn
 res://Enemy/enemy_kob_fodder.tscn::0107c528a4eef7950527e9d7447167fd::1701433169::res://.godot/exported/133200997/export-506201827568e858b9c5c1df1badb675-enemy_kob_fodder.scn
 res://Player/Attack/scythe.tscn::b98943d3521ca1a51a4a387b694b6c50::1702560604::res://.godot/exported/133200997/export-b8536260bd3826a22404b8f3b82819a4-scythe.scn
 res://Utility/frame_saver.tscn::e43518a655d76d517336620be801a469::1700303570::res://.godot/exported/133200997/export-762b786875f474c3164a847e497c73b7-frame_saver.scn
