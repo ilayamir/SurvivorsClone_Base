@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://b7iuvodl5fkqi"]
+[gd_scene load_steps=5 format=3 uid="uid://b7iuvodl5fkqi"]
 
 [ext_resource type="Script" path="res://Objects/ult_potion.gd" id="1_vyy4n"]
 [ext_resource type="Texture2D" uid="uid://ylu5yijgby0x" path="res://Textures/Items/Upgrades/ult_potion.png" id="2_lphxn"]
+[ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="3_ityby"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6wajt"]
 size = Vector2(20, 22)
@@ -19,3 +20,11 @@ shape = SubResource("RectangleShape2D_6wajt")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.65, 0.65)
 texture = ExtResource("2_lphxn")
+
+[node name="light" parent="." instance=ExtResource("3_ityby")]
+light_scale = 0.2
+
+[node name="texturelight" parent="light" index="0"]
+color = Color(0.792157, 0.0156863, 0.756863, 1)
+
+[editable path="light"]

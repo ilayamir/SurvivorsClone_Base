@@ -1,13 +1,13 @@
 [gd_scene load_steps=10 format=3 uid="uid://laoiqwkjjhwy"]
 
 [ext_resource type="Script" path="res://Player/Attack/sword.gd" id="1_8kqdv"]
-[ext_resource type="Texture2D" uid="uid://1bqodbc8606s" path="res://Textures/Items/Weapons/w_longsword_holy.png" id="1_cei4f"]
 [ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="2_plsyu"]
 [ext_resource type="AudioStream" uid="uid://jk7frppes8cf" path="res://Audio/SoundEffect/woosh.wav" id="3_707ik"]
+[ext_resource type="Texture2D" uid="uid://bm5nbk322g8uq" path="res://Textures/Items/Weapons/holySword.png" id="3_snail"]
 [ext_resource type="PackedScene" uid="uid://bxoguuytntc48" path="res://Player/Attack/shield.tscn" id="5_51r80"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_psq0w"]
-size = Vector2(9.8995, 63.6396)
+size = Vector2(9.8995, 71.4178)
 
 [sub_resource type="Animation" id="Animation_ly31e"]
 resource_name = "Hit"
@@ -72,10 +72,9 @@ _data = {
 
 [node name="Sword" type="Area2D" groups=["attacks", "cooldown_hurtbox_enforcers"]]
 top_level = true
-z_index = -2
 texture_filter = 1
 position = Vector2(0, -20)
-scale = Vector2(0.5, 0.5)
+scale = Vector2(0.7, 0.7)
 collision_layer = 16
 collision_mask = 0
 script = ExtResource("1_8kqdv")
@@ -87,10 +86,11 @@ color = Color(0.784314, 0.572549, 0.0235294, 1)
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 position = Vector2(3.8147e-06, -1)
-texture = ExtResource("1_cei4f")
+rotation = 0.79587
+texture = ExtResource("3_snail")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(5.5, -6.5)
+position = Vector2(8.25, -9.25)
 rotation = 0.785398
 shape = SubResource("RectangleShape2D_psq0w")
 

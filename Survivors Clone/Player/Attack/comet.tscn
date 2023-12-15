@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://c3krkgux62wpr"]
+[gd_scene load_steps=9 format=3 uid="uid://c3krkgux62wpr"]
 
 [ext_resource type="Texture2D" uid="uid://b3n6xtv3myrv5" path="res://Textures/Items/Weapons/comet.png" id="1_p7dil"]
 [ext_resource type="Script" path="res://Player/Attack/comet.gd" id="1_pbkhu"]
 [ext_resource type="AudioStream" uid="uid://jk7frppes8cf" path="res://Audio/SoundEffect/woosh.wav" id="3_moedq"]
+[ext_resource type="PackedScene" uid="uid://b0amkhxl1lq81" path="res://Utility/light.tscn" id="4_wgml5"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_sxysg"]
 radius = 4.0
@@ -67,3 +68,6 @@ libraries = {
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 stream = ExtResource("3_moedq")
 autoplay = true
+
+[node name="light" parent="." instance=ExtResource("4_wgml5")]
+light_scale = 0.3

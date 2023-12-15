@@ -38,3 +38,13 @@ res://Player/Attack/arrow.gd
 res://Player/Attack/fire_bullet.tscn
 res://Enemy/enemy_super.tscn
 res://Utility/enemy_group_manager.tscn
+res://Player/Attack/eye.tscn
+res://Player/Attack/sword.gd
+res://Player/Attack/scythe.tscn
+res://Enemy/enemy_loot_monster.tscn
+res://Utility/new_enemy_spawner.gd
+res://Objects/gem_magnet.tscn
+res://Objects/ult_potion.tscn
+res://Player/Attack/comet.tscn
+res://Utility/helper_manager.tscn
+res://Utility/helper_manager.gd

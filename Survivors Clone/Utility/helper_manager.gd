@@ -5,6 +5,7 @@ extends Node
 @onready var chance = 5.0
 @onready var chance_increase_per_kill = 0.5
 @onready var base_cd = 90.0
+@onready var max_chance = 90.0
 @onready var player = get_tree().get_first_node_in_group("player")
 @onready var cd = $HelpCD
 
@@ -17,12 +18,14 @@ func _ready():
 func killed():
 	enemies_killed += 1
 	chance += chance_increase_per_kill
-	chance = clamp(chance, 5.0, 100.0)
+	chance = clamp(chance, 5.0, max_chance)
 
 func assisted():
 	chance_increase_per_kill /= 2
 	chance_increase_per_kill = clamp(chance_increase_per_kill, 0.02, 1.0)
 	chance = base_chance
+	max_chance -= 10
+	max_chance = clamp(max_chance, 5.0, 90.0)
 	cd.wait_time = base_cd
 	cd.start()
 

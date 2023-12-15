@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://cwqu28p1q05v5"]
 
 [ext_resource type="Script" path="res://Player/Attack/scythe.gd" id="1_8xms1"]
-[ext_resource type="Texture2D" uid="uid://g38dmbrex6fa" path="res://Textures/Items/Weapons/scythe.png" id="2_spuba"]
+[ext_resource type="Texture2D" uid="uid://cq5o3jcieyqsv" path="res://Textures/Items/Weapons/scythe1.png" id="2_8nsxk"]
 [ext_resource type="AudioStream" uid="uid://jk7frppes8cf" path="res://Audio/SoundEffect/woosh.wav" id="3_ph1wv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_6o31u"]
@@ -19,16 +19,18 @@ script = ExtResource("1_8xms1")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 show_behind_parent = true
 texture_filter = 1
-position = Vector2(-20, -20)
-texture = ExtResource("2_spuba")
+position = Vector2(-12.3905, -20.7523)
+rotation = -0.724312
+texture = ExtResource("2_8nsxk")
+flip_h = true
 
 [node name="Blade" type="CollisionShape2D" parent="."]
-position = Vector2(-17.3635, -37)
-rotation = 1.5708
+position = Vector2(-23.53, -42.4975)
+rotation = 1.12748
 shape = SubResource("RectangleShape2D_6o31u")
 
 [node name="Handle" type="CollisionShape2D" parent="."]
-position = Vector2(-20.2043, -19.6775)
+position = Vector2(-26.1998, -23.2511)
 rotation = -0.837758
 shape = SubResource("RectangleShape2D_6o31u")
 

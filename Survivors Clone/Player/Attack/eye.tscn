@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cmnx5a3g8gg7m"]
 
 [ext_resource type="Script" path="res://Player/Attack/eye.gd" id="1_iby2b"]
-[ext_resource type="Texture2D" uid="uid://ba6564k8qpjvj" path="res://Textures/Items/Weapons/eye_ult.png" id="2_wlnsc"]
+[ext_resource type="Texture2D" uid="uid://bwf1u14rgw855" path="res://Textures/Items/Weapons/eye1.png" id="2_x5wjl"]
 
 [sub_resource type="Animation" id="Animation_wllmw"]
 length = 0.001
@@ -20,7 +20,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_hronh"]
 resource_name = "pre_hit"
-length = 0.6
+length = 0.5
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
@@ -28,10 +28,10 @@ tracks/0/path = NodePath("Sprite2D:frame")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.2, 0.3, 0.4, 0.5),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [0, 1, 2, 3, 2, 1, 0]
+"values": [0, 1, 2, 3, 1, 0]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_mb5vv"]
@@ -48,8 +48,9 @@ script = ExtResource("1_iby2b")
 [node name="Sprite2D" type="Sprite2D" parent="."]
 self_modulate = Color(1, 1, 1, 0.741176)
 show_behind_parent = true
-scale = Vector2(0.7, 0.7)
-texture = ExtResource("2_wlnsc")
+texture_filter = 1
+scale = Vector2(5, 5)
+texture = ExtResource("2_x5wjl")
 hframes = 4
 
 [node name="Timer" type="Timer" parent="."]
@@ -58,7 +59,7 @@ one_shot = true
 autostart = true
 
 [node name="Duration" type="Timer" parent="."]
-wait_time = 20.0
+wait_time = 19.0
 autostart = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

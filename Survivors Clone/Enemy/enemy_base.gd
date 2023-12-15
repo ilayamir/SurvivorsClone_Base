@@ -18,6 +18,7 @@ const CONTAINER = Vector2(4000,4000)
 @export var boss = false
 @export var in_flock = false
 @export var drops_unmergable_gems = false
+@export var drops_special_item = false
 
 var hp = 0.0
 var maxhp = 0.0
@@ -34,6 +35,8 @@ var staggered = false
 var dead = false
 var exp_gem = preload("res://Objects/experience_gem.tscn")
 var floor_meat = preload("res://Objects/floor_meat.tscn")
+var gem_magnet = preload("res://Objects/gem_magnet.tscn")
+var ult_potion = preload("res://Objects/ult_potion.tscn")
 var screen_size = Vector2.ZERO
 
 @onready var collision = $CollisionShape2D
@@ -288,6 +291,15 @@ func death():
 			var new_food = floor_meat.instantiate()
 			new_food.global_position = global_position + Vector2(5,5)
 			loot_base.call_deferred("add_child",new_food)
+		if drops_special_item:
+			var magnet_chance = randf_range(0,1)
+			var item = null
+			if magnet_chance<0.5: #drop magnet
+				item = gem_magnet.instantiate()
+			else:
+				item = ult_potion.instantiate()
+			item.global_position = global_position + Vector2(5,5)
+			loot_base.call_deferred("add_child",item)
 
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "death":

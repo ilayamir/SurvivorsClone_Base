@@ -4,7 +4,7 @@
 [ext_resource type="Script" path="res://Objects/experience_gem.gd" id="1_vvljx"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_busob"]
-radius = 10.0255
+radius = 7.17848
 
 [node name="ExperienceGem" type="Area2D" groups=["loot"]]
 texture_filter = 2

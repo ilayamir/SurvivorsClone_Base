@@ -581,7 +581,7 @@ func ultimate():
 	if eye_on == true:
 		var new_eye = eye.instantiate()
 		screen_size = get_viewport_rect().size
-		new_eye.position.x = -2
+		new_eye.position.x = 0
 		new_eye.position.y = -27
 		crit_chance = 0.5
 		add_child(new_eye)

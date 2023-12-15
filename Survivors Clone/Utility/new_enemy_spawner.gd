@@ -162,7 +162,7 @@ func _on_spawn_rate_timer_timeout():
 
 
 func get_enemy():
-	var choose = randi_range(1,100)
+	var choose = randf_range(0,100)
 	var option_cnt = current_wave_rates.size()
 	for i in range(0, option_cnt):
 		if choose <= current_wave_rates[i]:
